@@ -1,0 +1,18 @@
+program Ejemplo;
+main(){
+  read(p); j=p*2;
+  inicia ( p * j - 5);
+  for i=0 to 9 do
+    {Arreglo[i]=Arreglo[i];}
+
+    for j = 0 to 2 do{
+        for k=0 to 7 do
+        {Matriz[j][k] = Arreglo[j+k+p*k]*p+j;}
+    }
+    
+
+    while(i>=0) do
+    {write("resultado", Arreglo[i], valor);
+    i = i - 1;
+    }
+}
