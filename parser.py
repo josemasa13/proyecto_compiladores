@@ -1,9 +1,12 @@
 import ply.yacc as yacc
 from scanner import tokens
+from data_structures.functions_directory import FunctionsDirectory
+
+fun_dict = FunctionsDirectory()
 
 # programa
 def p_program(p):
-    '''program : PRO ID PTOCOM opvars opfunciones MAIN PARIZQ PARDER bloque'''
+    '''program : PRO ID r_register_global PTOCOM opvars opfunciones MAIN PARIZQ PARDER bloque'''
     print("1")
 
 def p_opvars(p):
@@ -291,6 +294,15 @@ def p_error(p):
     if p:
          print("Syntax error at token", p.type)
     print("ERROR, el input no cumple con todas las reglas gramaticales")
+
+# * Puntos neurálgicos registro de funciones
+def p_r_register_global(p):
+    'r_register_global : '
+    
+
+# * Puntos neurálgicos registro de variables
+
+# * Puntos neurálgicos 
     
 
 # Build the parser

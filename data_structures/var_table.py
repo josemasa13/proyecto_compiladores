@@ -23,7 +23,7 @@ class VarTable:
             if var["name"] == name:
                 return var, e
         
-        e = "The variable " + name " is not declared"
+        e = "The variable " + name + " is not declared"
         return None, e
 
         
