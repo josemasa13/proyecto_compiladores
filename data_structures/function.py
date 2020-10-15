@@ -6,7 +6,7 @@ class Function:
         self.type = type
         self.vars = VarTable()
 
-    def add_variable(self, var_type):
+    def add_variable(self, var_name, var_type):
         e = None
         # Check if the variable is not in the table already
         for var in self.vars.table:

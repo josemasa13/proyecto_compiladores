@@ -25,8 +25,8 @@ class FunctionsDirectory:
         self.curr_function.name = name
         return e
 
-    def append_variable_to_curr_function(self, type):
-        self.curr_function.add_variable()
+    def append_variable_to_curr_function(self, name, type):
+        self.curr_function.add_variable(name, type)
 
 
             

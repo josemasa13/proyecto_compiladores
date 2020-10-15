@@ -3,6 +3,7 @@ from scanner import tokens
 from data_structures.functions_directory import FunctionsDirectory
 
 fun_dict = FunctionsDirectory()
+temporal_var = ["", ""]
 
 # programa
 def p_program(p):
@@ -17,10 +18,10 @@ def p_opfunciones(p):
     | empty'''
 
 def p_vars(p):
-    '''vars : VARTOKEN tipo ID arr arr varciclo PTOCOM tipociclo'''
+    '''vars : VARTOKEN tipo ID r_register_variable_name arr arr varciclo PTOCOM tipociclo'''
 
 def p_varciclo(p):
-    '''varciclo : COMA ID arr arr varciclo
+    '''varciclo : COMA ID r_register_variable_name arr arr varciclo
     | empty'''
 
 def p_arr(p):
@@ -36,7 +37,7 @@ def p_opciontipo(p):
     | MODULE ID PARIZQ opcionvarsimple PARDER opvars bloquefunc'''
 
 def p_tipo(p):
-    '''tipo : INT r_register_variables
+    '''tipo : INT r_register_variable_type
     | FLT r_register_variables
     | CHAR r_register_variables'''
 
@@ -261,9 +262,14 @@ def p_r_update_curr_function_name(p):
     'r_update_curr_function_name : '
     fun_dict.update_curr_function_name(p[-1])
 
-def p_r_register_variables(p):
-    'r_register_variables : '
-    fun_dict.append_variable_to_curr_function()    
+def p_r_register_variable_type(p):
+    'r_register_variable_type : '
+    temporal_var[0] = p[-1]
+
+def p_r_register_variable_name(p):
+    'r_register_variable_name : '
+    temporal_var[1] = p[-1]
+    fun_dict.append_variable_to_curr_function(temporal_var[1], temporal_var[0])    
 
 # * Puntos neurálgicos registro de variables
 
