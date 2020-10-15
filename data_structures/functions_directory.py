@@ -28,5 +28,11 @@ class FunctionsDirectory:
     def append_variable_to_curr_function(self, name, type):
         self.curr_function.add_variable(name, type)
 
+    def print_var_tables(self):
+        for func in self.directory:
+            print(func.name)
+            for item in func.vars.table:
+                print(item["name"], item["type"])
+
 
             

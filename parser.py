@@ -38,8 +38,8 @@ def p_opciontipo(p):
 
 def p_tipo(p):
     '''tipo : INT r_register_variable_type
-    | FLT r_register_variables
-    | CHAR r_register_variables'''
+    | FLT r_register_variable_type
+    | CHAR r_register_variable_type'''
 
 def p_tipo_func(p):
     '''tipo_func : INT r_register_function
@@ -284,3 +284,4 @@ with open("test.txt") as f:
 
 
 parser.parse(data)
+fun_dict.print_var_tables()
