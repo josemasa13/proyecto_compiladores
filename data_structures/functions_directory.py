@@ -3,18 +3,30 @@ from .function import Function
 class FunctionsDirectory:
     def __init__(self):
         self.directory = []
+        self.curr_function = None
 
-    def add_function(self, name, type):
+    def add_function(self, type):
         e = None
-        for func in self.table:
-            if directory["name"] == name:
-                e = "The function " + name + " was previously declared"
-                return e
         
         # Creating the new function to append
-        newfunc = Function(name, type)
-        self.directory.append(newfunc)
+        new_func = Function(type)
+        self.curr_function = new_func
+        self.directory.append(new_func)
 
         return e
+
+    def update_curr_function_name(self, name):
+        e = None
+        for func in self.directory:
+            if func.name == name:
+                e = "The function " + name + " was previously declared"
+                return e
+
+        self.curr_function.name = name
+        return e
+
+    def append_variable_to_curr_function(self, type):
+        self.curr_function.add_variable()
+
 
             

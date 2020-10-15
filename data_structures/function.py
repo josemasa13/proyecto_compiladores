@@ -1,12 +1,12 @@
 from .var_table import VarTable
 
 class Function:
-    def __init__(self):
+    def __init__(self, type):
         self.name = ""
-        self.type = ""
+        self.type = type
         self.vars = VarTable()
 
-    def add_variable(self, var_name, var_type):
+    def add_variable(self, var_type):
         e = None
         # Check if the variable is not in the table already
         for var in self.vars.table:
@@ -20,5 +20,7 @@ class Function:
         })
 
         return e
+
+    
 
             
