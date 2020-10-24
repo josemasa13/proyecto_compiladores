@@ -5,20 +5,22 @@ semantic_cube = defaultdict(
 
 
 #Mathematical operators
-semantic_cube['int']['int']['*']       = 'int'
-semantic_cube['int']['int']['/']       = 'float'
 semantic_cube['int']['int']['+']       = 'int'
 semantic_cube['int']['int']['-']       = 'int'
+semantic_cube['int']['int']['*']       = 'int'
+semantic_cube['int']['int']['/']       = 'float'
+
 
 semantic_cube['float']['float']['*']   = 'float'
 semantic_cube['float']['float']['/']   = 'float'
-semantic_cube['float']['float']['+']   = 'float'
 semantic_cube['float']['float']['-']   = 'float'
+semantic_cube['float']['float']['+']   = 'float'
 
 semantic_cube['char']['char']['*']     = 'Error'
 semantic_cube['char']['char']['/']     = 'Error'
-semantic_cube['char']['char']['+']     = 'Error'
 semantic_cube['char']['char']['-']     = 'Error'
+semantic_cube['char']['char']['+']     = 'Error'
+
 
 semantic_cube['int']['float']['+'] = semantic_cube['float']['int']['+'] = 'float'
 semantic_cube['int']['float']['-'] = semantic_cube['float']['int']['-'] = 'float'
