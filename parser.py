@@ -1,8 +1,14 @@
 import ply.yacc as yacc
 from scanner import tokens
 from data_structures.functions_directory import FunctionsDirectory
+from data_structures.quadruple import Quadruple
 
 fun_dict = FunctionsDirectory()
+tabla_temporales = []
+pila_operandos = []
+pila_operadores = []
+pila_saltos = []
+cuadruplos = []
 temporal_var = ["", ""]
 
 # programa
@@ -33,7 +39,7 @@ def p_tipociclo(p):
     | empty'''
 
 def p_opciontipo(p):
-    '''opciontipo : ID arr arr varciclo PTOCOM tipociclo
+    '''opciontipo : ID r_register_variable_name arr arr varciclo PTOCOM tipociclo
     | MODULE ID PARIZQ opcionvarsimple PARDER opvars bloquefunc'''
 
 def p_tipo(p):
@@ -108,7 +114,7 @@ def p_estatutofunc(p):
     '''
 
 def p_asignacion(p):
-    '''asignacion : ID asignacionarr asignacionarr IGU expresion PTOCOM'''
+    '''asignacion : ID r_verifica_variable_existe r_pila_operandos_push asignacionarr asignacionarr IGU r_pila_operadores_push_igu  expresion r_pop_igu PTOCOM'''
 
 def p_asignacionarr(p):
     '''asignacionarr : CORIZQ expresion CORDER
@@ -116,15 +122,15 @@ def p_asignacionarr(p):
     '''
 
 def p_expresion(p):
-    '''expresion : exp expresionsig'''
+    '''expresion : exp r_pop_comp expresionsig'''
 
 def p_expresionsig(p):
-    '''expresionsig : MAY expresionsigequal exp
-    | MEN expresionsigequal exp
-    | DIF exp
-    | IGUIGU exp
-    | AND exp
-    | OR exp
+    '''expresionsig : MAY r_pila_operadores_push_may expresionsigequal expresion
+    | MEN r_pila_operadores_push_men expresionsigequal expresion
+    | DIF r_pila_operadores_push_dif expresion
+    | IGUIGU r_pila_operadores_push_iguigu expresion
+    | AND r_pila_operadores_push_and expresion
+    | OR r_pila_operadores_push_or expresion
     | empty'''
 
 def p_expresionsigequal(p):
@@ -132,27 +138,27 @@ def p_expresionsigequal(p):
     | empty'''
 
 def p_exp(p):
-    '''exp : termino expciclo'''
+    '''exp : termino r_pop_mas  expciclo'''
 
 def p_expciclo(p):
-    '''expciclo : MAS exp
-    | MENOS exp
+    '''expciclo : MAS r_pila_operadores_push_mas exp
+    | MENOS r_pila_operadores_push_menos  exp
     | empty
     '''
 
 def p_termino(p):
-    '''termino : factor factorciclo'''
+    '''termino : factor r_pop_mult factorciclo'''
 
 def p_factorciclo(p):
-    '''factorciclo : MULT termino
-    | DIV termino
+    '''factorciclo : MULT r_pila_operadores_push_mult termino
+    | DIV  r_pila_operadores_push_div termino
     | empty
     '''
 
 def p_factor(p):
     '''factor : PARIZQ expresion PARDER
     | masomenos varcte
-    | ID opcionid
+    | ID r_verifica_variable_existe r_pila_operandos_push opcionid
     '''
 
 def p_masomenos(p):
@@ -167,8 +173,8 @@ def p_opcionid(p):
 
 def p_varcte(p):
     '''varcte : iddim
-    | CTEI
-    | CTEF
+    | CTEI r_pila_operandos_push_cte_int
+    | CTEF r_pila_operandos_push_cte_flt
     '''
 
 def p_parametros(p):
@@ -181,7 +187,7 @@ def p_cicloparametros(p):
     '''
 
 def p_decision(p):
-    '''decision : IF PARIZQ expresion PARDER THEN bloque ELSE bloque'''
+    '''decision : IF PARIZQ expresion PARDER r_if_paso_1 THEN bloque ELSE r_if_paso_2 bloque r_if_paso_3'''
 
 def p_escritura(p):
     '''escritura : WRITE PARIZQ escrituraciclo otro PARDER PTOCOM'''
@@ -207,7 +213,7 @@ def p_ciclodim(p):
     '''
 
 def p_iddim(p):
-    '''iddim : ID arrexp arrexp'''
+    '''iddim : ID r_verifica_variable_existe r_pila_operandos_push arrexp arrexp'''
 
 def p_arrexp(p):
     '''arrexp : CORIZQ expresion CORDER
@@ -248,6 +254,7 @@ def p_error(p):
          print("Syntax error at token", p.type)
     print("ERROR, el input no cumple con todas las reglas gramaticales")
 
+
 # * Puntos neurálgicos registro de funciones
 def p_r_register_global(p):
     'r_register_global : '
@@ -269,14 +276,160 @@ def p_r_register_variable_type(p):
 def p_r_register_variable_name(p):
     'r_register_variable_name : '
     temporal_var[1] = p[-1]
-    fun_dict.append_variable_to_curr_function(temporal_var[1], temporal_var[0])    
+    fun_dict.append_variable_to_curr_function(temporal_var[1], temporal_var[0])
 
-# * Puntos neurálgicos registro de variables
+def p_r_verifica_variable_existe(p):
+    'r_verifica_variable_existe : '
+    var, e = fun_dict.curr_function.vars.search(p[-1])
 
-# * Puntos neurálgicos 
+    if not var:
+        print("la variable no está declarada " + p[-1])
+
+    else:
+        print(var)
+
+def p_r_if_paso_1(p):
+    'r_if_paso_1 : '
+    #preguntar el tipo si el operando es boolano
+    result = pila_operandos.pop()
+    cuad = Quadruple(14, result, (-1,-1),(-1,-1))
+    cuadruplos.append(cuad)
+    pila_saltos.append( len(cuadruplos)-1)
+
+def p_r_if_paso_2(p):
+    'r_if_paso_2 : '
+    #preguntar el tipo si el operando es boolano
+    cuad = Quadruple(13,  (-1,-1), (-1,-1),(-1,-1))
+    cuadruplos.append(cuad)
+    Salto = pila_saltos.pop()
+    pila_saltos.append( len(cuadruplos)-1)
+    cuadruplos[Salto].modificar_resultado((-1,len(cuadruplos)))
+
+def p_r_if_paso_3(p):
+    'r_if_paso_3 : '
+    #preguntar el tipo si el operando es boolano
+    Salto = pila_saltos.pop()
+    cuadruplos[Salto].modificar_resultado((-1,len(cuadruplos)))
     
 
-# Build the parser
+def p_r_pila_operandos_push(p):
+    'r_pila_operandos_push : '
+    pila_operandos.append((1, fun_dict.get_address(p[-2])))
+
+def p_r_pila_operandos_push_cte_int(p):
+    'r_pila_operandos_push_cte_int : '
+    pila_operandos.append((0, len(tabla_temporales) ))
+    tabla_temporales.append((1, p[-1]))
+
+def p_r_pila_operandos_push_cte_flt(p):
+    'r_pila_operandos_push_cte_flt : '
+    pila_operandos.append((0,len(tabla_temporales)))
+    tabla_temporales.append((2, p[-1]))
+
+def p_r_pop_mult(p):
+    'r_pop_mult : '
+    if len(pila_operadores) > 0:
+        if(pila_operadores[len(pila_operadores) - 1] == 9 or pila_operadores[len(pila_operadores) - 1] == 10):
+            tupla_der = pila_operandos.pop()
+            tupla_izq = pila_operandos.pop()
+            cuad = Quadruple(pila_operadores.pop(),  tupla_izq, tupla_der,(0,len(tabla_temporales)))
+            #verifica que el tipo se tal (ESTE TIPO,-1)
+            pila_operandos.append((0,len(tabla_temporales)))
+            tabla_temporales.append((-1,-1))
+            cuadruplos.append(cuad)
+
+def p_r_pop_mas(p):
+    'r_pop_mas : '
+    if len(pila_operadores) > 0:
+        if(pila_operadores[len(pila_operadores) - 1] == 7 or pila_operadores[len(pila_operadores) - 1] == 8):
+            tupla_der = pila_operandos.pop()
+            tupla_izq = pila_operandos.pop()
+            cuad = Quadruple(pila_operadores.pop(),  tupla_izq, tupla_der,(0,len(tabla_temporales)))
+            #verifica que el tipo se tal (ESTE TIPO,-1)
+            pila_operandos.append((0,len(tabla_temporales)))
+            tabla_temporales.append((-1,-1))
+            cuadruplos.append(cuad)
+
+def p_r_pop_comp(p):
+    'r_pop_comp : '
+    if len(pila_operadores) > 0:
+        if(pila_operadores[len(pila_operadores) - 1] <= 6 and pila_operadores[len(pila_operadores) - 1] >= 1):
+            tupla_der = pila_operandos.pop()
+            tupla_izq = pila_operandos.pop()
+            cuad = Quadruple(pila_operadores.pop(),  tupla_izq, tupla_der,(0,len(tabla_temporales)))
+            #verifica que el tipo se tal (ESTE TIPO,-1)
+            pila_operandos.append((0,len(tabla_temporales)))
+            tabla_temporales.append((-1,-1))
+            cuadruplos.append(cuad)
+
+def p_r_pop_igu(p):
+    'r_pop_igu : '
+    if len(pila_operadores) > 0:
+        if(pila_operadores[len(pila_operadores) - 1] == 0):
+            tupla_der = pila_operandos.pop()
+            tupla_izq = pila_operandos.pop()
+            cuad = Quadruple(pila_operadores.pop(),  tupla_der,(-1,-1) ,tupla_izq)
+            #verifica que el tipo se tal (ESTE TIPO,-1)
+            pila_operandos.append((0,len(tabla_temporales)))
+            tabla_temporales.append((-1,-1))
+            cuadruplos.append(cuad)
+
+    
+
+def p_r_pila_operadores_push_mult(p):
+    'r_pila_operadores_push_mult : '
+    pila_operadores.append(9)
+
+def p_r_pila_operadores_push_div(p):
+    'r_pila_operadores_push_div : '
+    pila_operadores.append(10)
+
+def p_r_pila_operadores_push_mas(p):
+    'r_pila_operadores_push_mas : '
+    pila_operadores.append(7)
+
+def p_r_pila_operadores_push_menos(p):
+    'r_pila_operadores_push_menos : '
+    pila_operadores.append(8)
+
+def p_r_pila_operadores_push_may(p):
+    'r_pila_operadores_push_may : '
+    pila_operadores.append(2)
+
+def p_r_pila_operadores_push_men(p):
+    'r_pila_operadores_push_men : '
+    pila_operadores.append(3)
+
+def p_r_pila_operadores_push_dif(p):
+    'r_pila_operadores_push_dif : '
+    pila_operadores.append(1)
+
+def p_r_pila_operadores_push_iguigu(p):
+    'r_pila_operadores_push_iguigu : '
+    pila_operadores.append(4)
+
+def p_r_pila_operadores_push_and(p):
+    'r_pila_operadores_push_and : '
+    pila_operadores.append(5)
+
+def p_r_pila_operadores_push_or(p):
+    'r_pila_operadores_push_or : '
+    pila_operadores.append(6)
+
+def p_r_pila_operadores_push_igu(p):
+    'r_pila_operadores_push_igu : '
+    pila_operadores.append(0)
+
+
+    
+
+
+
+def print_quads():
+    for cuad in cuadruplos:
+        print(cuad.operador, cuad.operando_izq, cuad.operando_der, cuad.resultado)
+    
+    # Build the parser
 parser = yacc.yacc()
 
 with open("test.txt") as f:
@@ -284,4 +437,6 @@ with open("test.txt") as f:
 
 
 parser.parse(data)
+
 fun_dict.print_var_tables()
+print_quads()

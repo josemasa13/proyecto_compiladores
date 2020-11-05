@@ -3,7 +3,7 @@ class VarTable:
         self.table = []
 
     def add(self, var_name, var_type):
-        error = None
+        e = None
         # Check if the variable is not in the table already
         for var in self.table:
             if var["name"] == var_name:
@@ -25,6 +25,14 @@ class VarTable:
         
         e = "The variable " + name + " is not declared"
         return None, e
+
+    # todo - check error handling
+    def getAddress(self, name):
+        for i,var in enumerate(self.table):
+            if var["name"] == name:
+                return i
+
+    
 
         
 

@@ -23,6 +23,7 @@ class FunctionsDirectory:
                 return e
 
         self.curr_function.name = name
+        self.directory[len(self.directory) - 1].name = name
         return e
 
     def append_variable_to_curr_function(self, name, type):
@@ -33,6 +34,12 @@ class FunctionsDirectory:
             print(func.name)
             for item in func.vars.table:
                 print(item["name"], item["type"])
+
+    # todo - check error handling
+    def get_address(self, var_name):
+        for i, func in enumerate(self.directory):
+            if func.name == self.curr_function.name:
+                return(i, self.curr_function.get_address(var_name))
 
 
             

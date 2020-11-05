@@ -1,0 +1,28 @@
+significado de cuádruplo
+
+1. =
+2. >
+3. <
+4. ==
+5. &
+6. |
+7. +
+8. -
+9. *
+10. /
+11. (
+12. )
+13. GOTO
+14. GOTOF
+15. GOTOT
+16. WRITE
+17. READ
+18. >=
+19. <=
+
+significado del objeto cuádruplo
+0: temporal
+1: tabla de variables
+
+Cuadruplo(int(direccion de memoria),(int(temporal o tabla de variables),int(direccion de memoria)),int(direccion de memoria)))
+

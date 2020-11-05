@@ -13,13 +13,14 @@ class Function:
             if var["name"] == var_name:
                 e = "The variable " + var_name + " already exists in the function's variable table"
                 return e
-
-        self.vars.table.append({
-            'name': var_name,
-            'type': var_type
-        })
-
+                
+        self.vars.add(var_name,var_type)
         return e
+
+    # todo - check error handling
+
+    def get_address(self, name):
+        return self.vars.getAddress(name)
 
     
 
