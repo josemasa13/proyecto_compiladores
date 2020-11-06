@@ -225,10 +225,10 @@ def p_repeticion(p):
     '''
 
 def p_condicional(p):
-    '''condicional : WHILE PARIZQ expresion PARDER DO bloque'''
+    '''condicional : WHILE r_while_paso_1 PARIZQ expresion PARDER r_while_paso_2 DO bloque r_while_paso_3'''
 
 def p_nocondicional(p):
-    '''nocondicional : FOR iddim IGU expresion TO expresion DO bloque
+    '''nocondicional : FOR iddim IGU r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion r_for_paso_1 DO bloque r_for_paso_2
     '''
 
 def p_decisionfunc(p):
@@ -298,7 +298,6 @@ def p_r_if_paso_1(p):
 
 def p_r_if_paso_2(p):
     'r_if_paso_2 : '
-    #preguntar el tipo si el operando es boolano
     cuad = Quadruple(13,  (-1,-1), (-1,-1),(-1,-1))
     cuadruplos.append(cuad)
     Salto = pila_saltos.pop()
@@ -307,10 +306,80 @@ def p_r_if_paso_2(p):
 
 def p_r_if_paso_3(p):
     'r_if_paso_3 : '
-    #preguntar el tipo si el operando es boolano
     Salto = pila_saltos.pop()
     cuadruplos[Salto].modificar_resultado((-1,len(cuadruplos)))
+
+def p_r_while_paso_1(p):
+    'r_while_paso_1 : '
+    pila_saltos.append(len(cuadruplos))
+
+def p_r_while_paso_2(p):
+    'r_while_paso_2 : '
+    #preguntar el tipo si el operando es boolano
+    resultado = pila_operandos.pop()
+    cuad = Quadruple(14, resultado, (-1,-1),(-1,-1))
+    pila_saltos.append(len(cuadruplos))
+    cuadruplos.append(cuad)
     
+
+def p_r_while_paso_3(p):
+    'r_while_paso_3 : '
+    #preguntar el tipo si el operando es boolano
+    salto_al_final = pila_saltos.pop()
+    salto_al_regreso = pila_saltos.pop()
+    cuad = Quadruple(13, (-1,-1), (-1,-1),(-1,salto_al_regreso) )
+    cuadruplos.append(cuad)
+    cuadruplos[salto_al_final].modificar_resultado(len(cuadruplos))
+
+def p_r_pop_igu_for(p):
+    'r_pop_igu_for : '
+    tupla_der = pila_operandos.pop()
+    tupla_izq = pila_operandos.pop()
+    cuad = Quadruple(pila_operadores.pop(),  tupla_der,(-1,-1) ,tupla_izq)
+    #verifica que el tipo se tal (ESTE TIPO,-1)
+    #verifica que sea del tipo igual a
+    pila_operandos.append(tupla_izq)
+    cuadruplos.append(cuad)
+
+def p_r_for_paso_1(p):
+    'r_for_paso_1 : '
+    valor_limite = pila_operandos.pop()
+    valor_de_comp = pila_operandos.pop()
+    #verificar que valor limite sea int
+    pila_saltos.append(len(cuadruplos))
+    cuad = Quadruple(2,valor_de_comp,valor_limite,(0,len(tabla_temporales)))
+    pila_operandos.append(valor_de_comp)        
+    pila_operandos.append((0,len(tabla_temporales)))
+    tabla_temporales.append((-1,-1))
+    cuadruplos.append(cuad)
+    #guardar salto del gotof
+    pila_saltos.append(len(cuadruplos))
+    resultado_gotof = pila_operandos.pop()
+    cuad2 = Quadruple(14,resultado_gotof,(-1,-1),(-1,-1)) 
+    cuadruplos.append(cuad2)
+
+def p_r_for_paso_2(p):
+    'r_for_paso_2 : '
+    resultado = pila_operandos.pop()
+    #guardar constante 1
+    tabla_temporales.append((2,1))
+    cuad = Quadruple(7,(0,len(tabla_temporales)-1),resultado,(0,len(tabla_temporales)))
+    tabla_temporales.append((-1,-1))
+    cuadruplos.append(cuad)
+    cuadasignacion = Quadruple(0,(0,len(tabla_temporales)-1),(-1,-1),resultado)
+    cuadruplos.append(cuadasignacion)
+    gotof = pila_saltos.pop()
+    retorno = pila_saltos.pop()
+    cuadgoto = Quadruple(13,(-1,-1),(-1,-1),retorno)
+    cuadruplos.append(cuadgoto)
+    cuadruplos[gotof].modificar_resultado(len(cuadruplos))
+
+
+
+
+
+
+
 
 def p_r_pila_operandos_push(p):
     'r_pila_operandos_push : '
@@ -370,8 +439,6 @@ def p_r_pop_igu(p):
             tupla_izq = pila_operandos.pop()
             cuad = Quadruple(pila_operadores.pop(),  tupla_der,(-1,-1) ,tupla_izq)
             #verifica que el tipo se tal (ESTE TIPO,-1)
-            pila_operandos.append((0,len(tabla_temporales)))
-            tabla_temporales.append((-1,-1))
             cuadruplos.append(cuad)
 
     
@@ -426,8 +493,8 @@ def p_r_pila_operadores_push_igu(p):
 
 
 def print_quads():
-    for cuad in cuadruplos:
-        print(cuad.operador, cuad.operando_izq, cuad.operando_der, cuad.resultado)
+    for i,cuad in enumerate(cuadruplos):
+        print(i, cuad.operador, cuad.operando_izq, cuad.operando_der, cuad.resultado)
     
     # Build the parser
 parser = yacc.yacc()

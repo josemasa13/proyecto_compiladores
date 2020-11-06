@@ -6,20 +6,40 @@ var
   int Matriz[3][8];
 
   void module inicia(int y)
-    var int x,z;
+    var int x;
     {
       x = 0;
-
-      if(z) then {
-        z = 10;
+      while (x < 11) do{
+        Arreglo[x] = y * x;
+        x = x + 1;
       }
-      else{
-        z = 13<20<20;
-      }
-
     }
-  
+
+  int module fact (int j)
+  var int i;
+  {
+    i=j+(p-j*2+j);
+
+    if(j != 1) then{
+      return (j);
+    }
+    else{
+      return (j * fact(j-1));
+    }
+  }
   
 main(){
-  
+  read(p); 
+  j=p*2;
+  inicia(p * j - 5);
+  for i=0 to 9 do
+    {Arreglo[i]=Arreglo[i]*fact(Arreglo[i]-p);}
+    for k=0 to 7 do{
+      Matriz[j][k] = Arreglo[j+k-fact(p)+p*k]*p+j;
+    }
+
+    while(i>=0) do{
+      write("resultado", Arreglo[i], fact(i + 2) * valor);
+      i = i - 1;
+    }
 }
