@@ -4,6 +4,8 @@
 
 ## Avance hasta el momento
 
-- Se corrigieron algunos errores con los puntos neurálgicos de la entrega pasada.
-- Terminamos el cubo semántico 
-- Se agregaron funciones de generación de código intermedio para las expresiones aritméticas, asignación y lectura
+- Para esta entrega nos pusimos al corriente hasta los puntos a cubrir de la entrega número 4 en la que se incluyen los siguientes puntos:
+- Generacion de código de estatutos condicionales : 
+- Generacion de código de estatutos condicionales : decisiones
+- Generación de código de las funciones
+- Pequeños avances sobre el mapa de memoria de ejecución para la MV
