@@ -5,6 +5,13 @@ class FunctionsDirectory:
         self.directory = []
         self.curr_function = None
 
+    def search_function(self, name):
+        for function in self.directory:
+            if function.name == name:
+                return function
+
+        return None
+
     def add_function(self, type):
         e = None
         

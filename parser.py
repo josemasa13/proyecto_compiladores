@@ -2,6 +2,7 @@ import ply.yacc as yacc
 from scanner import tokens
 from data_structures.functions_directory import FunctionsDirectory
 from data_structures.quadruple import Quadruple
+from data_structures.semantic_cube import semantic_cube
 
 fun_dict = FunctionsDirectory()
 tabla_temporales = []
@@ -10,6 +11,7 @@ pila_operadores = []
 pila_saltos = []
 cuadruplos = []
 temporal_var = ["", ""]
+
 
 # programa
 def p_program(p):
@@ -75,7 +77,7 @@ def p_funcion(p):
     '''funcion : tipo_func MODULE ID r_update_curr_function_name PARIZQ opcionvarsimple PARDER opvars bloquefunc'''
 
 def p_ident(p):
-    '''ident : ID arrini arrini'''
+    '''ident : ID r_register_variable_name arrini arrini'''
 
 def p_arrini(p):
     '''arrini : CORIZQ CORDER
@@ -259,7 +261,7 @@ def p_error(p):
 def p_r_register_global(p):
     'r_register_global : '
     fun_dict.add_function("global")
-    fun_dict.update_curr_function_name(p[-1])
+    fun_dict.update_curr_function_name("global")
 
 def p_r_register_function(p):
     'r_register_function : '
@@ -283,8 +285,16 @@ def p_r_verifica_variable_existe(p):
     var, e = fun_dict.curr_function.vars.search(p[-1])
 
     if not var:
-        print("la variable no está declarada " + p[-1])
+        # search in global
+        func = fun_dict.search_function("global")
+        if func:
+            var, e = func.vars.search(p[-1])
 
+            if var:
+                print(var)
+
+            else:
+                print("la variable no está declarada en ningún contexto " + p[-1])
     else:
         print(var)
 
@@ -292,6 +302,7 @@ def p_r_if_paso_1(p):
     'r_if_paso_1 : '
     #preguntar el tipo si el operando es boolano
     result = pila_operandos.pop()
+    
     cuad = Quadruple(14, result, (-1,-1),(-1,-1))
     cuadruplos.append(cuad)
     pila_saltos.append( len(cuadruplos)-1)
@@ -373,13 +384,6 @@ def p_r_for_paso_2(p):
     cuadgoto = Quadruple(13,(-1,-1),(-1,-1),retorno)
     cuadruplos.append(cuadgoto)
     cuadruplos[gotof].modificar_resultado(len(cuadruplos))
-
-
-
-
-
-
-
 
 def p_r_pila_operandos_push(p):
     'r_pila_operandos_push : '
@@ -487,11 +491,6 @@ def p_r_pila_operadores_push_igu(p):
     'r_pila_operadores_push_igu : '
     pila_operadores.append(0)
 
-
-    
-
-
-
 def print_quads():
     for i,cuad in enumerate(cuadruplos):
         print(i, cuad.operador, cuad.operando_izq, cuad.operando_der, cuad.resultado)
@@ -506,4 +505,4 @@ with open("test.txt") as f:
 parser.parse(data)
 
 fun_dict.print_var_tables()
-print_quads()
+#print_quads()
