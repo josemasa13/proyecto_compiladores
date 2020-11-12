@@ -29,6 +29,7 @@ var
   }
   
 main(){
+  marcial = marcial + 1;
   read(p); 
   j=p*2;
   inicia(p * j - 5);

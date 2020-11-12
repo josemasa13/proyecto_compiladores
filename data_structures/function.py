@@ -6,7 +6,7 @@ class Function:
         self.type = type
         self.vars = VarTable()
 
-    def add_variable(self, var_name, var_type):
+    def add_variable(self, var_name, var_type, virtual_address):
         e = None
         # Check if the variable is not in the table already
         for var in self.vars.table:
@@ -14,7 +14,7 @@ class Function:
                 e = "The variable " + var_name + " already exists in the function's variable table"
                 return e
                 
-        self.vars.add(var_name,var_type)
+        self.vars.add(var_name,var_type, virtual_address)
         return e
 
     # todo - check error handling

@@ -1,0 +1,16 @@
+Global -> 1000 - 7999
+    global_int -> 1000 - 3999
+    global_float -> 4000 - 7999
+
+Local -> 8000 - 15999
+    local_int -> 8000 - 11999
+    local_float -> 12000 - 15999
+
+Temporal -> 16000 - 23999
+    temporal_int -> 16000-18999
+    temporal_float -> 19000 - 21999
+    temporal_bool -> 22000 - 23999
+
+Constant -> 24000 - 31999
+    constant_int -> 24000 - 27999
+    constant_float -> 28000 - 31999

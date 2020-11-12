@@ -133,6 +133,8 @@ def p_expresionsig(p):
     | IGUIGU r_pila_operadores_push_iguigu expresion
     | AND r_pila_operadores_push_and expresion
     | OR r_pila_operadores_push_or expresion
+    | MAYIGU r_pila_operadores_push_mayigu expresionsigequal expresion
+    | MENIGU r_pila_operadores_push_menigu expresionsigequal expresion
     | empty'''
 
 def p_expresionsigequal(p):
@@ -189,7 +191,11 @@ def p_cicloparametros(p):
     '''
 
 def p_decision(p):
-    '''decision : IF PARIZQ expresion PARDER r_if_paso_1 THEN bloque ELSE r_if_paso_2 bloque r_if_paso_3'''
+    '''decision : IF PARIZQ expresion PARDER r_if_paso_1 THEN bloque decision_else r_if_paso_3'''
+
+def p_decision_else(p):
+    '''decision_else : ELSE r_if_paso_2 bloque
+    | empty'''
 
 def p_escritura(p):
     '''escritura : WRITE PARIZQ escrituraciclo otro PARDER PTOCOM'''
@@ -234,7 +240,12 @@ def p_nocondicional(p):
     '''
 
 def p_decisionfunc(p):
-    '''decisionfunc : IF PARIZQ expresion PARDER THEN bloquefunc ELSE bloquefunc'''
+    '''decisionfunc : IF PARIZQ expresion PARDER r_if_paso_1 THEN bloquefunc decisionfunc_else r_if_paso_3
+    '''
+
+def p_decisionfunc_else(p):
+    '''decisionfunc_else : ELSE r_if_paso_2 bloquefunc
+    | empty'''
 
 def p_repeticionfunc(p):
     '''repeticionfunc : condicionalfunc
@@ -290,22 +301,18 @@ def p_r_verifica_variable_existe(p):
         if func:
             var, e = func.vars.search(p[-1])
 
-            if var:
-                print(var)
-
-            else:
+            if not var:
                 print("la variable no está declarada en ningún contexto " + p[-1])
-    else:
-        print(var)
+                pass
 
 def p_r_if_paso_1(p):
     'r_if_paso_1 : '
     #preguntar el tipo si el operando es boolano
     result = pila_operandos.pop()
-    
+    print(result)
     cuad = Quadruple(14, result, (-1,-1),(-1,-1))
     cuadruplos.append(cuad)
-    pila_saltos.append( len(cuadruplos)-1)
+    pila_saltos.append(len(cuadruplos)-1)
 
 def p_r_if_paso_2(p):
     'r_if_paso_2 : '
@@ -338,7 +345,7 @@ def p_r_while_paso_3(p):
     #preguntar el tipo si el operando es boolano
     salto_al_final = pila_saltos.pop()
     salto_al_regreso = pila_saltos.pop()
-    cuad = Quadruple(13, (-1,-1), (-1,-1),(-1,salto_al_regreso) )
+    cuad = Quadruple(13, (-1,-1), (-1,-1),(-1,salto_al_regreso))
     cuadruplos.append(cuad)
     cuadruplos[salto_al_final].modificar_resultado(len(cuadruplos))
 
@@ -391,13 +398,17 @@ def p_r_pila_operandos_push(p):
 
 def p_r_pila_operandos_push_cte_int(p):
     'r_pila_operandos_push_cte_int : '
-    pila_operandos.append((0, len(tabla_temporales) ))
-    tabla_temporales.append((1, p[-1]))
+
+    //guardar la constant en la direccion de memoria - Tener en que direcion de memoria la gua
+    
+
+    pila_operandos.append()
+    //tabla_temporales.append(('int', p[-1]))
 
 def p_r_pila_operandos_push_cte_flt(p):
     'r_pila_operandos_push_cte_flt : '
     pila_operandos.append((0,len(tabla_temporales)))
-    tabla_temporales.append((2, p[-1]))
+    tabla_temporales.append(('float', p[-1]))
 
 def p_r_pop_mult(p):
     'r_pop_mult : '
@@ -417,11 +428,28 @@ def p_r_pop_mas(p):
         if(pila_operadores[len(pila_operadores) - 1] == 7 or pila_operadores[len(pila_operadores) - 1] == 8):
             tupla_der = pila_operandos.pop()
             tupla_izq = pila_operandos.pop()
+
             cuad = Quadruple(pila_operadores.pop(),  tupla_izq, tupla_der,(0,len(tabla_temporales)))
-            #verifica que el tipo se tal (ESTE TIPO,-1)
+            # verificar que combinación de tipos de tupla_der y tupla_izq, sea posible en el cubo semántico
+            # si es posible, hacer consulta al cubo semántico de la mezcla de los tipos y operador 
+            #  si no es posible, regreso error
+
+            
+            
             pila_operandos.append((0,len(tabla_temporales)))
+            # guardar el tipo de los pasos anteriores en la posición 0
             tabla_temporales.append((-1,-1))
+
+
             cuadruplos.append(cuad)
+
+def get_type(tupla):
+    # Temporal
+    if tupla[0] == 0:
+        return tabla_temporales[tupla[1]]
+
+    else:
+        return fun_dict.curr_function.vars[tupla[1]]
 
 def p_r_pop_comp(p):
     'r_pop_comp : '
@@ -490,6 +518,14 @@ def p_r_pila_operadores_push_or(p):
 def p_r_pila_operadores_push_igu(p):
     'r_pila_operadores_push_igu : '
     pila_operadores.append(0)
+
+def p_r_pila_operadores_push_mayigu(p):
+    'r_pila_operadores_push_mayigu : '
+    pila_operadores.append(18)
+
+def p_r_pila_operadores_push_menigu(p):
+    'r_pila_operadores_push_menigu : '
+    pila_operadores.append(19)
 
 def print_quads():
     for i,cuad in enumerate(cuadruplos):

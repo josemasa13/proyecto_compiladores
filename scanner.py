@@ -47,6 +47,8 @@ tokens = [
     'MENOS',
     'MULT',
     'DIV',
+    'MAYIGU',
+    'MENIGU'
 ] + list(reserved.values())
 
 
@@ -73,6 +75,8 @@ t_PARIZQ  = r'\('
 t_PARDER  = r'\)'
 t_DIF = r'!='
 t_CTE_STRING = r'\"[A-Za-z0-9\s]*\"'
+t_MAYIGU = r'>='
+t_MENIGU = r'<='
 
 def t_ID(t):
     r'[A-Za-z]+[A-Za-z0-9]*'

@@ -26,3 +26,7 @@ significado del objeto cuádruplo
 
 Cuadruplo(int(direccion de memoria),(int(temporal o tabla de variables),int(direccion de memoria)),int(direccion de memoria)))
 
+pila operandos contiene tuplas (temporal o tabla de variables, índice donde está -> si tupla[0] == 0 -> indice en tabla temporales, si tupla[0] == 1 -> índice en tabla de variables de la función actual)
+
+cada elemento de la tabla de temporales [0] = tipo de variable, [1] = valor de la constante
+
