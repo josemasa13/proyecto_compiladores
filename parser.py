@@ -9,9 +9,21 @@ tabla_temporales = []
 pila_operandos = []
 pila_operadores = []
 pila_saltos = []
+pila_tipos = []
 cuadruplos = []
 temporal_var = ["", ""]
 
+global_int = 1000
+global_float = 4000
+local_int = 8000
+local_float = 12000
+temporal_int = 16000
+temporal_float = 19000
+temporal_bool = 22000
+constant_int = 24000
+constant_float = 28000
+
+comp_set = {'>', '<', '==', '&', '|', '>=', '<=', '!='}
 
 # programa
 def p_program(p):
@@ -63,7 +75,7 @@ def p_funciones(p):
     | funcion'''
 
 def p_funcionvoid(p):
-    '''funcionvoid : VOID r_register_function MODULE ID r_update_curr_function_name PARIZQ opcionvarsimple PARDER opvars bloque'''
+    '''funcionvoid : VOID r_register_function MODULE ID r_update_curr_function_name PARIZQ opcionvarsimple PARDER r_register_param_types opvars bloque'''
 
 def p_opcionvarsimple(p):
     '''opcionvarsimple : varsimple ciclovarsimple
@@ -74,7 +86,7 @@ def p_ciclovarsimple(p):
     | empty'''
 
 def p_funcion(p): 
-    '''funcion : tipo_func MODULE ID r_update_curr_function_name PARIZQ opcionvarsimple PARDER opvars bloquefunc'''
+    '''funcion : tipo_func MODULE ID r_update_curr_function_name PARIZQ opcionvarsimple PARDER r_register_param_types opvars bloquefunc'''
 
 def p_ident(p):
     '''ident : ID r_register_variable_name arrini arrini'''
@@ -268,6 +280,24 @@ def p_error(p):
     print("ERROR, el input no cumple con todas las reglas gramaticales")
 
 
+# Counters reset
+def reset_counters():
+    global local_int
+    global local_float
+    global temporal_int
+    global temporal_float
+    global temporal_bool
+    global constant_int
+    global constant_float
+
+    local_int = 8000
+    local_float = 12000
+    temporal_int = 16000
+    temporal_float = 19000
+    temporal_bool = 22000
+    constant_int = 24000
+    constant_float = 28000
+
 # * Puntos neurálgicos registro de funciones
 def p_r_register_global(p):
     'r_register_global : '
@@ -276,11 +306,20 @@ def p_r_register_global(p):
 
 def p_r_register_function(p):
     'r_register_function : '
+    exists = fun_dict.search_function(p[-1])
+    if exists:
+        raise Exception("La función que intentas declarar ya existe " + p[-1])
+
     fun_dict.add_function(p[-1])
 
 def p_r_update_curr_function_name(p):
     'r_update_curr_function_name : '
     fun_dict.update_curr_function_name(p[-1])
+    reset_counters()
+
+def p_r_register_param_types(p):
+    'r_register_param_types : '
+    fun_dict.curr_function.register_parameters()
 
 def p_r_register_variable_type(p):
     'r_register_variable_type : '
@@ -288,8 +327,32 @@ def p_r_register_variable_type(p):
 
 def p_r_register_variable_name(p):
     'r_register_variable_name : '
+    global global_int
+    global local_int
+    global global_float
+    global local_float
     temporal_var[1] = p[-1]
-    fun_dict.append_variable_to_curr_function(temporal_var[1], temporal_var[0])
+    if temporal_var[0] == "int":
+        if fun_dict.curr_function.name == "global":
+            fun_dict.append_variable_to_curr_function(temporal_var[1], temporal_var[0], global_int)
+            global_int += 1
+
+        else:
+            fun_dict.append_variable_to_curr_function(temporal_var[1], temporal_var[0], local_int)
+            local_int += 1
+
+    elif temporal_var[0] == "float":
+        if fun_dict.curr_function.name == "global":
+            fun_dict.append_variable_to_curr_function(temporal_var[1], temporal_var[0], global_float)
+            global_float += 1
+
+        else:
+            fun_dict.append_variable_to_curr_function(temporal_var[1], temporal_var[0], local_float)
+            local_float += 1
+
+    else:
+        raise Exception("El tipo de dato especificado, no existe " + temporal_var[0])
+        
 
 def p_r_verifica_variable_existe(p):
     'r_verifica_variable_existe : '
@@ -309,23 +372,22 @@ def p_r_if_paso_1(p):
     'r_if_paso_1 : '
     #preguntar el tipo si el operando es boolano
     result = pila_operandos.pop()
-    print(result)
-    cuad = Quadruple(14, result, (-1,-1),(-1,-1))
+    cuad = Quadruple('gotof', result, None,None)
     cuadruplos.append(cuad)
     pila_saltos.append(len(cuadruplos)-1)
 
 def p_r_if_paso_2(p):
     'r_if_paso_2 : '
-    cuad = Quadruple(13,  (-1,-1), (-1,-1),(-1,-1))
+    cuad = Quadruple('goto',None, None,None)
     cuadruplos.append(cuad)
-    Salto = pila_saltos.pop()
-    pila_saltos.append( len(cuadruplos)-1)
-    cuadruplos[Salto].modificar_resultado((-1,len(cuadruplos)))
+    salto = pila_saltos.pop()
+    pila_saltos.append(len(cuadruplos)-1)
+    cuadruplos[salto].modificar_resultado((-1,len(cuadruplos)))
 
 def p_r_if_paso_3(p):
     'r_if_paso_3 : '
-    Salto = pila_saltos.pop()
-    cuadruplos[Salto].modificar_resultado((-1,len(cuadruplos)))
+    salto = pila_saltos.pop()
+    cuadruplos[salto].modificar_resultado((-1,len(cuadruplos)))
 
 def p_r_while_paso_1(p):
     'r_while_paso_1 : '
@@ -335,114 +397,183 @@ def p_r_while_paso_2(p):
     'r_while_paso_2 : '
     #preguntar el tipo si el operando es boolano
     resultado = pila_operandos.pop()
-    cuad = Quadruple(14, resultado, (-1,-1),(-1,-1))
+    cuad = Quadruple('gotof', resultado, None,None)
     pila_saltos.append(len(cuadruplos))
     cuadruplos.append(cuad)
-    
 
 def p_r_while_paso_3(p):
     'r_while_paso_3 : '
     #preguntar el tipo si el operando es boolano
     salto_al_final = pila_saltos.pop()
     salto_al_regreso = pila_saltos.pop()
-    cuad = Quadruple(13, (-1,-1), (-1,-1),(-1,salto_al_regreso))
+    cuad = Quadruple('goto', None, None,salto_al_regreso)
     cuadruplos.append(cuad)
     cuadruplos[salto_al_final].modificar_resultado(len(cuadruplos))
 
 def p_r_pop_igu_for(p):
     'r_pop_igu_for : '
-    tupla_der = pila_operandos.pop()
-    tupla_izq = pila_operandos.pop()
-    cuad = Quadruple(pila_operadores.pop(),  tupla_der,(-1,-1) ,tupla_izq)
-    #verifica que el tipo se tal (ESTE TIPO,-1)
-    #verifica que sea del tipo igual a
-    pila_operandos.append(tupla_izq)
-    cuadruplos.append(cuad)
+    operando_der = pila_operandos.pop()
+    operando_izq = pila_operandos.pop()
+    tipo_der = pila_tipos.pop()
+    tipo_izq = pila_tipos.pop()
+    operator = pila_operadores.pop()
+    res_type = semantic_cube[tipo_izq][tipo_der][operator]
+
+    if tipo_der == "int" and tipo_izq == "int":
+        cuad = Quadruple(operator,operando_der,None ,operando_izq)
+        #verifica que el tipo se tal (ESTE TIPO,-1)
+        #verifica que sea del tipo igual a
+        pila_operandos.append(operando_izq)
+        pila_tipos.append('int')
+        cuadruplos.append(cuad)
+
+    else:
+        raise Exception("Los dos operandos deben ser enteros")
 
 def p_r_for_paso_1(p):
     'r_for_paso_1 : '
+    global temporal_bool
     valor_limite = pila_operandos.pop()
     valor_de_comp = pila_operandos.pop()
     #verificar que valor limite sea int
     pila_saltos.append(len(cuadruplos))
-    cuad = Quadruple(2,valor_de_comp,valor_limite,(0,len(tabla_temporales)))
-    pila_operandos.append(valor_de_comp)        
-    pila_operandos.append((0,len(tabla_temporales)))
-    tabla_temporales.append((-1,-1))
+    cuad = Quadruple('<',valor_de_comp,valor_limite,temporal_bool)
+    pila_operandos.append(valor_de_comp)
+    pila_tipos.append('int')      
+    #pila_operandos.append((0,len(tabla_temporales)))
+    #tabla_temporales.append((-1,-1))
     cuadruplos.append(cuad)
     #guardar salto del gotof
     pila_saltos.append(len(cuadruplos))
-    resultado_gotof = pila_operandos.pop()
-    cuad2 = Quadruple(14,resultado_gotof,(-1,-1),(-1,-1)) 
+    #resultado_gotof = pila_operandos.pop()
+    cuad2 = Quadruple('gotof',temporal_bool,None,None)
+    temporal_bool += 1
     cuadruplos.append(cuad2)
 
 def p_r_for_paso_2(p):
     'r_for_paso_2 : '
     resultado = pila_operandos.pop()
     #guardar constante 1
-    tabla_temporales.append((2,1))
-    cuad = Quadruple(7,(0,len(tabla_temporales)-1),resultado,(0,len(tabla_temporales)))
-    tabla_temporales.append((-1,-1))
+    global constant_int
+    global temporal_int
+    cuad = Quadruple('+',constant_int,resultado,temporal_int)
     cuadruplos.append(cuad)
-    cuadasignacion = Quadruple(0,(0,len(tabla_temporales)-1),(-1,-1),resultado)
+    cuadasignacion = Quadruple('=',temporal_int,None,resultado)
+    temporal_int += 1
+    constant_int += 1
     cuadruplos.append(cuadasignacion)
     gotof = pila_saltos.pop()
     retorno = pila_saltos.pop()
-    cuadgoto = Quadruple(13,(-1,-1),(-1,-1),retorno)
+    cuadgoto = Quadruple('goto',None,None,retorno)
     cuadruplos.append(cuadgoto)
     cuadruplos[gotof].modificar_resultado(len(cuadruplos))
 
 def p_r_pila_operandos_push(p):
     'r_pila_operandos_push : '
-    pila_operandos.append((1, fun_dict.get_address(p[-2])))
+    var = fun_dict.get_variable(p[-2])
+    if var:
+        pila_operandos.append(var['virtual_address'])
+        pila_tipos.append(var["type"])
+
+    else:
+        raise Exception("La variable " + p[-2] + " no existe")
 
 def p_r_pila_operandos_push_cte_int(p):
     'r_pila_operandos_push_cte_int : '
-
-    //guardar la constant en la direccion de memoria - Tener en que direcion de memoria la gua
-    
-
-    pila_operandos.append()
-    //tabla_temporales.append(('int', p[-1]))
+    # guardar la constant en la direccion de memoria - Tener en que direcion de memoria la gua
+    global constant_int
+    pila_operandos.append(constant_int)
+    pila_tipos.append('int')
+    constant_int += 1
+    tabla_temporales.append(('int', p[-1]))
 
 def p_r_pila_operandos_push_cte_flt(p):
     'r_pila_operandos_push_cte_flt : '
-    pila_operandos.append((0,len(tabla_temporales)))
+    global constant_float
+    pila_operandos.append(constant_float)
+    pila_tipos.append('float')
+    constant_float += 1
     tabla_temporales.append(('float', p[-1]))
 
 def p_r_pop_mult(p):
     'r_pop_mult : '
     if len(pila_operadores) > 0:
-        if(pila_operadores[len(pila_operadores) - 1] == 9 or pila_operadores[len(pila_operadores) - 1] == 10):
-            tupla_der = pila_operandos.pop()
-            tupla_izq = pila_operandos.pop()
-            cuad = Quadruple(pila_operadores.pop(),  tupla_izq, tupla_der,(0,len(tabla_temporales)))
-            #verifica que el tipo se tal (ESTE TIPO,-1)
-            pila_operandos.append((0,len(tabla_temporales)))
-            tabla_temporales.append((-1,-1))
-            cuadruplos.append(cuad)
+        if(pila_operadores[len(pila_operadores) - 1] == '*' or pila_operadores[len(pila_operadores) - 1] == '/'):
+            operando_der = pila_operandos.pop()
+            operando_izq = pila_operandos.pop()
+            tipo_der = pila_tipos.pop()
+            tipo_izq = pila_tipos.pop()
+            operator = pila_operadores.pop()
+            res_type = semantic_cube[tipo_izq][tipo_der][operator]
+
+            if res_type != "Error":
+                global temporal_float
+                global temporal_int
+                global temporal_bool
+                
+                #verifica que el tipo se tal (ESTE TIPO,-1)
+                if res_type == 'float':
+                    cuad = Quadruple(operator, operando_izq, operando_der,temporal_float)
+                    pila_operandos.append(temporal_float)
+                    temporal_float += 1
+
+                elif res_type == 'int':
+                    cuad = Quadruple(operator, operando_izq, operando_der,temporal_int)
+                    pila_operandos.append(temporal_int)
+                    temporal_int += 1
+
+                elif res_type == 'bool':
+                    cuad = Quadruple(operator, operando_izq, operando_der,temporal_bool)
+                    pila_operandos.append(temporal_bool)
+                    temporal_bool += 1
+
+
+                pila_tipos.append(res_type)
+                tabla_temporales.append((-1,-1))
+                cuadruplos.append(cuad)
+
+            else:
+                raise Exception("La combinación de tipos no es compatible " + tipo_izq + ' ' + operator + ' ' + tipo_der)
 
 def p_r_pop_mas(p):
     'r_pop_mas : '
     if len(pila_operadores) > 0:
-        if(pila_operadores[len(pila_operadores) - 1] == 7 or pila_operadores[len(pila_operadores) - 1] == 8):
-            tupla_der = pila_operandos.pop()
-            tupla_izq = pila_operandos.pop()
+        if(pila_operadores[len(pila_operadores) - 1] == '+' or pila_operadores[len(pila_operadores) - 1] == '-'):
+            operando_der = pila_operandos.pop()
+            operando_izq = pila_operandos.pop()
+            tipo_der = pila_tipos.pop()
+            tipo_izq = pila_tipos.pop()
+            operator = pila_operadores.pop()
+            res_type = semantic_cube[tipo_izq][tipo_der][operator]
 
-            cuad = Quadruple(pila_operadores.pop(),  tupla_izq, tupla_der,(0,len(tabla_temporales)))
-            # verificar que combinación de tipos de tupla_der y tupla_izq, sea posible en el cubo semántico
-            # si es posible, hacer consulta al cubo semántico de la mezcla de los tipos y operador 
-            #  si no es posible, regreso error
+            if res_type != "Error":
+                global temporal_float
+                global temporal_int
+                global temporal_bool
+                
+                #verifica que el tipo se tal (ESTE TIPO,-1)
+                if res_type == 'float':
+                    cuad = Quadruple(operator, operando_izq, operando_der,temporal_float)
+                    pila_operandos.append(temporal_float)
+                    temporal_float += 1
 
-            
-            
-            pila_operandos.append((0,len(tabla_temporales)))
-            # guardar el tipo de los pasos anteriores en la posición 0
-            tabla_temporales.append((-1,-1))
+                elif res_type == 'int':
+                    cuad = Quadruple(operator, operando_izq, operando_der,temporal_int)
+                    pila_operandos.append(temporal_int)
+                    temporal_int += 1
+
+                elif res_type == 'bool':
+                    cuad = Quadruple(operator, operando_izq, operando_der,temporal_bool)
+                    pila_operandos.append(temporal_bool)
+                    temporal_bool += 1
 
 
-            cuadruplos.append(cuad)
+                pila_tipos.append(res_type)
+                tabla_temporales.append((-1,-1))
+                cuadruplos.append(cuad)
 
+            else:
+                raise Exception("La combinación de tipos no es compatible " + tipo_izq + ' ' + operator + ' ' + tipo_der)
 def get_type(tupla):
     # Temporal
     if tupla[0] == 0:
@@ -454,78 +585,115 @@ def get_type(tupla):
 def p_r_pop_comp(p):
     'r_pop_comp : '
     if len(pila_operadores) > 0:
-        if(pila_operadores[len(pila_operadores) - 1] <= 6 and pila_operadores[len(pila_operadores) - 1] >= 1):
-            tupla_der = pila_operandos.pop()
-            tupla_izq = pila_operandos.pop()
-            cuad = Quadruple(pila_operadores.pop(),  tupla_izq, tupla_der,(0,len(tabla_temporales)))
-            #verifica que el tipo se tal (ESTE TIPO,-1)
-            pila_operandos.append((0,len(tabla_temporales)))
-            tabla_temporales.append((-1,-1))
-            cuadruplos.append(cuad)
+        if(pila_operadores[len(pila_operadores) - 1] in comp_set):
+            operando_der = pila_operandos.pop()
+            operando_izq = pila_operandos.pop()
+            tipo_der = pila_tipos.pop()
+            tipo_izq = pila_tipos.pop()
+            operator = pila_operadores.pop()
+            res_type = semantic_cube[tipo_izq][tipo_der][operator]
+
+            if res_type != "Error":
+                global temporal_float
+                global temporal_int
+                global temporal_bool
+                
+                #verifica que el tipo se tal (ESTE TIPO,-1)
+                if res_type == 'float':
+                    cuad = Quadruple(operator, operando_izq, operando_der,temporal_float)
+                    pila_operandos.append(temporal_float)
+                    temporal_float += 1
+
+                elif res_type == 'int':
+                    cuad = Quadruple(operator, operando_izq, operando_der,temporal_int)
+                    pila_operandos.append(temporal_int)
+                    temporal_int += 1
+
+                elif res_type == 'bool':
+                    cuad = Quadruple(operator, operando_izq, operando_der,temporal_bool)
+                    pila_operandos.append(temporal_bool)
+                    temporal_bool += 1
+
+
+                pila_tipos.append(res_type)
+                tabla_temporales.append((-1,-1))
+                cuadruplos.append(cuad)
+
+            else:
+                raise Exception("La combinación de tipos no es compatible " + tipo_izq + ' ' + operator + ' ' + tipo_der)
+
 
 def p_r_pop_igu(p):
     'r_pop_igu : '
     if len(pila_operadores) > 0:
-        if(pila_operadores[len(pila_operadores) - 1] == 0):
-            tupla_der = pila_operandos.pop()
-            tupla_izq = pila_operandos.pop()
-            cuad = Quadruple(pila_operadores.pop(),  tupla_der,(-1,-1) ,tupla_izq)
-            #verifica que el tipo se tal (ESTE TIPO,-1)
-            cuadruplos.append(cuad)
+        if(pila_operadores[len(pila_operadores) - 1] == '='):
+            operando_der = pila_operandos.pop()
+            operando_izq = pila_operandos.pop()
+            tipo_der = pila_tipos.pop()
+            tipo_izq = pila_tipos.pop()
+            operator = pila_operadores.pop()
+            res_type = semantic_cube[tipo_izq][tipo_der][operator]
 
-    
+            if res_type != "Error":
+                cuad = Quadruple(operator, operando_der, None, operando_izq)
+                cuadruplos.append(cuad)
+
+            else:
+                raise Exception("La combinación de tipos no es compatible " + tipo_izq + ' ' + operator + ' ' + tipo_der)
+
+
 
 def p_r_pila_operadores_push_mult(p):
     'r_pila_operadores_push_mult : '
-    pila_operadores.append(9)
+    pila_operadores.append('*')
 
 def p_r_pila_operadores_push_div(p):
     'r_pila_operadores_push_div : '
-    pila_operadores.append(10)
+    pila_operadores.append('/')
 
 def p_r_pila_operadores_push_mas(p):
     'r_pila_operadores_push_mas : '
-    pila_operadores.append(7)
+    pila_operadores.append('+')
 
 def p_r_pila_operadores_push_menos(p):
     'r_pila_operadores_push_menos : '
-    pila_operadores.append(8)
+    pila_operadores.append('-')
 
 def p_r_pila_operadores_push_may(p):
     'r_pila_operadores_push_may : '
-    pila_operadores.append(2)
+    pila_operadores.append('>')
 
 def p_r_pila_operadores_push_men(p):
     'r_pila_operadores_push_men : '
-    pila_operadores.append(3)
+    pila_operadores.append('<')
 
 def p_r_pila_operadores_push_dif(p):
     'r_pila_operadores_push_dif : '
-    pila_operadores.append(1)
+    pila_operadores.append('!=')
 
 def p_r_pila_operadores_push_iguigu(p):
     'r_pila_operadores_push_iguigu : '
-    pila_operadores.append(4)
+    pila_operadores.append("==")
 
 def p_r_pila_operadores_push_and(p):
     'r_pila_operadores_push_and : '
-    pila_operadores.append(5)
+    pila_operadores.append('&')
 
 def p_r_pila_operadores_push_or(p):
     'r_pila_operadores_push_or : '
-    pila_operadores.append(6)
+    pila_operadores.append('|')
 
 def p_r_pila_operadores_push_igu(p):
     'r_pila_operadores_push_igu : '
-    pila_operadores.append(0)
+    pila_operadores.append('=')
 
 def p_r_pila_operadores_push_mayigu(p):
     'r_pila_operadores_push_mayigu : '
-    pila_operadores.append(18)
+    pila_operadores.append('>=')
 
 def p_r_pila_operadores_push_menigu(p):
     'r_pila_operadores_push_menigu : '
-    pila_operadores.append(19)
+    pila_operadores.append('<=')
 
 def print_quads():
     for i,cuad in enumerate(cuadruplos):
@@ -534,11 +702,11 @@ def print_quads():
     # Build the parser
 parser = yacc.yacc()
 
-with open("test.txt") as f:
+with open("test2.txt") as f:
     data = f.read()
 
 
 parser.parse(data)
 
-fun_dict.print_var_tables()
-#print_quads()
+fun_dict.print_funcs_params()
+print_quads()

@@ -5,6 +5,7 @@ class Function:
         self.name = ""
         self.type = type
         self.vars = VarTable()
+        self.parameters = []
 
     def add_variable(self, var_name, var_type, virtual_address):
         e = None
@@ -19,8 +20,12 @@ class Function:
 
     # todo - check error handling
 
-    def get_address(self, name):
-        return self.vars.getAddress(name)
+    def get_variable(self, name):
+        return self.vars.get_variable(name)
+
+    def register_parameters(self):
+        for var in self.vars.table:
+            self.parameters.append(var["type"])
 
     
 

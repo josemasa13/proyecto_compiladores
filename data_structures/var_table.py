@@ -28,10 +28,10 @@ class VarTable:
         return None, e
 
     # todo - check error handling
-    def getAddress(self, name):
+    def get_variable(self, name):
         for i,var in enumerate(self.table):
             if var["name"] == name:
-                return i
+                return var
 
     
 
