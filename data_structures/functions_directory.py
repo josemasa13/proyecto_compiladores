@@ -4,7 +4,14 @@ class FunctionsDirectory:
     def __init__(self):
         self.directory = []
         self.curr_function = None
+        self.types_parameter = []
+        self.number_quadruple = []
+        self.names = []
+        self.size = []
 
+    def add_quadruple(self,index):
+        self.number_quadruple.append(index)
+        return None
 
     def search_function(self, name):
         for function in self.directory:
@@ -13,25 +20,41 @@ class FunctionsDirectory:
 
         return None
 
+    def search_quad(self, name):
+        for i in range(len(self.names)):
+            if self.names[i] == name:
+                return self.number_quadruple[i-1]
+        return None
+
     def add_function(self, type):
         e = None
-        
         # Creating the new function to append
         new_func = Function(type)
         self.curr_function = new_func
         self.directory.append(new_func)
-
         return e
+    
+    def add_typesofparameter(self,parameters_type):
+        e = None
+        self.types_parameter.append(parameters_type)
+        return e
+
+    def search_existing_name(self,name):
+        for i in range(len(self.names)):
+            if self.names[i] == name:
+                return self.types_parameter[i-1]
+        return None
+
 
     def update_curr_function_name(self, name):
         e = None
-
         for func in self.directory:
             if func.name == name:
                 e = "The function " + name + " was previously declared"
                 return e
 
         self.curr_function.name = name
+        self.names.append(name)
         self.directory[len(self.directory) - 1].name = name
         return e
 
