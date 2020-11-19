@@ -6,6 +6,7 @@ class Function:
         self.type = type
         self.vars = VarTable()
         self.parameters = []
+        self.quadruple = -1
 
     def add_variable(self, var_name, var_type, virtual_address):
         e = None
@@ -26,7 +27,7 @@ class Function:
     def register_parameters(self):
         for var in self.vars.table:
             self.parameters.append(var["type"])
-
     
+    def add_quadruple(self,quadruple_index):
+        self.quadruple = quadruple_index
 
-            
