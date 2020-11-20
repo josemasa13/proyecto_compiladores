@@ -43,7 +43,7 @@ class FunctionsDirectory:
         for i in range(len(self.names)):
             if self.names[i] == name:
                 return self.types_parameter[i-1]
-        return None
+        return -1
 
     def update_curr_function_name(self, name):
         e = None

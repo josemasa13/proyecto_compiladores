@@ -351,7 +351,6 @@ def p_r_register_quad(p):
 def p_r_era_funcion_void(p):
     'r_era_funcion_void : '
     # guardar nombre de la función llamada
-    print(pila_guardar_variable)
     nombre_func = p[-3]
     pila_nombre_func.append(nombre_func)
     func = fun_dict.search_function(nombre_func)
@@ -363,10 +362,9 @@ def p_r_era_funcion_void(p):
             cuadruplos.append(cuad)
             if apuntador_argumento > -1:
                 pila_apuntador_argumentos.append(apuntador_argumento)
-            apuntador_argumento = 0
-            if len(tipos_argumentos) > 0:
-                pila_tipos_argumentos.append(tipos_argumentos)
-
+                #pila_tipos_argumentos.append(tipos_argumentos)
+            if len(tipos_argumentos)> 0:
+                apuntador_argumento = 0
         else:
             raise Exception("La función " + nombre_func + " tiene tipo de retorno")
 
@@ -377,21 +375,17 @@ def p_r_era_funcion_retorno(p):
     'r_era_funcion_retorno : '
     # guardar nombre de la función llamada
     nombre_func = pila_guardar_variable[-1]
-    print(nombre_func)
     pila_nombre_func.append(nombre_func)
     func = fun_dict.search_function(nombre_func)
     if func:
         if func.type != "void":
             global apuntador_argumento
             cuad = Quadruple('ERA',None,None,nombre_func)
-
             cuadruplos.append(cuad)
             if apuntador_argumento > -1:
                 pila_apuntador_argumentos.append(apuntador_argumento)
-            apuntador_argumento = 0
-            if len(tipos_argumentos) > 0:
-                pila_tipos_argumentos.append(tipos_argumentos)
-
+            if len(tipos_argumentos)> 0:
+                apuntador_argumento = 0
         else:
             raise Exception("La función " + nombre_func + " es de tipo void")
 
@@ -418,19 +412,19 @@ def p_r_terminar_parametro(p):
     num_quad = fun_dict.search_quad(nombrefunc)
     cuad = Quadruple('GOSUB',None,None,num_quad)
     cuadruplos.append(cuad)
+    if apuntador_argumento != -1:
+        if apuntador_argumento < len(tipos_argumentos):
+            raise Exception("Faltan argumentos en la llamada a la función")
+        else:
+            if len(pila_apuntador_argumentos) > 0:
+                apuntador_argumento = pila_apuntador_argumentos.pop()
+            else:
+                apuntador_argumento = -1
+            if len(pila_tipos_argumentos) > 0:
+                tipos_argumentos = pila_tipos_argumentos.pop()
+            else:
+                tipos_argumentos = []
 
-    if apuntador_argumento < len(tipos_argumentos):
-        raise Exception("Faltan argumentos en la llamada a la función")
-        print("Faltaron argumentos a la llamada de funcion")
-    else:
-        if len(pila_apuntador_argumentos) > 0:
-            apuntador_argumento = pila_apuntador_argumentos.pop()
-        else:
-            apuntador_argumento = -1
-        if len(pila_tipos_argumentos) > 0:
-            tipos_argumentos = pila_tipos_argumentos.pop()
-        else:
-            tipos_argumentos = []
 
 def p_r_terminar_parametro_void(p):
     'r_terminar_parametro_void : '
@@ -442,19 +436,18 @@ def p_r_terminar_parametro_void(p):
     num_quad = fun_dict.search_quad(nombrefunc)
     cuad = Quadruple('GOSUB',None,None,num_quad)
     cuadruplos.append(cuad)
-
-    if apuntador_argumento < len(tipos_argumentos):
-        raise Exception("Faltaron argumentos a la llamada de funcion")
-        print("Faltaron argumentos a la llamada de funcion")
-    else:
-        if len(pila_apuntador_argumentos) > 0:
-            apuntador_argumento = pila_apuntador_argumentos.pop()
+    if apuntador_argumento != -1:
+        if apuntador_argumento < len(tipos_argumentos):
+            raise Exception("Faltaron argumentos a la llamada de funcion")
         else:
-            apuntador_argumento = -1
-        if len(pila_tipos_argumentos) > 0:
-            tipos_argumentos = pila_tipos_argumentos.pop()
-        else:
-            tipos_argumentos = []
+            if len(pila_apuntador_argumentos) > 0:
+                apuntador_argumento = pila_apuntador_argumentos.pop()
+            else:
+                apuntador_argumento = -1
+            if len(pila_tipos_argumentos) > 0:
+                tipos_argumentos = pila_tipos_argumentos.pop()
+            else:
+                tipos_argumentos = []
 
 def p_r_extraer_parametro(p):
     'r_extraer_parametro : '
@@ -482,11 +475,10 @@ def p_r_verifica_void(p):
     if func:
         if func.type == "void":
             tipos_argumentos_defunc = fun_dict.search_existing_name(p[-1])
-            print(tipos_argumentos_defunc)
-            if len(tipos_argumentos) > 0:
+            if apuntador_argumento >= 0:
                 pila_tipos_argumentos.append(tipos_argumentos)
             tipos_argumentos = tipos_argumentos_defunc
-            if not tipos_argumentos:
+            if tipos_argumentos == -1:
                 raise Exception("la variable no está declarada en ningún contexto " + p[-1])
                 print("la variable no está declarada en ningún contexto " + p[-1])
             pass
@@ -562,17 +554,15 @@ def p_r_verifica_variable_existe(p):
             var, e = func.vars.search(p[-1])
             if not var:
                 tipos_argumentos_defunc = fun_dict.search_existing_name(p[-1])
-                #verifica que sea de tipo return JOSE MARCIAL
-                if len(tipos_argumentos) > 0:
+                if apuntador_argumento >= 0:
                     pila_tipos_argumentos.append(tipos_argumentos)
                 tipos_argumentos = tipos_argumentos_defunc
-                if not tipos_argumentos:
-                    print("la variable no está declarada en ningún contexto " + p[-1])
+                if tipos_argumentos == -1:
+                    raise Exception("la variable no está declarada en ningún contexto " + p[-1])
                     pass
 
 def p_r_return_func(p):
     'r_return_func : '
-    #verificar tipo de return sea de tipo de funcion
     global flag_return
     flag_return = True
     result = pila_operandos.pop()
