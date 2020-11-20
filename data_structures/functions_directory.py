@@ -45,7 +45,6 @@ class FunctionsDirectory:
                 return self.types_parameter[i-1]
         return None
 
-
     def update_curr_function_name(self, name):
         e = None
         for func in self.directory:

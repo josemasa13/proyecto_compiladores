@@ -5,7 +5,7 @@ class Function:
         self.name = ""
         self.type = type
         self.vars = VarTable()
-        self.parameters = []
+        self.parameters = [] 
         self.quadruple = -1
 
     def add_variable(self, var_name, var_type, virtual_address):
@@ -13,11 +13,9 @@ class Function:
         # Check if the variable is not in the table already
         for var in self.vars.table:
             if var["name"] == var_name:
-                e = "The variable " + var_name + " already exists in the function's variable table"
-                return e
+                raise Exception("La variable " + var_name + " ya está declarada en la función")
                 
         self.vars.add(var_name,var_type, virtual_address)
-        return e
 
     # todo - check error handling
 

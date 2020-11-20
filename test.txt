@@ -6,20 +6,25 @@ program Ejemplo;
   float valor;
   int Matriz[3][8];
 
-  int module fact(int y,int z)
+  int module test(int x, int y)
+    var int j;
+    {
+      return (j);
+    }
+
+  void module fact()
     var int x;
     {
       x = 1;
-      
     }
 
-    int module inicia(int y,int z)
+  int module inicia(float a,int z)
     var int x;
-    {
-     fact(fact(x,x),x);
-    }
+  {
+    return (x);
+  }
 
 main(){
-
+  j = (5+3)*(4+5);
 }
 

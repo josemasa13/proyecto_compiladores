@@ -20,6 +20,7 @@ pila_apuntador_argumentos = []
 apuntador_argumento = -1
 pila_guardar_variable = []
 pila_nombre_func = []
+flag_return = False
 
 global_int = 1000
 global_float = 4000
@@ -62,7 +63,7 @@ def p_tipociclo(p):
 
 def p_opciontipo(p):
     '''opciontipo : ID r_register_variable_name arr arr varciclo PTOCOM tipociclo
-    | MODULE ID r_update_func_type r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc'''
+    | MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return'''
 
 def p_tipo(p):
     '''tipo : INT r_register_variable_type
@@ -94,7 +95,7 @@ def p_ciclovarsimple(p):
     | empty'''
 
 def p_funcion(p): 
-    '''funcion : tipo_func MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc'''
+    '''funcion : tipo_func MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return'''
 
 def p_ident(p):
     '''ident : ID r_register_variable_name arrini arrini'''
@@ -192,7 +193,7 @@ def p_masomenos(p):
     '''
 
 def p_opcionid(p):
-    '''opcionid : PARIZQ r_era_funcion parametros r_terminar_parametro PARDER 
+    '''opcionid : PARIZQ r_era_funcion_retorno parametros r_terminar_parametro PARDER 
     | arrexp arrexp  '''
 
 def p_varcte(p):
@@ -211,7 +212,7 @@ def p_cicloparametros(p):
     '''
 
 def p_llamadafunc(p):
-    '''llamadafunc : ID r_verifica_void PARIZQ r_era_funcion parametros r_terminar_parametro_void PARDER PTOCOM'''
+    '''llamadafunc : ID r_verifica_void PARIZQ r_era_funcion_void parametros r_terminar_parametro_void PARDER PTOCOM'''
 
 def p_decision(p):
     '''decision : IF PARIZQ expresion PARDER r_if_paso_1 THEN bloque decision_else r_if_paso_3'''
@@ -319,6 +320,11 @@ def p_r_register_function(p):
         raise Exception("La función que intentas declarar ya existe " + p[-1])
     fun_dict.add_function(p[-1])
 
+def p_r_update_curr_function_name_especial(p):
+    'r_update_curr_function_name_especial : '
+    fun_dict.update_curr_function_name(p[-2])
+    reset_counters()
+
 def p_r_update_curr_function_name(p):
     'r_update_curr_function_name : '
     fun_dict.update_curr_function_name(p[-1])
@@ -342,19 +348,66 @@ def p_r_register_quad(p):
     'r_register_quad : '
     fun_dict.add_quadruple(len(cuadruplos))
 
-def p_r_era_funcion(p):
-    'r_era_funcion : '
-    print("ERA")
-    pila_nombre_func.append("Guarda el nombre de la funcion")
-    #TAMAÑO JOSEMARCIAL
-    global apuntador_argumento
-    cuad = Quadruple('ERA',None,None,'funcion')
-    cuadruplos.append(cuad)
-    if apuntador_argumento > -1:
-        pila_apuntador_argumentos.append(apuntador_argumento)
-    apuntador_argumento = 0
-    if len(tipos_argumentos) > 0:
-        pila_tipos_argumentos.append(tipos_argumentos)
+def p_r_era_funcion_void(p):
+    'r_era_funcion_void : '
+    # guardar nombre de la función llamada
+    print(pila_guardar_variable)
+    nombre_func = p[-3]
+    pila_nombre_func.append(nombre_func)
+    func = fun_dict.search_function(nombre_func)
+
+    if func:
+        if func.type == "void":
+            global apuntador_argumento
+            cuad = Quadruple('ERA',None,None,nombre_func)
+            cuadruplos.append(cuad)
+            if apuntador_argumento > -1:
+                pila_apuntador_argumentos.append(apuntador_argumento)
+            apuntador_argumento = 0
+            if len(tipos_argumentos) > 0:
+                pila_tipos_argumentos.append(tipos_argumentos)
+
+        else:
+            raise Exception("La función " + nombre_func + " tiene tipo de retorno")
+
+    else:
+        raise Exception("La función " + nombre_func + " no ha sido declarada")
+
+def p_r_era_funcion_retorno(p):
+    'r_era_funcion_retorno : '
+    # guardar nombre de la función llamada
+    nombre_func = pila_guardar_variable[-1]
+    print(nombre_func)
+    pila_nombre_func.append(nombre_func)
+    func = fun_dict.search_function(nombre_func)
+    if func:
+        if func.type != "void":
+            global apuntador_argumento
+            cuad = Quadruple('ERA',None,None,nombre_func)
+
+            cuadruplos.append(cuad)
+            if apuntador_argumento > -1:
+                pila_apuntador_argumentos.append(apuntador_argumento)
+            apuntador_argumento = 0
+            if len(tipos_argumentos) > 0:
+                pila_tipos_argumentos.append(tipos_argumentos)
+
+        else:
+            raise Exception("La función " + nombre_func + " es de tipo void")
+
+    else:
+        raise Exception("La función " + nombre_func + " no ha sido declarada")
+
+def p_r_asegurar_return(p):
+    'r_asegurar_return : '
+    global flag_return
+    if flag_return == False:
+        raise Exception("No se regresó ningún valor para la función " + fun_dict.curr_function.name)
+
+    else:
+        flag_return = False
+
+    pass
 
 def p_r_terminar_parametro(p):
     'r_terminar_parametro : '
@@ -365,11 +418,9 @@ def p_r_terminar_parametro(p):
     num_quad = fun_dict.search_quad(nombrefunc)
     cuad = Quadruple('GOSUB',None,None,num_quad)
     cuadruplos.append(cuad)
-    cuad = Quadruple('=','funcion',None,temporal_int)
-    cuadruplos.append(cuad)
-    pila_operandos.append(temporal_int)
-    temporal_int += 1
+
     if apuntador_argumento < len(tipos_argumentos):
+        raise Exception("Faltan argumentos en la llamada a la función")
         print("Faltaron argumentos a la llamada de funcion")
     else:
         if len(pila_apuntador_argumentos) > 0:
@@ -386,9 +437,14 @@ def p_r_terminar_parametro_void(p):
     global apuntador_argumento
     global tipos_argumentos
     global temporal_int
-    cuad = Quadruple('GOSUB',None,None,'funcion')
+
+    nombrefunc = pila_nombre_func.pop()
+    num_quad = fun_dict.search_quad(nombrefunc)
+    cuad = Quadruple('GOSUB',None,None,num_quad)
     cuadruplos.append(cuad)
+
     if apuntador_argumento < len(tipos_argumentos):
+        raise Exception("Faltaron argumentos a la llamada de funcion")
         print("Faltaron argumentos a la llamada de funcion")
     else:
         if len(pila_apuntador_argumentos) > 0:
@@ -414,21 +470,29 @@ def p_r_extraer_parametro(p):
             cuadruplos.append(cuad)
             apuntador_argumento+=1
         else:
-            print("el tipo de argumento no es del tipo de parametro")
+            raise Exception("el tipo de argumento no es del tipo del parametro")
     else:
-        print("La funcion no tiene ese numero de parametros")
+        raise Exception("La funcion no tiene ese numero de parametros")
 
 def p_r_verifica_void(p):
     'r_verifica_void : '
     global tipos_argumentos
     global pila_tipos_argumentos
-    tipos_argumentos_defunc = fun_dict.search_existing_name(p[-1])
-    if len(tipos_argumentos) > 0:
-        pila_tipos_argumentos.append(tipos_argumentos)
-    tipos_argumentos = tipos_argumentos_defunc
-    if not tipos_argumentos:
-        print("la variable no está declarada en ningún contexto " + p[-1])
-    pass
+    func = fun_dict.search_function(p[-1])
+    if func:
+        if func.type == "void":
+            tipos_argumentos_defunc = fun_dict.search_existing_name(p[-1])
+            print(tipos_argumentos_defunc)
+            if len(tipos_argumentos) > 0:
+                pila_tipos_argumentos.append(tipos_argumentos)
+            tipos_argumentos = tipos_argumentos_defunc
+            if not tipos_argumentos:
+                raise Exception("la variable no está declarada en ningún contexto " + p[-1])
+                print("la variable no está declarada en ningún contexto " + p[-1])
+            pass
+
+        else:
+            raise Exception("La función llamada no es de tipo void")
 
 def p_r_marcar_funcion(p):
     'r_marcar_funcion : '
@@ -509,9 +573,17 @@ def p_r_verifica_variable_existe(p):
 def p_r_return_func(p):
     'r_return_func : '
     #verificar tipo de return sea de tipo de funcion
+    global flag_return
+    flag_return = True
     result = pila_operandos.pop()
-    cuad = Quadruple('RETURN',None, None,result)
-    cuadruplos.append(cuad)
+    tipo = pila_tipos.pop()
+    if tipo == fun_dict.curr_function.type:
+        cuad = Quadruple('RETURN',None, None,result)
+        cuadruplos.append(cuad)
+
+    else:
+        curr_func = fun_dict.curr_function
+        raise Exception("Error, la función " + curr_func.name + " es de tipo " + curr_func.type + " y el retorno de tipo " + tipo)
 
 def p_r_if_paso_2(p):
     'r_if_paso_2 : '
@@ -610,6 +682,9 @@ def p_r_guardar_variable(p):
 
 def p_r_pila_operandos_push(p):
     'r_pila_operandos_push : '
+    global temporal_float
+    global temporal_int
+
     oper = pila_guardar_variable.pop()
     var = fun_dict.get_variable(oper)
     if var:
@@ -618,7 +693,24 @@ def p_r_pila_operandos_push(p):
     else:
         funcion = fun_dict.search_function(oper)
         if not funcion:
-            raise Exception("La variable no existe")
+            raise Exception("El identificador " + oper + " no existe")
+
+        else:
+            return_type = funcion.type
+            if return_type == "float":
+                new_quad = Quadruple('=', oper, None, temporal_float)
+                pila_operandos.append(temporal_float)
+                pila_tipos.append("float")
+                temporal_float += 1
+
+            else:
+                new_quad = Quadruple('=', oper, None, temporal_int)
+                pila_operandos.append(temporal_int)
+                pila_tipos.append("int")
+                temporal_int += 1
+
+            cuadruplos.append(new_quad)
+            
 
 def p_r_pila_operandos_push_id(p):
     'r_pila_operandos_push_id : '
@@ -658,6 +750,7 @@ def p_r_pop_mult(p):
             res_type = semantic_cube[tipo_izq][tipo_der][operator]
 
             if res_type != "Error":
+                print(res_type)
                 global temporal_float
                 global temporal_int
                 global temporal_bool
@@ -846,6 +939,16 @@ def p_r_pila_operadores_push_menigu(p):
     'r_pila_operadores_push_menigu : '
     pila_operadores.append('<=')
 
+def p_r_push_fondo_falso(p):
+    'r_push_fondo_falso : '
+    pila_operandos.append("(")
+    pila_tipos.append("(")
+
+def p_r_vaciar_fondo_falso(p):
+    'r_vaciar_fondo_falso : '
+    pass
+
+
 def print_quads():
     for i,cuad in enumerate(cuadruplos):
         print(i, cuad.operador, cuad.operando_izq, cuad.operando_der, cuad.resultado)
@@ -858,6 +961,6 @@ with open("test.txt") as f:
 
 
 parser.parse(data)
-
+fun_dict.print_var_tables()
 fun_dict.print_funcs_params()
 print_quads()
