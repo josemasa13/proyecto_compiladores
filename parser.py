@@ -181,7 +181,7 @@ def p_factorciclo(p):
     '''
 
 def p_factor(p):
-    '''factor : PARIZQ expresion PARDER
+    '''factor : PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     | masomenos varcte
     | ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     '''
@@ -825,8 +825,12 @@ def p_r_pop_comp(p):
             tipo_der = pila_tipos.pop()
             tipo_izq = pila_tipos.pop()
             operator = pila_operadores.pop()
+            print("Entras")
+            print(operator)
+            print(tipo_izq)
+            print(tipo_der)
             res_type = semantic_cube[tipo_izq][tipo_der][operator]
-
+            print(res_type)
             if res_type != "Error":
                 global temporal_float
                 global temporal_int
@@ -875,7 +879,20 @@ def p_r_pop_igu(p):
             else:
                 raise Exception("La combinación de tipos no es compatible " + tipo_izq + ' ' + operator + ' ' + tipo_der)
 
+def p_r_marcar_fondo_de_pila(p):
+    'r_marcar_fondo_de_pila : '
+    pila_operadores.append("(")
 
+def p_r_desmarcar_fondo_de_pila(p):
+    'r_desmarcar_fondo_de_pila : '
+    while pila_operadores[-1] != "(":
+        if pila_operadores[-1] == "*" or pila_operadores[-1] == "/":
+            p_r_pop_mult(-1)
+        elif pila_operadores[-1] == "+" or pila_operadores[-1] == "-":
+            p_r_pop_mas(-1)
+        else:
+            p_r_pop_comp(-1)
+    pila_operadores.pop()
 
 def p_r_pila_operadores_push_mult(p):
     'r_pila_operadores_push_mult : '

@@ -28,10 +28,13 @@ program Ejemplo;
   int module inicia(float a,int z)
     var int x;
   {
-    return ( fact( prueba(),test(x, inicia( a+1, z))+1,prueba()) );
+    return ( 1);
   }
 
 main(){
-  
+
+
+  i = 3+(inicia(3.4,5));
+
 }
 
