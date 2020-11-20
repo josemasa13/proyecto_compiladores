@@ -81,7 +81,7 @@ Rule 71    termino -> factor r_pop_mult factorciclo
 Rule 72    factorciclo -> MULT r_pila_operadores_push_mult termino
 Rule 73    factorciclo -> DIV r_pila_operadores_push_div termino
 Rule 74    factorciclo -> empty
-Rule 75    factor -> PARIZQ expresion PARDER
+Rule 75    factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
 Rule 76    factor -> masomenos varcte
 Rule 77    factor -> ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
 Rule 78    masomenos -> MAS
@@ -162,21 +162,23 @@ Rule 152   r_pop_mult -> <empty>
 Rule 153   r_pop_mas -> <empty>
 Rule 154   r_pop_comp -> <empty>
 Rule 155   r_pop_igu -> <empty>
-Rule 156   r_pila_operadores_push_mult -> <empty>
-Rule 157   r_pila_operadores_push_div -> <empty>
-Rule 158   r_pila_operadores_push_mas -> <empty>
-Rule 159   r_pila_operadores_push_menos -> <empty>
-Rule 160   r_pila_operadores_push_may -> <empty>
-Rule 161   r_pila_operadores_push_men -> <empty>
-Rule 162   r_pila_operadores_push_dif -> <empty>
-Rule 163   r_pila_operadores_push_iguigu -> <empty>
-Rule 164   r_pila_operadores_push_and -> <empty>
-Rule 165   r_pila_operadores_push_or -> <empty>
-Rule 166   r_pila_operadores_push_igu -> <empty>
-Rule 167   r_pila_operadores_push_mayigu -> <empty>
-Rule 168   r_pila_operadores_push_menigu -> <empty>
-Rule 169   r_push_fondo_falso -> <empty>
-Rule 170   r_vaciar_fondo_falso -> <empty>
+Rule 156   r_marcar_fondo_de_pila -> <empty>
+Rule 157   r_desmarcar_fondo_de_pila -> <empty>
+Rule 158   r_pila_operadores_push_mult -> <empty>
+Rule 159   r_pila_operadores_push_div -> <empty>
+Rule 160   r_pila_operadores_push_mas -> <empty>
+Rule 161   r_pila_operadores_push_menos -> <empty>
+Rule 162   r_pila_operadores_push_may -> <empty>
+Rule 163   r_pila_operadores_push_men -> <empty>
+Rule 164   r_pila_operadores_push_dif -> <empty>
+Rule 165   r_pila_operadores_push_iguigu -> <empty>
+Rule 166   r_pila_operadores_push_and -> <empty>
+Rule 167   r_pila_operadores_push_or -> <empty>
+Rule 168   r_pila_operadores_push_igu -> <empty>
+Rule 169   r_pila_operadores_push_mayigu -> <empty>
+Rule 170   r_pila_operadores_push_menigu -> <empty>
+Rule 171   r_push_fondo_falso -> <empty>
+Rule 172   r_vaciar_fondo_falso -> <empty>
 
 Terminals, with rules where they appear
 
@@ -277,6 +279,7 @@ otro                 : 94 97
 parametros           : 81 90
 program              : 0
 r_asegurar_return    : 14 29
+r_desmarcar_fondo_de_pila : 75
 r_desmarcar_funcion  : 14 24 29
 r_endfunc            : 14 24 29
 r_era_funcion_retorno : 81
@@ -288,6 +291,7 @@ r_guardar_variable   : 77
 r_if_paso_1          : 91 109
 r_if_paso_2          : 92 110
 r_if_paso_3          : 91 109
+r_marcar_fondo_de_pila : 75
 r_marcar_funcion     : 14 24 29
 r_pila_operadores_push_and : 60
 r_pila_operadores_push_dif : 58
@@ -1200,7 +1204,7 @@ state 78
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -1233,7 +1237,7 @@ state 79
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -1442,34 +1446,17 @@ state 92
 
 state 93
 
-    (75) factor -> PARIZQ . expresion PARDER
-    (55) expresion -> . exp r_pop_comp expresionsig
-    (67) exp -> . termino r_pop_mas expciclo
-    (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
-    (76) factor -> . masomenos varcte
-    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
-    (78) masomenos -> . MAS
-    (79) masomenos -> . MENOS
-    (80) masomenos -> . empty
-    (116) empty -> .
+    (75) factor -> PARIZQ . r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
+    (156) r_marcar_fondo_de_pila -> .
 
-  ! shift/reduce conflict for ID resolved as shift
-    PARIZQ          shift and go to state 93
-    ID              shift and go to state 99
-    MAS             shift and go to state 100
-    MENOS           shift and go to state 101
-    CTEI            reduce using rule 116 (empty -> .)
-    CTEF            reduce using rule 116 (empty -> .)
+    PARIZQ          reduce using rule 156 (r_marcar_fondo_de_pila -> .)
+    ID              reduce using rule 156 (r_marcar_fondo_de_pila -> .)
+    MAS             reduce using rule 156 (r_marcar_fondo_de_pila -> .)
+    MENOS           reduce using rule 156 (r_marcar_fondo_de_pila -> .)
+    CTEI            reduce using rule 156 (r_marcar_fondo_de_pila -> .)
+    CTEF            reduce using rule 156 (r_marcar_fondo_de_pila -> .)
 
-  ! ID              [ reduce using rule 116 (empty -> .) ]
-
-    expresion                      shift and go to state 125
-    exp                            shift and go to state 95
-    termino                        shift and go to state 96
-    factor                         shift and go to state 97
-    masomenos                      shift and go to state 98
-    empty                          shift and go to state 102
+    r_marcar_fondo_de_pila         shift and go to state 125
 
 state 94
 
@@ -1668,7 +1655,7 @@ state 107
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -1696,14 +1683,14 @@ state 107
 state 108
 
     (108) nocondicional -> FOR iddim IGU . r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion r_for_paso_1 DO bloque r_for_paso_2
-    (166) r_pila_operadores_push_igu -> .
+    (168) r_pila_operadores_push_igu -> .
 
-    PARIZQ          reduce using rule 166 (r_pila_operadores_push_igu -> .)
-    ID              reduce using rule 166 (r_pila_operadores_push_igu -> .)
-    MAS             reduce using rule 166 (r_pila_operadores_push_igu -> .)
-    MENOS           reduce using rule 166 (r_pila_operadores_push_igu -> .)
-    CTEI            reduce using rule 166 (r_pila_operadores_push_igu -> .)
-    CTEF            reduce using rule 166 (r_pila_operadores_push_igu -> .)
+    PARIZQ          reduce using rule 168 (r_pila_operadores_push_igu -> .)
+    ID              reduce using rule 168 (r_pila_operadores_push_igu -> .)
+    MAS             reduce using rule 168 (r_pila_operadores_push_igu -> .)
+    MENOS           reduce using rule 168 (r_pila_operadores_push_igu -> .)
+    CTEI            reduce using rule 168 (r_pila_operadores_push_igu -> .)
+    CTEF            reduce using rule 168 (r_pila_operadores_push_igu -> .)
 
     r_pila_operadores_push_igu     shift and go to state 142
 
@@ -1870,7 +1857,7 @@ state 122
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -1912,7 +1899,7 @@ state 124
     (116) empty -> .
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -1940,10 +1927,34 @@ state 124
 
 state 125
 
-    (75) factor -> PARIZQ expresion . PARDER
+    (75) factor -> PARIZQ r_marcar_fondo_de_pila . expresion r_desmarcar_fondo_de_pila PARDER
+    (55) expresion -> . exp r_pop_comp expresionsig
+    (67) exp -> . termino r_pop_mas expciclo
+    (71) termino -> . factor r_pop_mult factorciclo
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
+    (76) factor -> . masomenos varcte
+    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
+    (78) masomenos -> . MAS
+    (79) masomenos -> . MENOS
+    (80) masomenos -> . empty
+    (116) empty -> .
 
-    PARDER          shift and go to state 157
+  ! shift/reduce conflict for ID resolved as shift
+    PARIZQ          shift and go to state 93
+    ID              shift and go to state 99
+    MAS             shift and go to state 100
+    MENOS           shift and go to state 101
+    CTEI            reduce using rule 116 (empty -> .)
+    CTEF            reduce using rule 116 (empty -> .)
 
+  ! ID              [ reduce using rule 116 (empty -> .) ]
+
+    expresion                      shift and go to state 157
+    exp                            shift and go to state 95
+    termino                        shift and go to state 96
+    factor                         shift and go to state 97
+    masomenos                      shift and go to state 98
+    empty                          shift and go to state 102
 
 state 126
 
@@ -2187,7 +2198,7 @@ state 136
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -2257,7 +2268,7 @@ state 142
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -2453,33 +2464,18 @@ state 156
 
 state 157
 
-    (75) factor -> PARIZQ expresion PARDER .
+    (75) factor -> PARIZQ r_marcar_fondo_de_pila expresion . r_desmarcar_fondo_de_pila PARDER
+    (157) r_desmarcar_fondo_de_pila -> .
 
-    MULT            reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    DIV             reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    MAS             reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    MENOS           reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    MAY             reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    MEN             reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    DIF             reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    IGUIGU          reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    AND             reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    OR              reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    MAYIGU          reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    MENIGU          reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    PARDER          reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    COMA            reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    CORDER          reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    TO              reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    PTOCOM          reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
-    DO              reduce using rule 75 (factor -> PARIZQ expresion PARDER .)
+    PARDER          reduce using rule 157 (r_desmarcar_fondo_de_pila -> .)
 
+    r_desmarcar_fondo_de_pila      shift and go to state 202
 
 state 158
 
     (91) decision -> IF PARIZQ expresion PARDER r_if_paso_1 . THEN bloque decision_else r_if_paso_3
 
-    THEN            shift and go to state 202
+    THEN            shift and go to state 203
 
 
 state 159
@@ -2497,118 +2493,118 @@ state 159
 state 160
 
     (56) expresionsig -> MAY . r_pila_operadores_push_may expresionsigequal expresion
-    (160) r_pila_operadores_push_may -> .
+    (162) r_pila_operadores_push_may -> .
 
-    IGU             reduce using rule 160 (r_pila_operadores_push_may -> .)
-    PARIZQ          reduce using rule 160 (r_pila_operadores_push_may -> .)
-    ID              reduce using rule 160 (r_pila_operadores_push_may -> .)
-    MAS             reduce using rule 160 (r_pila_operadores_push_may -> .)
-    MENOS           reduce using rule 160 (r_pila_operadores_push_may -> .)
-    CTEI            reduce using rule 160 (r_pila_operadores_push_may -> .)
-    CTEF            reduce using rule 160 (r_pila_operadores_push_may -> .)
+    IGU             reduce using rule 162 (r_pila_operadores_push_may -> .)
+    PARIZQ          reduce using rule 162 (r_pila_operadores_push_may -> .)
+    ID              reduce using rule 162 (r_pila_operadores_push_may -> .)
+    MAS             reduce using rule 162 (r_pila_operadores_push_may -> .)
+    MENOS           reduce using rule 162 (r_pila_operadores_push_may -> .)
+    CTEI            reduce using rule 162 (r_pila_operadores_push_may -> .)
+    CTEF            reduce using rule 162 (r_pila_operadores_push_may -> .)
 
-    r_pila_operadores_push_may     shift and go to state 203
+    r_pila_operadores_push_may     shift and go to state 204
 
 state 161
 
     (57) expresionsig -> MEN . r_pila_operadores_push_men expresionsigequal expresion
-    (161) r_pila_operadores_push_men -> .
+    (163) r_pila_operadores_push_men -> .
 
-    IGU             reduce using rule 161 (r_pila_operadores_push_men -> .)
-    PARIZQ          reduce using rule 161 (r_pila_operadores_push_men -> .)
-    ID              reduce using rule 161 (r_pila_operadores_push_men -> .)
-    MAS             reduce using rule 161 (r_pila_operadores_push_men -> .)
-    MENOS           reduce using rule 161 (r_pila_operadores_push_men -> .)
-    CTEI            reduce using rule 161 (r_pila_operadores_push_men -> .)
-    CTEF            reduce using rule 161 (r_pila_operadores_push_men -> .)
+    IGU             reduce using rule 163 (r_pila_operadores_push_men -> .)
+    PARIZQ          reduce using rule 163 (r_pila_operadores_push_men -> .)
+    ID              reduce using rule 163 (r_pila_operadores_push_men -> .)
+    MAS             reduce using rule 163 (r_pila_operadores_push_men -> .)
+    MENOS           reduce using rule 163 (r_pila_operadores_push_men -> .)
+    CTEI            reduce using rule 163 (r_pila_operadores_push_men -> .)
+    CTEF            reduce using rule 163 (r_pila_operadores_push_men -> .)
 
-    r_pila_operadores_push_men     shift and go to state 204
+    r_pila_operadores_push_men     shift and go to state 205
 
 state 162
 
     (58) expresionsig -> DIF . r_pila_operadores_push_dif expresion
-    (162) r_pila_operadores_push_dif -> .
+    (164) r_pila_operadores_push_dif -> .
 
-    PARIZQ          reduce using rule 162 (r_pila_operadores_push_dif -> .)
-    ID              reduce using rule 162 (r_pila_operadores_push_dif -> .)
-    MAS             reduce using rule 162 (r_pila_operadores_push_dif -> .)
-    MENOS           reduce using rule 162 (r_pila_operadores_push_dif -> .)
-    CTEI            reduce using rule 162 (r_pila_operadores_push_dif -> .)
-    CTEF            reduce using rule 162 (r_pila_operadores_push_dif -> .)
+    PARIZQ          reduce using rule 164 (r_pila_operadores_push_dif -> .)
+    ID              reduce using rule 164 (r_pila_operadores_push_dif -> .)
+    MAS             reduce using rule 164 (r_pila_operadores_push_dif -> .)
+    MENOS           reduce using rule 164 (r_pila_operadores_push_dif -> .)
+    CTEI            reduce using rule 164 (r_pila_operadores_push_dif -> .)
+    CTEF            reduce using rule 164 (r_pila_operadores_push_dif -> .)
 
-    r_pila_operadores_push_dif     shift and go to state 205
+    r_pila_operadores_push_dif     shift and go to state 206
 
 state 163
 
     (59) expresionsig -> IGUIGU . r_pila_operadores_push_iguigu expresion
-    (163) r_pila_operadores_push_iguigu -> .
+    (165) r_pila_operadores_push_iguigu -> .
 
-    PARIZQ          reduce using rule 163 (r_pila_operadores_push_iguigu -> .)
-    ID              reduce using rule 163 (r_pila_operadores_push_iguigu -> .)
-    MAS             reduce using rule 163 (r_pila_operadores_push_iguigu -> .)
-    MENOS           reduce using rule 163 (r_pila_operadores_push_iguigu -> .)
-    CTEI            reduce using rule 163 (r_pila_operadores_push_iguigu -> .)
-    CTEF            reduce using rule 163 (r_pila_operadores_push_iguigu -> .)
+    PARIZQ          reduce using rule 165 (r_pila_operadores_push_iguigu -> .)
+    ID              reduce using rule 165 (r_pila_operadores_push_iguigu -> .)
+    MAS             reduce using rule 165 (r_pila_operadores_push_iguigu -> .)
+    MENOS           reduce using rule 165 (r_pila_operadores_push_iguigu -> .)
+    CTEI            reduce using rule 165 (r_pila_operadores_push_iguigu -> .)
+    CTEF            reduce using rule 165 (r_pila_operadores_push_iguigu -> .)
 
-    r_pila_operadores_push_iguigu  shift and go to state 206
+    r_pila_operadores_push_iguigu  shift and go to state 207
 
 state 164
 
     (60) expresionsig -> AND . r_pila_operadores_push_and expresion
-    (164) r_pila_operadores_push_and -> .
+    (166) r_pila_operadores_push_and -> .
 
-    PARIZQ          reduce using rule 164 (r_pila_operadores_push_and -> .)
-    ID              reduce using rule 164 (r_pila_operadores_push_and -> .)
-    MAS             reduce using rule 164 (r_pila_operadores_push_and -> .)
-    MENOS           reduce using rule 164 (r_pila_operadores_push_and -> .)
-    CTEI            reduce using rule 164 (r_pila_operadores_push_and -> .)
-    CTEF            reduce using rule 164 (r_pila_operadores_push_and -> .)
+    PARIZQ          reduce using rule 166 (r_pila_operadores_push_and -> .)
+    ID              reduce using rule 166 (r_pila_operadores_push_and -> .)
+    MAS             reduce using rule 166 (r_pila_operadores_push_and -> .)
+    MENOS           reduce using rule 166 (r_pila_operadores_push_and -> .)
+    CTEI            reduce using rule 166 (r_pila_operadores_push_and -> .)
+    CTEF            reduce using rule 166 (r_pila_operadores_push_and -> .)
 
-    r_pila_operadores_push_and     shift and go to state 207
+    r_pila_operadores_push_and     shift and go to state 208
 
 state 165
 
     (61) expresionsig -> OR . r_pila_operadores_push_or expresion
-    (165) r_pila_operadores_push_or -> .
+    (167) r_pila_operadores_push_or -> .
 
-    PARIZQ          reduce using rule 165 (r_pila_operadores_push_or -> .)
-    ID              reduce using rule 165 (r_pila_operadores_push_or -> .)
-    MAS             reduce using rule 165 (r_pila_operadores_push_or -> .)
-    MENOS           reduce using rule 165 (r_pila_operadores_push_or -> .)
-    CTEI            reduce using rule 165 (r_pila_operadores_push_or -> .)
-    CTEF            reduce using rule 165 (r_pila_operadores_push_or -> .)
+    PARIZQ          reduce using rule 167 (r_pila_operadores_push_or -> .)
+    ID              reduce using rule 167 (r_pila_operadores_push_or -> .)
+    MAS             reduce using rule 167 (r_pila_operadores_push_or -> .)
+    MENOS           reduce using rule 167 (r_pila_operadores_push_or -> .)
+    CTEI            reduce using rule 167 (r_pila_operadores_push_or -> .)
+    CTEF            reduce using rule 167 (r_pila_operadores_push_or -> .)
 
-    r_pila_operadores_push_or      shift and go to state 208
+    r_pila_operadores_push_or      shift and go to state 209
 
 state 166
 
     (62) expresionsig -> MAYIGU . r_pila_operadores_push_mayigu expresionsigequal expresion
-    (167) r_pila_operadores_push_mayigu -> .
+    (169) r_pila_operadores_push_mayigu -> .
 
-    IGU             reduce using rule 167 (r_pila_operadores_push_mayigu -> .)
-    PARIZQ          reduce using rule 167 (r_pila_operadores_push_mayigu -> .)
-    ID              reduce using rule 167 (r_pila_operadores_push_mayigu -> .)
-    MAS             reduce using rule 167 (r_pila_operadores_push_mayigu -> .)
-    MENOS           reduce using rule 167 (r_pila_operadores_push_mayigu -> .)
-    CTEI            reduce using rule 167 (r_pila_operadores_push_mayigu -> .)
-    CTEF            reduce using rule 167 (r_pila_operadores_push_mayigu -> .)
+    IGU             reduce using rule 169 (r_pila_operadores_push_mayigu -> .)
+    PARIZQ          reduce using rule 169 (r_pila_operadores_push_mayigu -> .)
+    ID              reduce using rule 169 (r_pila_operadores_push_mayigu -> .)
+    MAS             reduce using rule 169 (r_pila_operadores_push_mayigu -> .)
+    MENOS           reduce using rule 169 (r_pila_operadores_push_mayigu -> .)
+    CTEI            reduce using rule 169 (r_pila_operadores_push_mayigu -> .)
+    CTEF            reduce using rule 169 (r_pila_operadores_push_mayigu -> .)
 
-    r_pila_operadores_push_mayigu  shift and go to state 209
+    r_pila_operadores_push_mayigu  shift and go to state 210
 
 state 167
 
     (63) expresionsig -> MENIGU . r_pila_operadores_push_menigu expresionsigequal expresion
-    (168) r_pila_operadores_push_menigu -> .
+    (170) r_pila_operadores_push_menigu -> .
 
-    IGU             reduce using rule 168 (r_pila_operadores_push_menigu -> .)
-    PARIZQ          reduce using rule 168 (r_pila_operadores_push_menigu -> .)
-    ID              reduce using rule 168 (r_pila_operadores_push_menigu -> .)
-    MAS             reduce using rule 168 (r_pila_operadores_push_menigu -> .)
-    MENOS           reduce using rule 168 (r_pila_operadores_push_menigu -> .)
-    CTEI            reduce using rule 168 (r_pila_operadores_push_menigu -> .)
-    CTEF            reduce using rule 168 (r_pila_operadores_push_menigu -> .)
+    IGU             reduce using rule 170 (r_pila_operadores_push_menigu -> .)
+    PARIZQ          reduce using rule 170 (r_pila_operadores_push_menigu -> .)
+    ID              reduce using rule 170 (r_pila_operadores_push_menigu -> .)
+    MAS             reduce using rule 170 (r_pila_operadores_push_menigu -> .)
+    MENOS           reduce using rule 170 (r_pila_operadores_push_menigu -> .)
+    CTEI            reduce using rule 170 (r_pila_operadores_push_menigu -> .)
+    CTEF            reduce using rule 170 (r_pila_operadores_push_menigu -> .)
 
-    r_pila_operadores_push_menigu  shift and go to state 210
+    r_pila_operadores_push_menigu  shift and go to state 211
 
 state 168
 
@@ -2645,30 +2641,30 @@ state 169
 state 170
 
     (68) expciclo -> MAS . r_pila_operadores_push_mas exp
-    (158) r_pila_operadores_push_mas -> .
+    (160) r_pila_operadores_push_mas -> .
 
-    PARIZQ          reduce using rule 158 (r_pila_operadores_push_mas -> .)
-    ID              reduce using rule 158 (r_pila_operadores_push_mas -> .)
-    MAS             reduce using rule 158 (r_pila_operadores_push_mas -> .)
-    MENOS           reduce using rule 158 (r_pila_operadores_push_mas -> .)
-    CTEI            reduce using rule 158 (r_pila_operadores_push_mas -> .)
-    CTEF            reduce using rule 158 (r_pila_operadores_push_mas -> .)
+    PARIZQ          reduce using rule 160 (r_pila_operadores_push_mas -> .)
+    ID              reduce using rule 160 (r_pila_operadores_push_mas -> .)
+    MAS             reduce using rule 160 (r_pila_operadores_push_mas -> .)
+    MENOS           reduce using rule 160 (r_pila_operadores_push_mas -> .)
+    CTEI            reduce using rule 160 (r_pila_operadores_push_mas -> .)
+    CTEF            reduce using rule 160 (r_pila_operadores_push_mas -> .)
 
-    r_pila_operadores_push_mas     shift and go to state 211
+    r_pila_operadores_push_mas     shift and go to state 212
 
 state 171
 
     (69) expciclo -> MENOS . r_pila_operadores_push_menos exp
-    (159) r_pila_operadores_push_menos -> .
+    (161) r_pila_operadores_push_menos -> .
 
-    PARIZQ          reduce using rule 159 (r_pila_operadores_push_menos -> .)
-    ID              reduce using rule 159 (r_pila_operadores_push_menos -> .)
-    MAS             reduce using rule 159 (r_pila_operadores_push_menos -> .)
-    MENOS           reduce using rule 159 (r_pila_operadores_push_menos -> .)
-    CTEI            reduce using rule 159 (r_pila_operadores_push_menos -> .)
-    CTEF            reduce using rule 159 (r_pila_operadores_push_menos -> .)
+    PARIZQ          reduce using rule 161 (r_pila_operadores_push_menos -> .)
+    ID              reduce using rule 161 (r_pila_operadores_push_menos -> .)
+    MAS             reduce using rule 161 (r_pila_operadores_push_menos -> .)
+    MENOS           reduce using rule 161 (r_pila_operadores_push_menos -> .)
+    CTEI            reduce using rule 161 (r_pila_operadores_push_menos -> .)
+    CTEF            reduce using rule 161 (r_pila_operadores_push_menos -> .)
 
-    r_pila_operadores_push_menos   shift and go to state 212
+    r_pila_operadores_push_menos   shift and go to state 213
 
 state 172
 
@@ -2715,30 +2711,30 @@ state 173
 state 174
 
     (72) factorciclo -> MULT . r_pila_operadores_push_mult termino
-    (156) r_pila_operadores_push_mult -> .
+    (158) r_pila_operadores_push_mult -> .
 
-    PARIZQ          reduce using rule 156 (r_pila_operadores_push_mult -> .)
-    ID              reduce using rule 156 (r_pila_operadores_push_mult -> .)
-    MAS             reduce using rule 156 (r_pila_operadores_push_mult -> .)
-    MENOS           reduce using rule 156 (r_pila_operadores_push_mult -> .)
-    CTEI            reduce using rule 156 (r_pila_operadores_push_mult -> .)
-    CTEF            reduce using rule 156 (r_pila_operadores_push_mult -> .)
+    PARIZQ          reduce using rule 158 (r_pila_operadores_push_mult -> .)
+    ID              reduce using rule 158 (r_pila_operadores_push_mult -> .)
+    MAS             reduce using rule 158 (r_pila_operadores_push_mult -> .)
+    MENOS           reduce using rule 158 (r_pila_operadores_push_mult -> .)
+    CTEI            reduce using rule 158 (r_pila_operadores_push_mult -> .)
+    CTEF            reduce using rule 158 (r_pila_operadores_push_mult -> .)
 
-    r_pila_operadores_push_mult    shift and go to state 213
+    r_pila_operadores_push_mult    shift and go to state 214
 
 state 175
 
     (73) factorciclo -> DIV . r_pila_operadores_push_div termino
-    (157) r_pila_operadores_push_div -> .
+    (159) r_pila_operadores_push_div -> .
 
-    PARIZQ          reduce using rule 157 (r_pila_operadores_push_div -> .)
-    ID              reduce using rule 157 (r_pila_operadores_push_div -> .)
-    MAS             reduce using rule 157 (r_pila_operadores_push_div -> .)
-    MENOS           reduce using rule 157 (r_pila_operadores_push_div -> .)
-    CTEI            reduce using rule 157 (r_pila_operadores_push_div -> .)
-    CTEF            reduce using rule 157 (r_pila_operadores_push_div -> .)
+    PARIZQ          reduce using rule 159 (r_pila_operadores_push_div -> .)
+    ID              reduce using rule 159 (r_pila_operadores_push_div -> .)
+    MAS             reduce using rule 159 (r_pila_operadores_push_div -> .)
+    MENOS           reduce using rule 159 (r_pila_operadores_push_div -> .)
+    CTEI            reduce using rule 159 (r_pila_operadores_push_div -> .)
+    CTEF            reduce using rule 159 (r_pila_operadores_push_div -> .)
 
-    r_pila_operadores_push_div     shift and go to state 214
+    r_pila_operadores_push_div     shift and go to state 215
 
 state 176
 
@@ -2820,7 +2816,7 @@ state 179
     (116) empty -> .
 
   ! shift/reduce conflict for CORIZQ resolved as shift
-    PARIZQ          shift and go to state 216
+    PARIZQ          shift and go to state 217
     CORIZQ          shift and go to state 187
     MULT            reduce using rule 116 (empty -> .)
     DIV             reduce using rule 116 (empty -> .)
@@ -2843,15 +2839,15 @@ state 179
 
   ! CORIZQ          [ reduce using rule 116 (empty -> .) ]
 
-    opcionid                       shift and go to state 215
-    arrexp                         shift and go to state 217
+    opcionid                       shift and go to state 216
+    arrexp                         shift and go to state 218
     empty                          shift and go to state 188
 
 state 180
 
     (94) escritura -> WRITE PARIZQ escrituraciclo otro PARDER . PTOCOM
 
-    PTOCOM          shift and go to state 218
+    PTOCOM          shift and go to state 219
 
 
 state 181
@@ -2864,14 +2860,14 @@ state 181
     COMA            shift and go to state 136
     PARDER          reduce using rule 116 (empty -> .)
 
-    otro                           shift and go to state 219
+    otro                           shift and go to state 220
     empty                          shift and go to state 137
 
 state 182
 
     (99) lectura -> READ PARIZQ iddim ciclodim PARDER . PTOCOM
 
-    PTOCOM          shift and go to state 220
+    PTOCOM          shift and go to state 221
 
 
 state 183
@@ -2884,7 +2880,7 @@ state 183
     COMA            shift and go to state 139
     PARDER          reduce using rule 116 (empty -> .)
 
-    ciclodim                       shift and go to state 221
+    ciclodim                       shift and go to state 222
     empty                          shift and go to state 140
 
 state 184
@@ -2894,13 +2890,13 @@ state 184
 
     DO              reduce using rule 142 (r_while_paso_2 -> .)
 
-    r_while_paso_2                 shift and go to state 222
+    r_while_paso_2                 shift and go to state 223
 
 state 185
 
     (108) nocondicional -> FOR iddim IGU r_pila_operadores_push_igu expresion . TO r_pop_igu_for expresion r_for_paso_1 DO bloque r_for_paso_2
 
-    TO              shift and go to state 223
+    TO              shift and go to state 224
 
 
 state 186
@@ -2931,7 +2927,7 @@ state 186
     PTOCOM          reduce using rule 116 (empty -> .)
     DO              reduce using rule 116 (empty -> .)
 
-    arrexp                         shift and go to state 224
+    arrexp                         shift and go to state 225
     empty                          shift and go to state 188
 
 state 187
@@ -2940,7 +2936,7 @@ state 187
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -2958,7 +2954,7 @@ state 187
 
   ! ID              [ reduce using rule 116 (empty -> .) ]
 
-    expresion                      shift and go to state 225
+    expresion                      shift and go to state 226
     exp                            shift and go to state 95
     termino                        shift and go to state 96
     factor                         shift and go to state 97
@@ -2999,7 +2995,7 @@ state 189
     VARTOKEN        reduce using rule 121 (r_register_param_types -> .)
     KEYIZQ          reduce using rule 121 (r_register_param_types -> .)
 
-    r_register_param_types         shift and go to state 226
+    r_register_param_types         shift and go to state 227
 
 state 190
 
@@ -3012,7 +3008,7 @@ state 190
     VARTOKEN        shift and go to state 9
     KEYIZQ          reduce using rule 116 (empty -> .)
 
-    opvars                         shift and go to state 227
+    opvars                         shift and go to state 228
     vars                           shift and go to state 7
     empty                          shift and go to state 8
 
@@ -3034,14 +3030,14 @@ state 192
     COMA            reduce using rule 116 (empty -> .)
     PARDER          reduce using rule 116 (empty -> .)
 
-    arrini                         shift and go to state 228
+    arrini                         shift and go to state 229
     empty                          shift and go to state 194
 
 state 193
 
     (31) arrini -> CORIZQ . CORDER
 
-    CORDER          shift and go to state 229
+    CORDER          shift and go to state 230
 
 
 state 194
@@ -3067,7 +3063,7 @@ state 195
 
   ! CORIZQ          [ reduce using rule 116 (empty -> .) ]
 
-    arr                            shift and go to state 230
+    arr                            shift and go to state 231
     empty                          shift and go to state 44
 
 state 196
@@ -3077,7 +3073,7 @@ state 196
 
     PARIZQ          reduce using rule 123 (r_update_func_type -> .)
 
-    r_update_func_type             shift and go to state 231
+    r_update_func_type             shift and go to state 232
 
 state 197
 
@@ -3089,22 +3085,22 @@ state 197
     COMA            shift and go to state 71
     PTOCOM          reduce using rule 116 (empty -> .)
 
-    varciclo                       shift and go to state 232
+    varciclo                       shift and go to state 233
     empty                          shift and go to state 72
 
 state 198
 
     (52) asignacion -> ID r_verifica_variable_existe r_pila_operandos_push_id asignacionarr asignacionarr IGU . r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
-    (166) r_pila_operadores_push_igu -> .
+    (168) r_pila_operadores_push_igu -> .
 
-    PARIZQ          reduce using rule 166 (r_pila_operadores_push_igu -> .)
-    ID              reduce using rule 166 (r_pila_operadores_push_igu -> .)
-    MAS             reduce using rule 166 (r_pila_operadores_push_igu -> .)
-    MENOS           reduce using rule 166 (r_pila_operadores_push_igu -> .)
-    CTEI            reduce using rule 166 (r_pila_operadores_push_igu -> .)
-    CTEF            reduce using rule 166 (r_pila_operadores_push_igu -> .)
+    PARIZQ          reduce using rule 168 (r_pila_operadores_push_igu -> .)
+    ID              reduce using rule 168 (r_pila_operadores_push_igu -> .)
+    MAS             reduce using rule 168 (r_pila_operadores_push_igu -> .)
+    MENOS           reduce using rule 168 (r_pila_operadores_push_igu -> .)
+    CTEI            reduce using rule 168 (r_pila_operadores_push_igu -> .)
+    CTEF            reduce using rule 168 (r_pila_operadores_push_igu -> .)
 
-    r_pila_operadores_push_igu     shift and go to state 233
+    r_pila_operadores_push_igu     shift and go to state 234
 
 state 199
 
@@ -3118,7 +3114,7 @@ state 200
 
     (90) llamadafunc -> ID r_verifica_void PARIZQ r_era_funcion_void parametros r_terminar_parametro_void . PARDER PTOCOM
 
-    PARDER          shift and go to state 234
+    PARDER          shift and go to state 235
 
 
 state 201
@@ -3128,29 +3124,36 @@ state 201
     (89) cicloparametros -> . empty
     (116) empty -> .
 
-    COMA            shift and go to state 236
+    COMA            shift and go to state 237
     PARDER          reduce using rule 116 (empty -> .)
 
-    cicloparametros                shift and go to state 235
-    empty                          shift and go to state 237
+    cicloparametros                shift and go to state 236
+    empty                          shift and go to state 238
 
 state 202
+
+    (75) factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila . PARDER
+
+    PARDER          shift and go to state 239
+
+
+state 203
 
     (91) decision -> IF PARIZQ expresion PARDER r_if_paso_1 THEN . bloque decision_else r_if_paso_3
     (33) bloque -> . KEYIZQ bloqueopcion KEYDER
 
     KEYIZQ          shift and go to state 46
 
-    bloque                         shift and go to state 238
+    bloque                         shift and go to state 240
 
-state 203
+state 204
 
     (56) expresionsig -> MAY r_pila_operadores_push_may . expresionsigequal expresion
     (65) expresionsigequal -> . IGU
     (66) expresionsigequal -> . empty
     (116) empty -> .
 
-    IGU             shift and go to state 240
+    IGU             shift and go to state 242
     PARIZQ          reduce using rule 116 (empty -> .)
     ID              reduce using rule 116 (empty -> .)
     MAS             reduce using rule 116 (empty -> .)
@@ -3158,17 +3161,17 @@ state 203
     CTEI            reduce using rule 116 (empty -> .)
     CTEF            reduce using rule 116 (empty -> .)
 
-    expresionsigequal              shift and go to state 239
-    empty                          shift and go to state 241
+    expresionsigequal              shift and go to state 241
+    empty                          shift and go to state 243
 
-state 204
+state 205
 
     (57) expresionsig -> MEN r_pila_operadores_push_men . expresionsigequal expresion
     (65) expresionsigequal -> . IGU
     (66) expresionsigequal -> . empty
     (116) empty -> .
 
-    IGU             shift and go to state 240
+    IGU             shift and go to state 242
     PARIZQ          reduce using rule 116 (empty -> .)
     ID              reduce using rule 116 (empty -> .)
     MAS             reduce using rule 116 (empty -> .)
@@ -3176,78 +3179,16 @@ state 204
     CTEI            reduce using rule 116 (empty -> .)
     CTEF            reduce using rule 116 (empty -> .)
 
-    expresionsigequal              shift and go to state 242
-    empty                          shift and go to state 241
+    expresionsigequal              shift and go to state 244
+    empty                          shift and go to state 243
 
-state 205
+state 206
 
     (58) expresionsig -> DIF r_pila_operadores_push_dif . expresion
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
-    (76) factor -> . masomenos varcte
-    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
-    (78) masomenos -> . MAS
-    (79) masomenos -> . MENOS
-    (80) masomenos -> . empty
-    (116) empty -> .
-
-  ! shift/reduce conflict for ID resolved as shift
-    PARIZQ          shift and go to state 93
-    ID              shift and go to state 99
-    MAS             shift and go to state 100
-    MENOS           shift and go to state 101
-    CTEI            reduce using rule 116 (empty -> .)
-    CTEF            reduce using rule 116 (empty -> .)
-
-  ! ID              [ reduce using rule 116 (empty -> .) ]
-
-    expresion                      shift and go to state 243
-    exp                            shift and go to state 95
-    termino                        shift and go to state 96
-    factor                         shift and go to state 97
-    masomenos                      shift and go to state 98
-    empty                          shift and go to state 102
-
-state 206
-
-    (59) expresionsig -> IGUIGU r_pila_operadores_push_iguigu . expresion
-    (55) expresion -> . exp r_pop_comp expresionsig
-    (67) exp -> . termino r_pop_mas expciclo
-    (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
-    (76) factor -> . masomenos varcte
-    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
-    (78) masomenos -> . MAS
-    (79) masomenos -> . MENOS
-    (80) masomenos -> . empty
-    (116) empty -> .
-
-  ! shift/reduce conflict for ID resolved as shift
-    PARIZQ          shift and go to state 93
-    ID              shift and go to state 99
-    MAS             shift and go to state 100
-    MENOS           shift and go to state 101
-    CTEI            reduce using rule 116 (empty -> .)
-    CTEF            reduce using rule 116 (empty -> .)
-
-  ! ID              [ reduce using rule 116 (empty -> .) ]
-
-    expresion                      shift and go to state 244
-    exp                            shift and go to state 95
-    termino                        shift and go to state 96
-    factor                         shift and go to state 97
-    masomenos                      shift and go to state 98
-    empty                          shift and go to state 102
-
-state 207
-
-    (60) expresionsig -> AND r_pila_operadores_push_and . expresion
-    (55) expresion -> . exp r_pop_comp expresionsig
-    (67) exp -> . termino r_pop_mas expciclo
-    (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -3272,13 +3213,13 @@ state 207
     masomenos                      shift and go to state 98
     empty                          shift and go to state 102
 
-state 208
+state 207
 
-    (61) expresionsig -> OR r_pila_operadores_push_or . expresion
+    (59) expresionsig -> IGUIGU r_pila_operadores_push_iguigu . expresion
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -3303,14 +3244,76 @@ state 208
     masomenos                      shift and go to state 98
     empty                          shift and go to state 102
 
+state 208
+
+    (60) expresionsig -> AND r_pila_operadores_push_and . expresion
+    (55) expresion -> . exp r_pop_comp expresionsig
+    (67) exp -> . termino r_pop_mas expciclo
+    (71) termino -> . factor r_pop_mult factorciclo
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
+    (76) factor -> . masomenos varcte
+    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
+    (78) masomenos -> . MAS
+    (79) masomenos -> . MENOS
+    (80) masomenos -> . empty
+    (116) empty -> .
+
+  ! shift/reduce conflict for ID resolved as shift
+    PARIZQ          shift and go to state 93
+    ID              shift and go to state 99
+    MAS             shift and go to state 100
+    MENOS           shift and go to state 101
+    CTEI            reduce using rule 116 (empty -> .)
+    CTEF            reduce using rule 116 (empty -> .)
+
+  ! ID              [ reduce using rule 116 (empty -> .) ]
+
+    expresion                      shift and go to state 247
+    exp                            shift and go to state 95
+    termino                        shift and go to state 96
+    factor                         shift and go to state 97
+    masomenos                      shift and go to state 98
+    empty                          shift and go to state 102
+
 state 209
+
+    (61) expresionsig -> OR r_pila_operadores_push_or . expresion
+    (55) expresion -> . exp r_pop_comp expresionsig
+    (67) exp -> . termino r_pop_mas expciclo
+    (71) termino -> . factor r_pop_mult factorciclo
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
+    (76) factor -> . masomenos varcte
+    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
+    (78) masomenos -> . MAS
+    (79) masomenos -> . MENOS
+    (80) masomenos -> . empty
+    (116) empty -> .
+
+  ! shift/reduce conflict for ID resolved as shift
+    PARIZQ          shift and go to state 93
+    ID              shift and go to state 99
+    MAS             shift and go to state 100
+    MENOS           shift and go to state 101
+    CTEI            reduce using rule 116 (empty -> .)
+    CTEF            reduce using rule 116 (empty -> .)
+
+  ! ID              [ reduce using rule 116 (empty -> .) ]
+
+    expresion                      shift and go to state 248
+    exp                            shift and go to state 95
+    termino                        shift and go to state 96
+    factor                         shift and go to state 97
+    masomenos                      shift and go to state 98
+    empty                          shift and go to state 102
+
+state 210
 
     (62) expresionsig -> MAYIGU r_pila_operadores_push_mayigu . expresionsigequal expresion
     (65) expresionsigequal -> . IGU
     (66) expresionsigequal -> . empty
     (116) empty -> .
 
-    IGU             shift and go to state 240
+    IGU             shift and go to state 242
     PARIZQ          reduce using rule 116 (empty -> .)
     ID              reduce using rule 116 (empty -> .)
     MAS             reduce using rule 116 (empty -> .)
@@ -3318,17 +3321,17 @@ state 209
     CTEI            reduce using rule 116 (empty -> .)
     CTEF            reduce using rule 116 (empty -> .)
 
-    expresionsigequal              shift and go to state 247
-    empty                          shift and go to state 241
+    expresionsigequal              shift and go to state 249
+    empty                          shift and go to state 243
 
-state 210
+state 211
 
     (63) expresionsig -> MENIGU r_pila_operadores_push_menigu . expresionsigequal expresion
     (65) expresionsigequal -> . IGU
     (66) expresionsigequal -> . empty
     (116) empty -> .
 
-    IGU             shift and go to state 240
+    IGU             shift and go to state 242
     PARIZQ          reduce using rule 116 (empty -> .)
     ID              reduce using rule 116 (empty -> .)
     MAS             reduce using rule 116 (empty -> .)
@@ -3336,15 +3339,15 @@ state 210
     CTEI            reduce using rule 116 (empty -> .)
     CTEF            reduce using rule 116 (empty -> .)
 
-    expresionsigequal              shift and go to state 248
-    empty                          shift and go to state 241
+    expresionsigequal              shift and go to state 250
+    empty                          shift and go to state 243
 
-state 211
+state 212
 
     (68) expciclo -> MAS r_pila_operadores_push_mas . exp
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -3362,36 +3365,7 @@ state 211
 
   ! ID              [ reduce using rule 116 (empty -> .) ]
 
-    exp                            shift and go to state 249
-    termino                        shift and go to state 96
-    factor                         shift and go to state 97
-    masomenos                      shift and go to state 98
-    empty                          shift and go to state 102
-
-state 212
-
-    (69) expciclo -> MENOS r_pila_operadores_push_menos . exp
-    (67) exp -> . termino r_pop_mas expciclo
-    (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
-    (76) factor -> . masomenos varcte
-    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
-    (78) masomenos -> . MAS
-    (79) masomenos -> . MENOS
-    (80) masomenos -> . empty
-    (116) empty -> .
-
-  ! shift/reduce conflict for ID resolved as shift
-    PARIZQ          shift and go to state 93
-    ID              shift and go to state 99
-    MAS             shift and go to state 100
-    MENOS           shift and go to state 101
-    CTEI            reduce using rule 116 (empty -> .)
-    CTEF            reduce using rule 116 (empty -> .)
-
-  ! ID              [ reduce using rule 116 (empty -> .) ]
-
-    exp                            shift and go to state 250
+    exp                            shift and go to state 251
     termino                        shift and go to state 96
     factor                         shift and go to state 97
     masomenos                      shift and go to state 98
@@ -3399,9 +3373,10 @@ state 212
 
 state 213
 
-    (72) factorciclo -> MULT r_pila_operadores_push_mult . termino
+    (69) expciclo -> MENOS r_pila_operadores_push_menos . exp
+    (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -3419,16 +3394,17 @@ state 213
 
   ! ID              [ reduce using rule 116 (empty -> .) ]
 
-    termino                        shift and go to state 251
+    exp                            shift and go to state 252
+    termino                        shift and go to state 96
     factor                         shift and go to state 97
     masomenos                      shift and go to state 98
     empty                          shift and go to state 102
 
 state 214
 
-    (73) factorciclo -> DIV r_pila_operadores_push_div . termino
+    (72) factorciclo -> MULT r_pila_operadores_push_mult . termino
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -3446,12 +3422,39 @@ state 214
 
   ! ID              [ reduce using rule 116 (empty -> .) ]
 
-    termino                        shift and go to state 252
+    termino                        shift and go to state 253
     factor                         shift and go to state 97
     masomenos                      shift and go to state 98
     empty                          shift and go to state 102
 
 state 215
+
+    (73) factorciclo -> DIV r_pila_operadores_push_div . termino
+    (71) termino -> . factor r_pop_mult factorciclo
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
+    (76) factor -> . masomenos varcte
+    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
+    (78) masomenos -> . MAS
+    (79) masomenos -> . MENOS
+    (80) masomenos -> . empty
+    (116) empty -> .
+
+  ! shift/reduce conflict for ID resolved as shift
+    PARIZQ          shift and go to state 93
+    ID              shift and go to state 99
+    MAS             shift and go to state 100
+    MENOS           shift and go to state 101
+    CTEI            reduce using rule 116 (empty -> .)
+    CTEF            reduce using rule 116 (empty -> .)
+
+  ! ID              [ reduce using rule 116 (empty -> .) ]
+
+    termino                        shift and go to state 254
+    factor                         shift and go to state 97
+    masomenos                      shift and go to state 98
+    empty                          shift and go to state 102
+
+state 216
 
     (77) factor -> ID r_verifica_variable_existe r_guardar_variable opcionid . r_pila_operandos_push
     (148) r_pila_operandos_push -> .
@@ -3475,9 +3478,9 @@ state 215
     PTOCOM          reduce using rule 148 (r_pila_operandos_push -> .)
     DO              reduce using rule 148 (r_pila_operandos_push -> .)
 
-    r_pila_operandos_push          shift and go to state 253
+    r_pila_operandos_push          shift and go to state 255
 
-state 216
+state 217
 
     (81) opcionid -> PARIZQ . r_era_funcion_retorno parametros r_terminar_parametro PARDER
     (126) r_era_funcion_retorno -> .
@@ -3490,9 +3493,9 @@ state 216
     CTEI            reduce using rule 126 (r_era_funcion_retorno -> .)
     CTEF            reduce using rule 126 (r_era_funcion_retorno -> .)
 
-    r_era_funcion_retorno          shift and go to state 254
+    r_era_funcion_retorno          shift and go to state 256
 
-state 217
+state 218
 
     (82) opcionid -> arrexp . arrexp
     (103) arrexp -> . CORIZQ expresion CORDER
@@ -3519,10 +3522,10 @@ state 217
     PTOCOM          reduce using rule 116 (empty -> .)
     DO              reduce using rule 116 (empty -> .)
 
-    arrexp                         shift and go to state 255
+    arrexp                         shift and go to state 257
     empty                          shift and go to state 188
 
-state 218
+state 219
 
     (94) escritura -> WRITE PARIZQ escrituraciclo otro PARDER PTOCOM .
 
@@ -3536,14 +3539,14 @@ state 218
     RETURN          reduce using rule 94 (escritura -> WRITE PARIZQ escrituraciclo otro PARDER PTOCOM .)
 
 
-state 219
+state 220
 
     (97) otro -> COMA escrituraciclo otro .
 
     PARDER          reduce using rule 97 (otro -> COMA escrituraciclo otro .)
 
 
-state 220
+state 221
 
     (99) lectura -> READ PARIZQ iddim ciclodim PARDER PTOCOM .
 
@@ -3557,21 +3560,21 @@ state 220
     RETURN          reduce using rule 99 (lectura -> READ PARIZQ iddim ciclodim PARDER PTOCOM .)
 
 
-state 221
+state 222
 
     (100) ciclodim -> COMA iddim ciclodim .
 
     PARDER          reduce using rule 100 (ciclodim -> COMA iddim ciclodim .)
 
 
-state 222
+state 223
 
     (107) condicional -> WHILE r_while_paso_1 PARIZQ expresion PARDER r_while_paso_2 . DO bloque r_while_paso_3
 
-    DO              shift and go to state 256
+    DO              shift and go to state 258
 
 
-state 223
+state 224
 
     (108) nocondicional -> FOR iddim IGU r_pila_operadores_push_igu expresion TO . r_pop_igu_for expresion r_for_paso_1 DO bloque r_for_paso_2
     (144) r_pop_igu_for -> .
@@ -3583,9 +3586,9 @@ state 223
     CTEI            reduce using rule 144 (r_pop_igu_for -> .)
     CTEF            reduce using rule 144 (r_pop_igu_for -> .)
 
-    r_pop_igu_for                  shift and go to state 257
+    r_pop_igu_for                  shift and go to state 259
 
-state 224
+state 225
 
     (102) iddim -> ID r_verifica_variable_existe r_pila_operandos_push_id arrexp arrexp .
 
@@ -3610,14 +3613,14 @@ state 224
     DO              reduce using rule 102 (iddim -> ID r_verifica_variable_existe r_pila_operandos_push_id arrexp arrexp .)
 
 
-state 225
+state 226
 
     (103) arrexp -> CORIZQ expresion . CORDER
 
-    CORDER          shift and go to state 258
+    CORDER          shift and go to state 260
 
 
-state 226
+state 227
 
     (24) funcionvoid -> VOID r_register_function MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types . opvars r_register_quad bloque r_endfunc
     (2) opvars -> . vars
@@ -3628,20 +3631,20 @@ state 226
     VARTOKEN        shift and go to state 9
     KEYIZQ          reduce using rule 116 (empty -> .)
 
-    opvars                         shift and go to state 259
+    opvars                         shift and go to state 261
     vars                           shift and go to state 7
     empty                          shift and go to state 8
 
-state 227
+state 228
 
     (29) funcion -> tipo_func MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars . r_register_quad bloquefunc r_endfunc r_asegurar_return
     (124) r_register_quad -> .
 
     KEYIZQ          reduce using rule 124 (r_register_quad -> .)
 
-    r_register_quad                shift and go to state 260
+    r_register_quad                shift and go to state 262
 
-state 228
+state 229
 
     (30) ident -> ID r_register_variable_name arrini arrini .
 
@@ -3649,7 +3652,7 @@ state 228
     PARDER          reduce using rule 30 (ident -> ID r_register_variable_name arrini arrini .)
 
 
-state 229
+state 230
 
     (31) arrini -> CORIZQ CORDER .
 
@@ -3658,7 +3661,7 @@ state 229
     PARDER          reduce using rule 31 (arrini -> CORIZQ CORDER .)
 
 
-state 230
+state 231
 
     (13) opciontipo -> ID r_register_variable_name arr . arr varciclo PTOCOM tipociclo
     (9) arr -> . CORIZQ CTEI CORDER
@@ -3669,77 +3672,32 @@ state 230
     COMA            reduce using rule 116 (empty -> .)
     PTOCOM          reduce using rule 116 (empty -> .)
 
-    arr                            shift and go to state 261
+    arr                            shift and go to state 263
     empty                          shift and go to state 44
 
-state 231
+state 232
 
     (14) opciontipo -> MODULE ID r_update_func_type . r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
     (119) r_update_curr_function_name_especial -> .
 
     PARIZQ          reduce using rule 119 (r_update_curr_function_name_especial -> .)
 
-    r_update_curr_function_name_especial shift and go to state 262
+    r_update_curr_function_name_especial shift and go to state 264
 
-state 232
+state 233
 
     (7) varciclo -> COMA ID r_register_variable_name arr arr varciclo .
 
     PTOCOM          reduce using rule 7 (varciclo -> COMA ID r_register_variable_name arr arr varciclo .)
 
 
-state 233
+state 234
 
     (52) asignacion -> ID r_verifica_variable_existe r_pila_operandos_push_id asignacionarr asignacionarr IGU r_pila_operadores_push_igu . expresion r_pop_igu PTOCOM
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
-    (76) factor -> . masomenos varcte
-    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
-    (78) masomenos -> . MAS
-    (79) masomenos -> . MENOS
-    (80) masomenos -> . empty
-    (116) empty -> .
-
-  ! shift/reduce conflict for ID resolved as shift
-    PARIZQ          shift and go to state 93
-    ID              shift and go to state 99
-    MAS             shift and go to state 100
-    MENOS           shift and go to state 101
-    CTEI            reduce using rule 116 (empty -> .)
-    CTEF            reduce using rule 116 (empty -> .)
-
-  ! ID              [ reduce using rule 116 (empty -> .) ]
-
-    expresion                      shift and go to state 263
-    exp                            shift and go to state 95
-    termino                        shift and go to state 96
-    factor                         shift and go to state 97
-    masomenos                      shift and go to state 98
-    empty                          shift and go to state 102
-
-state 234
-
-    (90) llamadafunc -> ID r_verifica_void PARIZQ r_era_funcion_void parametros r_terminar_parametro_void PARDER . PTOCOM
-
-    PTOCOM          shift and go to state 264
-
-
-state 235
-
-    (86) parametros -> expresion r_extraer_parametro cicloparametros .
-
-    PARDER          reduce using rule 86 (parametros -> expresion r_extraer_parametro cicloparametros .)
-
-
-state 236
-
-    (88) cicloparametros -> COMA . expresion r_extraer_parametro cicloparametros
-    (55) expresion -> . exp r_pop_comp expresionsig
-    (67) exp -> . termino r_pop_mas expciclo
-    (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -3764,21 +3722,90 @@ state 236
     masomenos                      shift and go to state 98
     empty                          shift and go to state 102
 
+state 235
+
+    (90) llamadafunc -> ID r_verifica_void PARIZQ r_era_funcion_void parametros r_terminar_parametro_void PARDER . PTOCOM
+
+    PTOCOM          shift and go to state 266
+
+
+state 236
+
+    (86) parametros -> expresion r_extraer_parametro cicloparametros .
+
+    PARDER          reduce using rule 86 (parametros -> expresion r_extraer_parametro cicloparametros .)
+
+
 state 237
+
+    (88) cicloparametros -> COMA . expresion r_extraer_parametro cicloparametros
+    (55) expresion -> . exp r_pop_comp expresionsig
+    (67) exp -> . termino r_pop_mas expciclo
+    (71) termino -> . factor r_pop_mult factorciclo
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
+    (76) factor -> . masomenos varcte
+    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
+    (78) masomenos -> . MAS
+    (79) masomenos -> . MENOS
+    (80) masomenos -> . empty
+    (116) empty -> .
+
+  ! shift/reduce conflict for ID resolved as shift
+    PARIZQ          shift and go to state 93
+    ID              shift and go to state 99
+    MAS             shift and go to state 100
+    MENOS           shift and go to state 101
+    CTEI            reduce using rule 116 (empty -> .)
+    CTEF            reduce using rule 116 (empty -> .)
+
+  ! ID              [ reduce using rule 116 (empty -> .) ]
+
+    expresion                      shift and go to state 267
+    exp                            shift and go to state 95
+    termino                        shift and go to state 96
+    factor                         shift and go to state 97
+    masomenos                      shift and go to state 98
+    empty                          shift and go to state 102
+
+state 238
 
     (89) cicloparametros -> empty .
 
     PARDER          reduce using rule 89 (cicloparametros -> empty .)
 
 
-state 238
+state 239
+
+    (75) factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .
+
+    MULT            reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    DIV             reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    MAS             reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    MENOS           reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    MAY             reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    MEN             reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    DIF             reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    IGUIGU          reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    AND             reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    OR              reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    MAYIGU          reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    MENIGU          reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    PARDER          reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    COMA            reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    CORDER          reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    TO              reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    PTOCOM          reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+    DO              reduce using rule 75 (factor -> PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER .)
+
+
+state 240
 
     (91) decision -> IF PARIZQ expresion PARDER r_if_paso_1 THEN bloque . decision_else r_if_paso_3
     (92) decision_else -> . ELSE r_if_paso_2 bloque
     (93) decision_else -> . empty
     (116) empty -> .
 
-    ELSE            shift and go to state 267
+    ELSE            shift and go to state 269
     ID              reduce using rule 116 (empty -> .)
     IF              reduce using rule 116 (empty -> .)
     WRITE           reduce using rule 116 (empty -> .)
@@ -3787,150 +3814,16 @@ state 238
     FOR             reduce using rule 116 (empty -> .)
     KEYDER          reduce using rule 116 (empty -> .)
 
-    decision_else                  shift and go to state 266
-    empty                          shift and go to state 268
+    decision_else                  shift and go to state 268
+    empty                          shift and go to state 270
 
-state 239
+state 241
 
     (56) expresionsig -> MAY r_pila_operadores_push_may expresionsigequal . expresion
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
-    (76) factor -> . masomenos varcte
-    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
-    (78) masomenos -> . MAS
-    (79) masomenos -> . MENOS
-    (80) masomenos -> . empty
-    (116) empty -> .
-
-  ! shift/reduce conflict for ID resolved as shift
-    PARIZQ          shift and go to state 93
-    ID              shift and go to state 99
-    MAS             shift and go to state 100
-    MENOS           shift and go to state 101
-    CTEI            reduce using rule 116 (empty -> .)
-    CTEF            reduce using rule 116 (empty -> .)
-
-  ! ID              [ reduce using rule 116 (empty -> .) ]
-
-    expresion                      shift and go to state 269
-    exp                            shift and go to state 95
-    termino                        shift and go to state 96
-    factor                         shift and go to state 97
-    masomenos                      shift and go to state 98
-    empty                          shift and go to state 102
-
-state 240
-
-    (65) expresionsigequal -> IGU .
-
-    PARIZQ          reduce using rule 65 (expresionsigequal -> IGU .)
-    ID              reduce using rule 65 (expresionsigequal -> IGU .)
-    MAS             reduce using rule 65 (expresionsigequal -> IGU .)
-    MENOS           reduce using rule 65 (expresionsigequal -> IGU .)
-    CTEI            reduce using rule 65 (expresionsigequal -> IGU .)
-    CTEF            reduce using rule 65 (expresionsigequal -> IGU .)
-
-
-state 241
-
-    (66) expresionsigequal -> empty .
-
-    PARIZQ          reduce using rule 66 (expresionsigequal -> empty .)
-    ID              reduce using rule 66 (expresionsigequal -> empty .)
-    MAS             reduce using rule 66 (expresionsigequal -> empty .)
-    MENOS           reduce using rule 66 (expresionsigequal -> empty .)
-    CTEI            reduce using rule 66 (expresionsigequal -> empty .)
-    CTEF            reduce using rule 66 (expresionsigequal -> empty .)
-
-
-state 242
-
-    (57) expresionsig -> MEN r_pila_operadores_push_men expresionsigequal . expresion
-    (55) expresion -> . exp r_pop_comp expresionsig
-    (67) exp -> . termino r_pop_mas expciclo
-    (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
-    (76) factor -> . masomenos varcte
-    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
-    (78) masomenos -> . MAS
-    (79) masomenos -> . MENOS
-    (80) masomenos -> . empty
-    (116) empty -> .
-
-  ! shift/reduce conflict for ID resolved as shift
-    PARIZQ          shift and go to state 93
-    ID              shift and go to state 99
-    MAS             shift and go to state 100
-    MENOS           shift and go to state 101
-    CTEI            reduce using rule 116 (empty -> .)
-    CTEF            reduce using rule 116 (empty -> .)
-
-  ! ID              [ reduce using rule 116 (empty -> .) ]
-
-    expresion                      shift and go to state 270
-    exp                            shift and go to state 95
-    termino                        shift and go to state 96
-    factor                         shift and go to state 97
-    masomenos                      shift and go to state 98
-    empty                          shift and go to state 102
-
-state 243
-
-    (58) expresionsig -> DIF r_pila_operadores_push_dif expresion .
-
-    PARDER          reduce using rule 58 (expresionsig -> DIF r_pila_operadores_push_dif expresion .)
-    COMA            reduce using rule 58 (expresionsig -> DIF r_pila_operadores_push_dif expresion .)
-    CORDER          reduce using rule 58 (expresionsig -> DIF r_pila_operadores_push_dif expresion .)
-    TO              reduce using rule 58 (expresionsig -> DIF r_pila_operadores_push_dif expresion .)
-    PTOCOM          reduce using rule 58 (expresionsig -> DIF r_pila_operadores_push_dif expresion .)
-    DO              reduce using rule 58 (expresionsig -> DIF r_pila_operadores_push_dif expresion .)
-
-
-state 244
-
-    (59) expresionsig -> IGUIGU r_pila_operadores_push_iguigu expresion .
-
-    PARDER          reduce using rule 59 (expresionsig -> IGUIGU r_pila_operadores_push_iguigu expresion .)
-    COMA            reduce using rule 59 (expresionsig -> IGUIGU r_pila_operadores_push_iguigu expresion .)
-    CORDER          reduce using rule 59 (expresionsig -> IGUIGU r_pila_operadores_push_iguigu expresion .)
-    TO              reduce using rule 59 (expresionsig -> IGUIGU r_pila_operadores_push_iguigu expresion .)
-    PTOCOM          reduce using rule 59 (expresionsig -> IGUIGU r_pila_operadores_push_iguigu expresion .)
-    DO              reduce using rule 59 (expresionsig -> IGUIGU r_pila_operadores_push_iguigu expresion .)
-
-
-state 245
-
-    (60) expresionsig -> AND r_pila_operadores_push_and expresion .
-
-    PARDER          reduce using rule 60 (expresionsig -> AND r_pila_operadores_push_and expresion .)
-    COMA            reduce using rule 60 (expresionsig -> AND r_pila_operadores_push_and expresion .)
-    CORDER          reduce using rule 60 (expresionsig -> AND r_pila_operadores_push_and expresion .)
-    TO              reduce using rule 60 (expresionsig -> AND r_pila_operadores_push_and expresion .)
-    PTOCOM          reduce using rule 60 (expresionsig -> AND r_pila_operadores_push_and expresion .)
-    DO              reduce using rule 60 (expresionsig -> AND r_pila_operadores_push_and expresion .)
-
-
-state 246
-
-    (61) expresionsig -> OR r_pila_operadores_push_or expresion .
-
-    PARDER          reduce using rule 61 (expresionsig -> OR r_pila_operadores_push_or expresion .)
-    COMA            reduce using rule 61 (expresionsig -> OR r_pila_operadores_push_or expresion .)
-    CORDER          reduce using rule 61 (expresionsig -> OR r_pila_operadores_push_or expresion .)
-    TO              reduce using rule 61 (expresionsig -> OR r_pila_operadores_push_or expresion .)
-    PTOCOM          reduce using rule 61 (expresionsig -> OR r_pila_operadores_push_or expresion .)
-    DO              reduce using rule 61 (expresionsig -> OR r_pila_operadores_push_or expresion .)
-
-
-state 247
-
-    (62) expresionsig -> MAYIGU r_pila_operadores_push_mayigu expresionsigequal . expresion
-    (55) expresion -> . exp r_pop_comp expresionsig
-    (67) exp -> . termino r_pop_mas expciclo
-    (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -3955,13 +3848,37 @@ state 247
     masomenos                      shift and go to state 98
     empty                          shift and go to state 102
 
-state 248
+state 242
 
-    (63) expresionsig -> MENIGU r_pila_operadores_push_menigu expresionsigequal . expresion
+    (65) expresionsigequal -> IGU .
+
+    PARIZQ          reduce using rule 65 (expresionsigequal -> IGU .)
+    ID              reduce using rule 65 (expresionsigequal -> IGU .)
+    MAS             reduce using rule 65 (expresionsigequal -> IGU .)
+    MENOS           reduce using rule 65 (expresionsigequal -> IGU .)
+    CTEI            reduce using rule 65 (expresionsigequal -> IGU .)
+    CTEF            reduce using rule 65 (expresionsigequal -> IGU .)
+
+
+state 243
+
+    (66) expresionsigequal -> empty .
+
+    PARIZQ          reduce using rule 66 (expresionsigequal -> empty .)
+    ID              reduce using rule 66 (expresionsigequal -> empty .)
+    MAS             reduce using rule 66 (expresionsigequal -> empty .)
+    MENOS           reduce using rule 66 (expresionsigequal -> empty .)
+    CTEI            reduce using rule 66 (expresionsigequal -> empty .)
+    CTEF            reduce using rule 66 (expresionsigequal -> empty .)
+
+
+state 244
+
+    (57) expresionsig -> MEN r_pila_operadores_push_men expresionsigequal . expresion
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -3986,7 +3903,117 @@ state 248
     masomenos                      shift and go to state 98
     empty                          shift and go to state 102
 
+state 245
+
+    (58) expresionsig -> DIF r_pila_operadores_push_dif expresion .
+
+    PARDER          reduce using rule 58 (expresionsig -> DIF r_pila_operadores_push_dif expresion .)
+    COMA            reduce using rule 58 (expresionsig -> DIF r_pila_operadores_push_dif expresion .)
+    CORDER          reduce using rule 58 (expresionsig -> DIF r_pila_operadores_push_dif expresion .)
+    TO              reduce using rule 58 (expresionsig -> DIF r_pila_operadores_push_dif expresion .)
+    PTOCOM          reduce using rule 58 (expresionsig -> DIF r_pila_operadores_push_dif expresion .)
+    DO              reduce using rule 58 (expresionsig -> DIF r_pila_operadores_push_dif expresion .)
+
+
+state 246
+
+    (59) expresionsig -> IGUIGU r_pila_operadores_push_iguigu expresion .
+
+    PARDER          reduce using rule 59 (expresionsig -> IGUIGU r_pila_operadores_push_iguigu expresion .)
+    COMA            reduce using rule 59 (expresionsig -> IGUIGU r_pila_operadores_push_iguigu expresion .)
+    CORDER          reduce using rule 59 (expresionsig -> IGUIGU r_pila_operadores_push_iguigu expresion .)
+    TO              reduce using rule 59 (expresionsig -> IGUIGU r_pila_operadores_push_iguigu expresion .)
+    PTOCOM          reduce using rule 59 (expresionsig -> IGUIGU r_pila_operadores_push_iguigu expresion .)
+    DO              reduce using rule 59 (expresionsig -> IGUIGU r_pila_operadores_push_iguigu expresion .)
+
+
+state 247
+
+    (60) expresionsig -> AND r_pila_operadores_push_and expresion .
+
+    PARDER          reduce using rule 60 (expresionsig -> AND r_pila_operadores_push_and expresion .)
+    COMA            reduce using rule 60 (expresionsig -> AND r_pila_operadores_push_and expresion .)
+    CORDER          reduce using rule 60 (expresionsig -> AND r_pila_operadores_push_and expresion .)
+    TO              reduce using rule 60 (expresionsig -> AND r_pila_operadores_push_and expresion .)
+    PTOCOM          reduce using rule 60 (expresionsig -> AND r_pila_operadores_push_and expresion .)
+    DO              reduce using rule 60 (expresionsig -> AND r_pila_operadores_push_and expresion .)
+
+
+state 248
+
+    (61) expresionsig -> OR r_pila_operadores_push_or expresion .
+
+    PARDER          reduce using rule 61 (expresionsig -> OR r_pila_operadores_push_or expresion .)
+    COMA            reduce using rule 61 (expresionsig -> OR r_pila_operadores_push_or expresion .)
+    CORDER          reduce using rule 61 (expresionsig -> OR r_pila_operadores_push_or expresion .)
+    TO              reduce using rule 61 (expresionsig -> OR r_pila_operadores_push_or expresion .)
+    PTOCOM          reduce using rule 61 (expresionsig -> OR r_pila_operadores_push_or expresion .)
+    DO              reduce using rule 61 (expresionsig -> OR r_pila_operadores_push_or expresion .)
+
+
 state 249
+
+    (62) expresionsig -> MAYIGU r_pila_operadores_push_mayigu expresionsigequal . expresion
+    (55) expresion -> . exp r_pop_comp expresionsig
+    (67) exp -> . termino r_pop_mas expciclo
+    (71) termino -> . factor r_pop_mult factorciclo
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
+    (76) factor -> . masomenos varcte
+    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
+    (78) masomenos -> . MAS
+    (79) masomenos -> . MENOS
+    (80) masomenos -> . empty
+    (116) empty -> .
+
+  ! shift/reduce conflict for ID resolved as shift
+    PARIZQ          shift and go to state 93
+    ID              shift and go to state 99
+    MAS             shift and go to state 100
+    MENOS           shift and go to state 101
+    CTEI            reduce using rule 116 (empty -> .)
+    CTEF            reduce using rule 116 (empty -> .)
+
+  ! ID              [ reduce using rule 116 (empty -> .) ]
+
+    expresion                      shift and go to state 273
+    exp                            shift and go to state 95
+    termino                        shift and go to state 96
+    factor                         shift and go to state 97
+    masomenos                      shift and go to state 98
+    empty                          shift and go to state 102
+
+state 250
+
+    (63) expresionsig -> MENIGU r_pila_operadores_push_menigu expresionsigequal . expresion
+    (55) expresion -> . exp r_pop_comp expresionsig
+    (67) exp -> . termino r_pop_mas expciclo
+    (71) termino -> . factor r_pop_mult factorciclo
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
+    (76) factor -> . masomenos varcte
+    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
+    (78) masomenos -> . MAS
+    (79) masomenos -> . MENOS
+    (80) masomenos -> . empty
+    (116) empty -> .
+
+  ! shift/reduce conflict for ID resolved as shift
+    PARIZQ          shift and go to state 93
+    ID              shift and go to state 99
+    MAS             shift and go to state 100
+    MENOS           shift and go to state 101
+    CTEI            reduce using rule 116 (empty -> .)
+    CTEF            reduce using rule 116 (empty -> .)
+
+  ! ID              [ reduce using rule 116 (empty -> .) ]
+
+    expresion                      shift and go to state 274
+    exp                            shift and go to state 95
+    termino                        shift and go to state 96
+    factor                         shift and go to state 97
+    masomenos                      shift and go to state 98
+    empty                          shift and go to state 102
+
+state 251
 
     (68) expciclo -> MAS r_pila_operadores_push_mas exp .
 
@@ -4006,7 +4033,7 @@ state 249
     DO              reduce using rule 68 (expciclo -> MAS r_pila_operadores_push_mas exp .)
 
 
-state 250
+state 252
 
     (69) expciclo -> MENOS r_pila_operadores_push_menos exp .
 
@@ -4026,7 +4053,7 @@ state 250
     DO              reduce using rule 69 (expciclo -> MENOS r_pila_operadores_push_menos exp .)
 
 
-state 251
+state 253
 
     (72) factorciclo -> MULT r_pila_operadores_push_mult termino .
 
@@ -4048,7 +4075,7 @@ state 251
     DO              reduce using rule 72 (factorciclo -> MULT r_pila_operadores_push_mult termino .)
 
 
-state 252
+state 254
 
     (73) factorciclo -> DIV r_pila_operadores_push_div termino .
 
@@ -4070,7 +4097,7 @@ state 252
     DO              reduce using rule 73 (factorciclo -> DIV r_pila_operadores_push_div termino .)
 
 
-state 253
+state 255
 
     (77) factor -> ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push .
 
@@ -4094,7 +4121,7 @@ state 253
     DO              reduce using rule 77 (factor -> ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push .)
 
 
-state 254
+state 256
 
     (81) opcionid -> PARIZQ r_era_funcion_retorno . parametros r_terminar_parametro PARDER
     (86) parametros -> . expresion r_extraer_parametro cicloparametros
@@ -4103,7 +4130,7 @@ state 254
     (116) empty -> .
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -4121,7 +4148,7 @@ state 254
 
   ! ID              [ reduce using rule 116 (empty -> .) ]
 
-    parametros                     shift and go to state 273
+    parametros                     shift and go to state 275
     expresion                      shift and go to state 155
     empty                          shift and go to state 156
     exp                            shift and go to state 95
@@ -4129,7 +4156,7 @@ state 254
     factor                         shift and go to state 97
     masomenos                      shift and go to state 98
 
-state 255
+state 257
 
     (82) opcionid -> arrexp arrexp .
 
@@ -4153,22 +4180,22 @@ state 255
     DO              reduce using rule 82 (opcionid -> arrexp arrexp .)
 
 
-state 256
+state 258
 
     (107) condicional -> WHILE r_while_paso_1 PARIZQ expresion PARDER r_while_paso_2 DO . bloque r_while_paso_3
     (33) bloque -> . KEYIZQ bloqueopcion KEYDER
 
     KEYIZQ          shift and go to state 46
 
-    bloque                         shift and go to state 274
+    bloque                         shift and go to state 276
 
-state 257
+state 259
 
     (108) nocondicional -> FOR iddim IGU r_pila_operadores_push_igu expresion TO r_pop_igu_for . expresion r_for_paso_1 DO bloque r_for_paso_2
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -4186,14 +4213,14 @@ state 257
 
   ! ID              [ reduce using rule 116 (empty -> .) ]
 
-    expresion                      shift and go to state 275
+    expresion                      shift and go to state 277
     exp                            shift and go to state 95
     termino                        shift and go to state 96
     factor                         shift and go to state 97
     masomenos                      shift and go to state 98
     empty                          shift and go to state 102
 
-state 258
+state 260
 
     (103) arrexp -> CORIZQ expresion CORDER .
 
@@ -4219,25 +4246,25 @@ state 258
     DO              reduce using rule 103 (arrexp -> CORIZQ expresion CORDER .)
 
 
-state 259
+state 261
 
     (24) funcionvoid -> VOID r_register_function MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars . r_register_quad bloque r_endfunc
     (124) r_register_quad -> .
 
     KEYIZQ          reduce using rule 124 (r_register_quad -> .)
 
-    r_register_quad                shift and go to state 276
+    r_register_quad                shift and go to state 278
 
-state 260
+state 262
 
     (29) funcion -> tipo_func MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad . bloquefunc r_endfunc r_asegurar_return
     (36) bloquefunc -> . KEYIZQ bloqueopcionfunc KEYDER
 
-    KEYIZQ          shift and go to state 278
+    KEYIZQ          shift and go to state 280
 
-    bloquefunc                     shift and go to state 277
+    bloquefunc                     shift and go to state 279
 
-state 261
+state 263
 
     (13) opciontipo -> ID r_register_variable_name arr arr . varciclo PTOCOM tipociclo
     (7) varciclo -> . COMA ID r_register_variable_name arr arr varciclo
@@ -4247,26 +4274,26 @@ state 261
     COMA            shift and go to state 71
     PTOCOM          reduce using rule 116 (empty -> .)
 
-    varciclo                       shift and go to state 279
+    varciclo                       shift and go to state 281
     empty                          shift and go to state 72
 
-state 262
+state 264
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial . PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
 
-    PARIZQ          shift and go to state 280
+    PARIZQ          shift and go to state 282
 
 
-state 263
+state 265
 
     (52) asignacion -> ID r_verifica_variable_existe r_pila_operandos_push_id asignacionarr asignacionarr IGU r_pila_operadores_push_igu expresion . r_pop_igu PTOCOM
     (155) r_pop_igu -> .
 
     PTOCOM          reduce using rule 155 (r_pop_igu -> .)
 
-    r_pop_igu                      shift and go to state 281
+    r_pop_igu                      shift and go to state 283
 
-state 264
+state 266
 
     (90) llamadafunc -> ID r_verifica_void PARIZQ r_era_funcion_void parametros r_terminar_parametro_void PARDER PTOCOM .
 
@@ -4280,7 +4307,7 @@ state 264
     RETURN          reduce using rule 90 (llamadafunc -> ID r_verifica_void PARIZQ r_era_funcion_void parametros r_terminar_parametro_void PARDER PTOCOM .)
 
 
-state 265
+state 267
 
     (88) cicloparametros -> COMA expresion . r_extraer_parametro cicloparametros
     (130) r_extraer_parametro -> .
@@ -4288,9 +4315,9 @@ state 265
     COMA            reduce using rule 130 (r_extraer_parametro -> .)
     PARDER          reduce using rule 130 (r_extraer_parametro -> .)
 
-    r_extraer_parametro            shift and go to state 282
+    r_extraer_parametro            shift and go to state 284
 
-state 266
+state 268
 
     (91) decision -> IF PARIZQ expresion PARDER r_if_paso_1 THEN bloque decision_else . r_if_paso_3
     (140) r_if_paso_3 -> .
@@ -4303,18 +4330,18 @@ state 266
     FOR             reduce using rule 140 (r_if_paso_3 -> .)
     KEYDER          reduce using rule 140 (r_if_paso_3 -> .)
 
-    r_if_paso_3                    shift and go to state 283
+    r_if_paso_3                    shift and go to state 285
 
-state 267
+state 269
 
     (92) decision_else -> ELSE . r_if_paso_2 bloque
     (139) r_if_paso_2 -> .
 
     KEYIZQ          reduce using rule 139 (r_if_paso_2 -> .)
 
-    r_if_paso_2                    shift and go to state 284
+    r_if_paso_2                    shift and go to state 286
 
-state 268
+state 270
 
     (93) decision_else -> empty .
 
@@ -4327,7 +4354,7 @@ state 268
     KEYDER          reduce using rule 93 (decision_else -> empty .)
 
 
-state 269
+state 271
 
     (56) expresionsig -> MAY r_pila_operadores_push_may expresionsigequal expresion .
 
@@ -4339,7 +4366,7 @@ state 269
     DO              reduce using rule 56 (expresionsig -> MAY r_pila_operadores_push_may expresionsigequal expresion .)
 
 
-state 270
+state 272
 
     (57) expresionsig -> MEN r_pila_operadores_push_men expresionsigequal expresion .
 
@@ -4351,7 +4378,7 @@ state 270
     DO              reduce using rule 57 (expresionsig -> MEN r_pila_operadores_push_men expresionsigequal expresion .)
 
 
-state 271
+state 273
 
     (62) expresionsig -> MAYIGU r_pila_operadores_push_mayigu expresionsigequal expresion .
 
@@ -4363,7 +4390,7 @@ state 271
     DO              reduce using rule 62 (expresionsig -> MAYIGU r_pila_operadores_push_mayigu expresionsigequal expresion .)
 
 
-state 272
+state 274
 
     (63) expresionsig -> MENIGU r_pila_operadores_push_menigu expresionsigequal expresion .
 
@@ -4375,16 +4402,16 @@ state 272
     DO              reduce using rule 63 (expresionsig -> MENIGU r_pila_operadores_push_menigu expresionsigequal expresion .)
 
 
-state 273
+state 275
 
     (81) opcionid -> PARIZQ r_era_funcion_retorno parametros . r_terminar_parametro PARDER
     (128) r_terminar_parametro -> .
 
     PARDER          reduce using rule 128 (r_terminar_parametro -> .)
 
-    r_terminar_parametro           shift and go to state 285
+    r_terminar_parametro           shift and go to state 287
 
-state 274
+state 276
 
     (107) condicional -> WHILE r_while_paso_1 PARIZQ expresion PARDER r_while_paso_2 DO bloque . r_while_paso_3
     (143) r_while_paso_3 -> .
@@ -4397,27 +4424,27 @@ state 274
     FOR             reduce using rule 143 (r_while_paso_3 -> .)
     KEYDER          reduce using rule 143 (r_while_paso_3 -> .)
 
-    r_while_paso_3                 shift and go to state 286
+    r_while_paso_3                 shift and go to state 288
 
-state 275
+state 277
 
     (108) nocondicional -> FOR iddim IGU r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion . r_for_paso_1 DO bloque r_for_paso_2
     (145) r_for_paso_1 -> .
 
     DO              reduce using rule 145 (r_for_paso_1 -> .)
 
-    r_for_paso_1                   shift and go to state 287
+    r_for_paso_1                   shift and go to state 289
 
-state 276
+state 278
 
     (24) funcionvoid -> VOID r_register_function MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad . bloque r_endfunc
     (33) bloque -> . KEYIZQ bloqueopcion KEYDER
 
     KEYIZQ          shift and go to state 46
 
-    bloque                         shift and go to state 288
+    bloque                         shift and go to state 290
 
-state 277
+state 279
 
     (29) funcion -> tipo_func MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc . r_endfunc r_asegurar_return
     (134) r_endfunc -> .
@@ -4428,9 +4455,9 @@ state 277
     CHAR            reduce using rule 134 (r_endfunc -> .)
     MAIN            reduce using rule 134 (r_endfunc -> .)
 
-    r_endfunc                      shift and go to state 289
+    r_endfunc                      shift and go to state 291
 
-state 278
+state 280
 
     (36) bloquefunc -> KEYIZQ . bloqueopcionfunc KEYDER
     (37) bloqueopcionfunc -> . estatutofunc bloqueopcionfunc
@@ -4453,35 +4480,35 @@ state 278
     (114) condicionalfunc -> . WHILE PARIZQ expresion PARDER DO bloquefunc
     (115) nocondicionalfunc -> . FOR iddim IGU expresion TO expresion DO bloquefunc
 
-    RETURN          shift and go to state 299
+    RETURN          shift and go to state 301
     KEYDER          reduce using rule 116 (empty -> .)
     ID              shift and go to state 60
-    IF              shift and go to state 300
+    IF              shift and go to state 302
     WRITE           shift and go to state 62
     READ            shift and go to state 65
-    WHILE           shift and go to state 303
-    FOR             shift and go to state 304
+    WHILE           shift and go to state 305
+    FOR             shift and go to state 306
 
-    bloqueopcionfunc               shift and go to state 290
-    estatutofunc                   shift and go to state 291
-    empty                          shift and go to state 292
-    asignacion                     shift and go to state 293
-    decisionfunc                   shift and go to state 294
-    escritura                      shift and go to state 295
-    llamadafunc                    shift and go to state 296
-    repeticionfunc                 shift and go to state 297
-    lectura                        shift and go to state 298
-    condicionalfunc                shift and go to state 301
-    nocondicionalfunc              shift and go to state 302
+    bloqueopcionfunc               shift and go to state 292
+    estatutofunc                   shift and go to state 293
+    empty                          shift and go to state 294
+    asignacion                     shift and go to state 295
+    decisionfunc                   shift and go to state 296
+    escritura                      shift and go to state 297
+    llamadafunc                    shift and go to state 298
+    repeticionfunc                 shift and go to state 299
+    lectura                        shift and go to state 300
+    condicionalfunc                shift and go to state 303
+    nocondicionalfunc              shift and go to state 304
 
-state 279
+state 281
 
     (13) opciontipo -> ID r_register_variable_name arr arr varciclo . PTOCOM tipociclo
 
-    PTOCOM          shift and go to state 305
+    PTOCOM          shift and go to state 307
 
 
-state 280
+state 282
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ . r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
     (132) r_marcar_funcion -> .
@@ -4491,29 +4518,29 @@ state 280
     CHAR            reduce using rule 132 (r_marcar_funcion -> .)
     PARDER          reduce using rule 132 (r_marcar_funcion -> .)
 
-    r_marcar_funcion               shift and go to state 306
+    r_marcar_funcion               shift and go to state 308
 
-state 281
+state 283
 
     (52) asignacion -> ID r_verifica_variable_existe r_pila_operandos_push_id asignacionarr asignacionarr IGU r_pila_operadores_push_igu expresion r_pop_igu . PTOCOM
 
-    PTOCOM          shift and go to state 307
+    PTOCOM          shift and go to state 309
 
 
-state 282
+state 284
 
     (88) cicloparametros -> COMA expresion r_extraer_parametro . cicloparametros
     (88) cicloparametros -> . COMA expresion r_extraer_parametro cicloparametros
     (89) cicloparametros -> . empty
     (116) empty -> .
 
-    COMA            shift and go to state 236
+    COMA            shift and go to state 237
     PARDER          reduce using rule 116 (empty -> .)
 
-    cicloparametros                shift and go to state 308
-    empty                          shift and go to state 237
+    cicloparametros                shift and go to state 310
+    empty                          shift and go to state 238
 
-state 283
+state 285
 
     (91) decision -> IF PARIZQ expresion PARDER r_if_paso_1 THEN bloque decision_else r_if_paso_3 .
 
@@ -4526,23 +4553,23 @@ state 283
     KEYDER          reduce using rule 91 (decision -> IF PARIZQ expresion PARDER r_if_paso_1 THEN bloque decision_else r_if_paso_3 .)
 
 
-state 284
+state 286
 
     (92) decision_else -> ELSE r_if_paso_2 . bloque
     (33) bloque -> . KEYIZQ bloqueopcion KEYDER
 
     KEYIZQ          shift and go to state 46
 
-    bloque                         shift and go to state 309
+    bloque                         shift and go to state 311
 
-state 285
+state 287
 
     (81) opcionid -> PARIZQ r_era_funcion_retorno parametros r_terminar_parametro . PARDER
 
-    PARDER          shift and go to state 310
+    PARDER          shift and go to state 312
 
 
-state 286
+state 288
 
     (107) condicional -> WHILE r_while_paso_1 PARIZQ expresion PARDER r_while_paso_2 DO bloque r_while_paso_3 .
 
@@ -4555,14 +4582,14 @@ state 286
     KEYDER          reduce using rule 107 (condicional -> WHILE r_while_paso_1 PARIZQ expresion PARDER r_while_paso_2 DO bloque r_while_paso_3 .)
 
 
-state 287
+state 289
 
     (108) nocondicional -> FOR iddim IGU r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion r_for_paso_1 . DO bloque r_for_paso_2
 
-    DO              shift and go to state 311
+    DO              shift and go to state 313
 
 
-state 288
+state 290
 
     (24) funcionvoid -> VOID r_register_function MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloque . r_endfunc
     (134) r_endfunc -> .
@@ -4573,9 +4600,9 @@ state 288
     CHAR            reduce using rule 134 (r_endfunc -> .)
     MAIN            reduce using rule 134 (r_endfunc -> .)
 
-    r_endfunc                      shift and go to state 312
+    r_endfunc                      shift and go to state 314
 
-state 289
+state 291
 
     (29) funcion -> tipo_func MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc . r_asegurar_return
     (127) r_asegurar_return -> .
@@ -4586,16 +4613,16 @@ state 289
     CHAR            reduce using rule 127 (r_asegurar_return -> .)
     MAIN            reduce using rule 127 (r_asegurar_return -> .)
 
-    r_asegurar_return              shift and go to state 313
+    r_asegurar_return              shift and go to state 315
 
-state 290
+state 292
 
     (36) bloquefunc -> KEYIZQ bloqueopcionfunc . KEYDER
 
-    KEYDER          shift and go to state 314
+    KEYDER          shift and go to state 316
 
 
-state 291
+state 293
 
     (37) bloqueopcionfunc -> estatutofunc . bloqueopcionfunc
     (37) bloqueopcionfunc -> . estatutofunc bloqueopcionfunc
@@ -4618,35 +4645,35 @@ state 291
     (114) condicionalfunc -> . WHILE PARIZQ expresion PARDER DO bloquefunc
     (115) nocondicionalfunc -> . FOR iddim IGU expresion TO expresion DO bloquefunc
 
-    RETURN          shift and go to state 299
+    RETURN          shift and go to state 301
     KEYDER          reduce using rule 116 (empty -> .)
     ID              shift and go to state 60
-    IF              shift and go to state 300
+    IF              shift and go to state 302
     WRITE           shift and go to state 62
     READ            shift and go to state 65
-    WHILE           shift and go to state 303
-    FOR             shift and go to state 304
+    WHILE           shift and go to state 305
+    FOR             shift and go to state 306
 
-    estatutofunc                   shift and go to state 291
-    bloqueopcionfunc               shift and go to state 315
-    empty                          shift and go to state 292
-    asignacion                     shift and go to state 293
-    decisionfunc                   shift and go to state 294
-    escritura                      shift and go to state 295
-    llamadafunc                    shift and go to state 296
-    repeticionfunc                 shift and go to state 297
-    lectura                        shift and go to state 298
-    condicionalfunc                shift and go to state 301
-    nocondicionalfunc              shift and go to state 302
+    estatutofunc                   shift and go to state 293
+    bloqueopcionfunc               shift and go to state 317
+    empty                          shift and go to state 294
+    asignacion                     shift and go to state 295
+    decisionfunc                   shift and go to state 296
+    escritura                      shift and go to state 297
+    llamadafunc                    shift and go to state 298
+    repeticionfunc                 shift and go to state 299
+    lectura                        shift and go to state 300
+    condicionalfunc                shift and go to state 303
+    nocondicionalfunc              shift and go to state 304
 
-state 292
+state 294
 
     (38) bloqueopcionfunc -> empty .
 
     KEYDER          reduce using rule 38 (bloqueopcionfunc -> empty .)
 
 
-state 293
+state 295
 
     (45) estatutofunc -> asignacion .
 
@@ -4660,7 +4687,7 @@ state 293
     KEYDER          reduce using rule 45 (estatutofunc -> asignacion .)
 
 
-state 294
+state 296
 
     (46) estatutofunc -> decisionfunc .
 
@@ -4674,7 +4701,7 @@ state 294
     KEYDER          reduce using rule 46 (estatutofunc -> decisionfunc .)
 
 
-state 295
+state 297
 
     (47) estatutofunc -> escritura .
 
@@ -4688,7 +4715,7 @@ state 295
     KEYDER          reduce using rule 47 (estatutofunc -> escritura .)
 
 
-state 296
+state 298
 
     (48) estatutofunc -> llamadafunc .
 
@@ -4702,7 +4729,7 @@ state 296
     KEYDER          reduce using rule 48 (estatutofunc -> llamadafunc .)
 
 
-state 297
+state 299
 
     (49) estatutofunc -> repeticionfunc .
 
@@ -4716,7 +4743,7 @@ state 297
     KEYDER          reduce using rule 49 (estatutofunc -> repeticionfunc .)
 
 
-state 298
+state 300
 
     (50) estatutofunc -> lectura .
 
@@ -4730,21 +4757,21 @@ state 298
     KEYDER          reduce using rule 50 (estatutofunc -> lectura .)
 
 
-state 299
+state 301
 
     (51) estatutofunc -> RETURN . PARIZQ expresion r_return_func PARDER PTOCOM
 
-    PARIZQ          shift and go to state 316
+    PARIZQ          shift and go to state 318
 
 
-state 300
+state 302
 
     (109) decisionfunc -> IF . PARIZQ expresion PARDER r_if_paso_1 THEN bloquefunc decisionfunc_else r_if_paso_3
 
-    PARIZQ          shift and go to state 317
+    PARIZQ          shift and go to state 319
 
 
-state 301
+state 303
 
     (112) repeticionfunc -> condicionalfunc .
 
@@ -4758,7 +4785,7 @@ state 301
     KEYDER          reduce using rule 112 (repeticionfunc -> condicionalfunc .)
 
 
-state 302
+state 304
 
     (113) repeticionfunc -> nocondicionalfunc .
 
@@ -4772,23 +4799,23 @@ state 302
     KEYDER          reduce using rule 113 (repeticionfunc -> nocondicionalfunc .)
 
 
-state 303
+state 305
 
     (114) condicionalfunc -> WHILE . PARIZQ expresion PARDER DO bloquefunc
 
-    PARIZQ          shift and go to state 318
+    PARIZQ          shift and go to state 320
 
 
-state 304
+state 306
 
     (115) nocondicionalfunc -> FOR . iddim IGU expresion TO expresion DO bloquefunc
     (102) iddim -> . ID r_verifica_variable_existe r_pila_operandos_push_id arrexp arrexp
 
     ID              shift and go to state 83
 
-    iddim                          shift and go to state 319
+    iddim                          shift and go to state 321
 
-state 305
+state 307
 
     (13) opciontipo -> ID r_register_variable_name arr arr varciclo PTOCOM . tipociclo
     (11) tipociclo -> . tipo opciontipo
@@ -4812,11 +4839,11 @@ state 305
   ! FLT             [ reduce using rule 116 (empty -> .) ]
   ! CHAR            [ reduce using rule 116 (empty -> .) ]
 
-    tipociclo                      shift and go to state 320
+    tipociclo                      shift and go to state 322
     tipo                           shift and go to state 117
     empty                          shift and go to state 119
 
-state 306
+state 308
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion . opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
     (25) opcionvarsimple -> . varsimple ciclovarsimple
@@ -4832,12 +4859,12 @@ state 306
     FLT             shift and go to state 22
     CHAR            shift and go to state 23
 
-    opcionvarsimple                shift and go to state 321
+    opcionvarsimple                shift and go to state 323
     varsimple                      shift and go to state 86
     empty                          shift and go to state 87
     tipo                           shift and go to state 88
 
-state 307
+state 309
 
     (52) asignacion -> ID r_verifica_variable_existe r_pila_operandos_push_id asignacionarr asignacionarr IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .
 
@@ -4851,14 +4878,14 @@ state 307
     RETURN          reduce using rule 52 (asignacion -> ID r_verifica_variable_existe r_pila_operandos_push_id asignacionarr asignacionarr IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
 
 
-state 308
+state 310
 
     (88) cicloparametros -> COMA expresion r_extraer_parametro cicloparametros .
 
     PARDER          reduce using rule 88 (cicloparametros -> COMA expresion r_extraer_parametro cicloparametros .)
 
 
-state 309
+state 311
 
     (92) decision_else -> ELSE r_if_paso_2 bloque .
 
@@ -4871,7 +4898,7 @@ state 309
     KEYDER          reduce using rule 92 (decision_else -> ELSE r_if_paso_2 bloque .)
 
 
-state 310
+state 312
 
     (81) opcionid -> PARIZQ r_era_funcion_retorno parametros r_terminar_parametro PARDER .
 
@@ -4895,16 +4922,16 @@ state 310
     DO              reduce using rule 81 (opcionid -> PARIZQ r_era_funcion_retorno parametros r_terminar_parametro PARDER .)
 
 
-state 311
+state 313
 
     (108) nocondicional -> FOR iddim IGU r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion r_for_paso_1 DO . bloque r_for_paso_2
     (33) bloque -> . KEYIZQ bloqueopcion KEYDER
 
     KEYIZQ          shift and go to state 46
 
-    bloque                         shift and go to state 322
+    bloque                         shift and go to state 324
 
-state 312
+state 314
 
     (24) funcionvoid -> VOID r_register_function MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloque r_endfunc .
 
@@ -4915,7 +4942,7 @@ state 312
     MAIN            reduce using rule 24 (funcionvoid -> VOID r_register_function MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloque r_endfunc .)
 
 
-state 313
+state 315
 
     (29) funcion -> tipo_func MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return .
 
@@ -4926,7 +4953,7 @@ state 313
     MAIN            reduce using rule 29 (funcion -> tipo_func MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return .)
 
 
-state 314
+state 316
 
     (36) bloquefunc -> KEYIZQ bloqueopcionfunc KEYDER .
 
@@ -4947,82 +4974,20 @@ state 314
     KEYIZQ          reduce using rule 36 (bloquefunc -> KEYIZQ bloqueopcionfunc KEYDER .)
 
 
-state 315
+state 317
 
     (37) bloqueopcionfunc -> estatutofunc bloqueopcionfunc .
 
     KEYDER          reduce using rule 37 (bloqueopcionfunc -> estatutofunc bloqueopcionfunc .)
 
 
-state 316
+state 318
 
     (51) estatutofunc -> RETURN PARIZQ . expresion r_return_func PARDER PTOCOM
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
-    (76) factor -> . masomenos varcte
-    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
-    (78) masomenos -> . MAS
-    (79) masomenos -> . MENOS
-    (80) masomenos -> . empty
-    (116) empty -> .
-
-  ! shift/reduce conflict for ID resolved as shift
-    PARIZQ          shift and go to state 93
-    ID              shift and go to state 99
-    MAS             shift and go to state 100
-    MENOS           shift and go to state 101
-    CTEI            reduce using rule 116 (empty -> .)
-    CTEF            reduce using rule 116 (empty -> .)
-
-  ! ID              [ reduce using rule 116 (empty -> .) ]
-
-    expresion                      shift and go to state 323
-    exp                            shift and go to state 95
-    termino                        shift and go to state 96
-    factor                         shift and go to state 97
-    masomenos                      shift and go to state 98
-    empty                          shift and go to state 102
-
-state 317
-
-    (109) decisionfunc -> IF PARIZQ . expresion PARDER r_if_paso_1 THEN bloquefunc decisionfunc_else r_if_paso_3
-    (55) expresion -> . exp r_pop_comp expresionsig
-    (67) exp -> . termino r_pop_mas expciclo
-    (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
-    (76) factor -> . masomenos varcte
-    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
-    (78) masomenos -> . MAS
-    (79) masomenos -> . MENOS
-    (80) masomenos -> . empty
-    (116) empty -> .
-
-  ! shift/reduce conflict for ID resolved as shift
-    PARIZQ          shift and go to state 93
-    ID              shift and go to state 99
-    MAS             shift and go to state 100
-    MENOS           shift and go to state 101
-    CTEI            reduce using rule 116 (empty -> .)
-    CTEF            reduce using rule 116 (empty -> .)
-
-  ! ID              [ reduce using rule 116 (empty -> .) ]
-
-    expresion                      shift and go to state 324
-    exp                            shift and go to state 95
-    termino                        shift and go to state 96
-    factor                         shift and go to state 97
-    masomenos                      shift and go to state 98
-    empty                          shift and go to state 102
-
-state 318
-
-    (114) condicionalfunc -> WHILE PARIZQ . expresion PARDER DO bloquefunc
-    (55) expresion -> . exp r_pop_comp expresionsig
-    (67) exp -> . termino r_pop_mas expciclo
-    (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -5049,12 +5014,74 @@ state 318
 
 state 319
 
-    (115) nocondicionalfunc -> FOR iddim . IGU expresion TO expresion DO bloquefunc
+    (109) decisionfunc -> IF PARIZQ . expresion PARDER r_if_paso_1 THEN bloquefunc decisionfunc_else r_if_paso_3
+    (55) expresion -> . exp r_pop_comp expresionsig
+    (67) exp -> . termino r_pop_mas expciclo
+    (71) termino -> . factor r_pop_mult factorciclo
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
+    (76) factor -> . masomenos varcte
+    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
+    (78) masomenos -> . MAS
+    (79) masomenos -> . MENOS
+    (80) masomenos -> . empty
+    (116) empty -> .
 
-    IGU             shift and go to state 326
+  ! shift/reduce conflict for ID resolved as shift
+    PARIZQ          shift and go to state 93
+    ID              shift and go to state 99
+    MAS             shift and go to state 100
+    MENOS           shift and go to state 101
+    CTEI            reduce using rule 116 (empty -> .)
+    CTEF            reduce using rule 116 (empty -> .)
 
+  ! ID              [ reduce using rule 116 (empty -> .) ]
+
+    expresion                      shift and go to state 326
+    exp                            shift and go to state 95
+    termino                        shift and go to state 96
+    factor                         shift and go to state 97
+    masomenos                      shift and go to state 98
+    empty                          shift and go to state 102
 
 state 320
+
+    (114) condicionalfunc -> WHILE PARIZQ . expresion PARDER DO bloquefunc
+    (55) expresion -> . exp r_pop_comp expresionsig
+    (67) exp -> . termino r_pop_mas expciclo
+    (71) termino -> . factor r_pop_mult factorciclo
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
+    (76) factor -> . masomenos varcte
+    (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
+    (78) masomenos -> . MAS
+    (79) masomenos -> . MENOS
+    (80) masomenos -> . empty
+    (116) empty -> .
+
+  ! shift/reduce conflict for ID resolved as shift
+    PARIZQ          shift and go to state 93
+    ID              shift and go to state 99
+    MAS             shift and go to state 100
+    MENOS           shift and go to state 101
+    CTEI            reduce using rule 116 (empty -> .)
+    CTEF            reduce using rule 116 (empty -> .)
+
+  ! ID              [ reduce using rule 116 (empty -> .) ]
+
+    expresion                      shift and go to state 327
+    exp                            shift and go to state 95
+    termino                        shift and go to state 96
+    factor                         shift and go to state 97
+    masomenos                      shift and go to state 98
+    empty                          shift and go to state 102
+
+state 321
+
+    (115) nocondicionalfunc -> FOR iddim . IGU expresion TO expresion DO bloquefunc
+
+    IGU             shift and go to state 328
+
+
+state 322
 
     (13) opciontipo -> ID r_register_variable_name arr arr varciclo PTOCOM tipociclo .
 
@@ -5066,16 +5093,16 @@ state 320
     KEYIZQ          reduce using rule 13 (opciontipo -> ID r_register_variable_name arr arr varciclo PTOCOM tipociclo .)
 
 
-state 321
+state 323
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple . r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
     (133) r_desmarcar_funcion -> .
 
     PARDER          reduce using rule 133 (r_desmarcar_funcion -> .)
 
-    r_desmarcar_funcion            shift and go to state 327
+    r_desmarcar_funcion            shift and go to state 329
 
-state 322
+state 324
 
     (108) nocondicional -> FOR iddim IGU r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion r_for_paso_1 DO bloque . r_for_paso_2
     (146) r_for_paso_2 -> .
@@ -5088,38 +5115,38 @@ state 322
     FOR             reduce using rule 146 (r_for_paso_2 -> .)
     KEYDER          reduce using rule 146 (r_for_paso_2 -> .)
 
-    r_for_paso_2                   shift and go to state 328
+    r_for_paso_2                   shift and go to state 330
 
-state 323
+state 325
 
     (51) estatutofunc -> RETURN PARIZQ expresion . r_return_func PARDER PTOCOM
     (138) r_return_func -> .
 
     PARDER          reduce using rule 138 (r_return_func -> .)
 
-    r_return_func                  shift and go to state 329
+    r_return_func                  shift and go to state 331
 
-state 324
+state 326
 
     (109) decisionfunc -> IF PARIZQ expresion . PARDER r_if_paso_1 THEN bloquefunc decisionfunc_else r_if_paso_3
 
-    PARDER          shift and go to state 330
+    PARDER          shift and go to state 332
 
 
-state 325
+state 327
 
     (114) condicionalfunc -> WHILE PARIZQ expresion . PARDER DO bloquefunc
 
-    PARDER          shift and go to state 331
+    PARDER          shift and go to state 333
 
 
-state 326
+state 328
 
     (115) nocondicionalfunc -> FOR iddim IGU . expresion TO expresion DO bloquefunc
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -5137,21 +5164,21 @@ state 326
 
   ! ID              [ reduce using rule 116 (empty -> .) ]
 
-    expresion                      shift and go to state 332
+    expresion                      shift and go to state 334
     exp                            shift and go to state 95
     termino                        shift and go to state 96
     factor                         shift and go to state 97
     masomenos                      shift and go to state 98
     empty                          shift and go to state 102
 
-state 327
+state 329
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion . PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
 
-    PARDER          shift and go to state 333
+    PARDER          shift and go to state 335
 
 
-state 328
+state 330
 
     (108) nocondicional -> FOR iddim IGU r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion r_for_paso_1 DO bloque r_for_paso_2 .
 
@@ -5164,37 +5191,37 @@ state 328
     KEYDER          reduce using rule 108 (nocondicional -> FOR iddim IGU r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion r_for_paso_1 DO bloque r_for_paso_2 .)
 
 
-state 329
+state 331
 
     (51) estatutofunc -> RETURN PARIZQ expresion r_return_func . PARDER PTOCOM
 
-    PARDER          shift and go to state 334
+    PARDER          shift and go to state 336
 
 
-state 330
+state 332
 
     (109) decisionfunc -> IF PARIZQ expresion PARDER . r_if_paso_1 THEN bloquefunc decisionfunc_else r_if_paso_3
     (135) r_if_paso_1 -> .
 
     THEN            reduce using rule 135 (r_if_paso_1 -> .)
 
-    r_if_paso_1                    shift and go to state 335
+    r_if_paso_1                    shift and go to state 337
 
-state 331
+state 333
 
     (114) condicionalfunc -> WHILE PARIZQ expresion PARDER . DO bloquefunc
 
-    DO              shift and go to state 336
+    DO              shift and go to state 338
 
 
-state 332
+state 334
 
     (115) nocondicionalfunc -> FOR iddim IGU expresion . TO expresion DO bloquefunc
 
-    TO              shift and go to state 337
+    TO              shift and go to state 339
 
 
-state 333
+state 335
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER . r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
     (121) r_register_param_types -> .
@@ -5202,38 +5229,38 @@ state 333
     VARTOKEN        reduce using rule 121 (r_register_param_types -> .)
     KEYIZQ          reduce using rule 121 (r_register_param_types -> .)
 
-    r_register_param_types         shift and go to state 338
+    r_register_param_types         shift and go to state 340
 
-state 334
+state 336
 
     (51) estatutofunc -> RETURN PARIZQ expresion r_return_func PARDER . PTOCOM
 
-    PTOCOM          shift and go to state 339
+    PTOCOM          shift and go to state 341
 
 
-state 335
+state 337
 
     (109) decisionfunc -> IF PARIZQ expresion PARDER r_if_paso_1 . THEN bloquefunc decisionfunc_else r_if_paso_3
 
-    THEN            shift and go to state 340
+    THEN            shift and go to state 342
 
 
-state 336
+state 338
 
     (114) condicionalfunc -> WHILE PARIZQ expresion PARDER DO . bloquefunc
     (36) bloquefunc -> . KEYIZQ bloqueopcionfunc KEYDER
 
-    KEYIZQ          shift and go to state 278
+    KEYIZQ          shift and go to state 280
 
-    bloquefunc                     shift and go to state 341
+    bloquefunc                     shift and go to state 343
 
-state 337
+state 339
 
     (115) nocondicionalfunc -> FOR iddim IGU expresion TO . expresion DO bloquefunc
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
     (71) termino -> . factor r_pop_mult factorciclo
-    (75) factor -> . PARIZQ expresion PARDER
+    (75) factor -> . PARIZQ r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
     (76) factor -> . masomenos varcte
     (77) factor -> . ID r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
     (78) masomenos -> . MAS
@@ -5251,14 +5278,14 @@ state 337
 
   ! ID              [ reduce using rule 116 (empty -> .) ]
 
-    expresion                      shift and go to state 342
+    expresion                      shift and go to state 344
     exp                            shift and go to state 95
     termino                        shift and go to state 96
     factor                         shift and go to state 97
     masomenos                      shift and go to state 98
     empty                          shift and go to state 102
 
-state 338
+state 340
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types . opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
     (2) opvars -> . vars
@@ -5269,11 +5296,11 @@ state 338
     VARTOKEN        shift and go to state 9
     KEYIZQ          reduce using rule 116 (empty -> .)
 
-    opvars                         shift and go to state 343
+    opvars                         shift and go to state 345
     vars                           shift and go to state 7
     empty                          shift and go to state 8
 
-state 339
+state 341
 
     (51) estatutofunc -> RETURN PARIZQ expresion r_return_func PARDER PTOCOM .
 
@@ -5287,16 +5314,16 @@ state 339
     KEYDER          reduce using rule 51 (estatutofunc -> RETURN PARIZQ expresion r_return_func PARDER PTOCOM .)
 
 
-state 340
+state 342
 
     (109) decisionfunc -> IF PARIZQ expresion PARDER r_if_paso_1 THEN . bloquefunc decisionfunc_else r_if_paso_3
     (36) bloquefunc -> . KEYIZQ bloqueopcionfunc KEYDER
 
-    KEYIZQ          shift and go to state 278
+    KEYIZQ          shift and go to state 280
 
-    bloquefunc                     shift and go to state 344
+    bloquefunc                     shift and go to state 346
 
-state 341
+state 343
 
     (114) condicionalfunc -> WHILE PARIZQ expresion PARDER DO bloquefunc .
 
@@ -5310,30 +5337,30 @@ state 341
     KEYDER          reduce using rule 114 (condicionalfunc -> WHILE PARIZQ expresion PARDER DO bloquefunc .)
 
 
-state 342
+state 344
 
     (115) nocondicionalfunc -> FOR iddim IGU expresion TO expresion . DO bloquefunc
 
-    DO              shift and go to state 345
+    DO              shift and go to state 347
 
 
-state 343
+state 345
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars . r_register_quad bloquefunc r_endfunc r_asegurar_return
     (124) r_register_quad -> .
 
     KEYIZQ          reduce using rule 124 (r_register_quad -> .)
 
-    r_register_quad                shift and go to state 346
+    r_register_quad                shift and go to state 348
 
-state 344
+state 346
 
     (109) decisionfunc -> IF PARIZQ expresion PARDER r_if_paso_1 THEN bloquefunc . decisionfunc_else r_if_paso_3
     (110) decisionfunc_else -> . ELSE r_if_paso_2 bloquefunc
     (111) decisionfunc_else -> . empty
     (116) empty -> .
 
-    ELSE            shift and go to state 348
+    ELSE            shift and go to state 350
     RETURN          reduce using rule 116 (empty -> .)
     ID              reduce using rule 116 (empty -> .)
     IF              reduce using rule 116 (empty -> .)
@@ -5343,28 +5370,28 @@ state 344
     FOR             reduce using rule 116 (empty -> .)
     KEYDER          reduce using rule 116 (empty -> .)
 
-    decisionfunc_else              shift and go to state 347
-    empty                          shift and go to state 349
+    decisionfunc_else              shift and go to state 349
+    empty                          shift and go to state 351
 
-state 345
+state 347
 
     (115) nocondicionalfunc -> FOR iddim IGU expresion TO expresion DO . bloquefunc
     (36) bloquefunc -> . KEYIZQ bloqueopcionfunc KEYDER
 
-    KEYIZQ          shift and go to state 278
+    KEYIZQ          shift and go to state 280
 
-    bloquefunc                     shift and go to state 350
+    bloquefunc                     shift and go to state 352
 
-state 346
+state 348
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad . bloquefunc r_endfunc r_asegurar_return
     (36) bloquefunc -> . KEYIZQ bloqueopcionfunc KEYDER
 
-    KEYIZQ          shift and go to state 278
+    KEYIZQ          shift and go to state 280
 
-    bloquefunc                     shift and go to state 351
+    bloquefunc                     shift and go to state 353
 
-state 347
+state 349
 
     (109) decisionfunc -> IF PARIZQ expresion PARDER r_if_paso_1 THEN bloquefunc decisionfunc_else . r_if_paso_3
     (140) r_if_paso_3 -> .
@@ -5378,18 +5405,18 @@ state 347
     FOR             reduce using rule 140 (r_if_paso_3 -> .)
     KEYDER          reduce using rule 140 (r_if_paso_3 -> .)
 
-    r_if_paso_3                    shift and go to state 352
+    r_if_paso_3                    shift and go to state 354
 
-state 348
+state 350
 
     (110) decisionfunc_else -> ELSE . r_if_paso_2 bloquefunc
     (139) r_if_paso_2 -> .
 
     KEYIZQ          reduce using rule 139 (r_if_paso_2 -> .)
 
-    r_if_paso_2                    shift and go to state 353
+    r_if_paso_2                    shift and go to state 355
 
-state 349
+state 351
 
     (111) decisionfunc_else -> empty .
 
@@ -5403,7 +5430,7 @@ state 349
     KEYDER          reduce using rule 111 (decisionfunc_else -> empty .)
 
 
-state 350
+state 352
 
     (115) nocondicionalfunc -> FOR iddim IGU expresion TO expresion DO bloquefunc .
 
@@ -5417,7 +5444,7 @@ state 350
     KEYDER          reduce using rule 115 (nocondicionalfunc -> FOR iddim IGU expresion TO expresion DO bloquefunc .)
 
 
-state 351
+state 353
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc . r_endfunc r_asegurar_return
     (134) r_endfunc -> .
@@ -5429,9 +5456,9 @@ state 351
     MAIN            reduce using rule 134 (r_endfunc -> .)
     KEYIZQ          reduce using rule 134 (r_endfunc -> .)
 
-    r_endfunc                      shift and go to state 354
+    r_endfunc                      shift and go to state 356
 
-state 352
+state 354
 
     (109) decisionfunc -> IF PARIZQ expresion PARDER r_if_paso_1 THEN bloquefunc decisionfunc_else r_if_paso_3 .
 
@@ -5445,16 +5472,16 @@ state 352
     KEYDER          reduce using rule 109 (decisionfunc -> IF PARIZQ expresion PARDER r_if_paso_1 THEN bloquefunc decisionfunc_else r_if_paso_3 .)
 
 
-state 353
+state 355
 
     (110) decisionfunc_else -> ELSE r_if_paso_2 . bloquefunc
     (36) bloquefunc -> . KEYIZQ bloqueopcionfunc KEYDER
 
-    KEYIZQ          shift and go to state 278
+    KEYIZQ          shift and go to state 280
 
-    bloquefunc                     shift and go to state 355
+    bloquefunc                     shift and go to state 357
 
-state 354
+state 356
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc . r_asegurar_return
     (127) r_asegurar_return -> .
@@ -5466,9 +5493,9 @@ state 354
     MAIN            reduce using rule 127 (r_asegurar_return -> .)
     KEYIZQ          reduce using rule 127 (r_asegurar_return -> .)
 
-    r_asegurar_return              shift and go to state 356
+    r_asegurar_return              shift and go to state 358
 
-state 355
+state 357
 
     (110) decisionfunc_else -> ELSE r_if_paso_2 bloquefunc .
 
@@ -5482,7 +5509,7 @@ state 355
     KEYDER          reduce using rule 110 (decisionfunc_else -> ELSE r_if_paso_2 bloquefunc .)
 
 
-state 356
+state 358
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return .
 
@@ -5503,11 +5530,11 @@ WARNING: shift/reduce conflict for INT in state 89 resolved as shift
 WARNING: shift/reduce conflict for FLT in state 89 resolved as shift
 WARNING: shift/reduce conflict for CHAR in state 89 resolved as shift
 WARNING: shift/reduce conflict for CORIZQ in state 91 resolved as shift
-WARNING: shift/reduce conflict for ID in state 93 resolved as shift
 WARNING: shift/reduce conflict for ID in state 107 resolved as shift
 WARNING: shift/reduce conflict for CORIZQ in state 120 resolved as shift
 WARNING: shift/reduce conflict for ID in state 122 resolved as shift
 WARNING: shift/reduce conflict for ID in state 124 resolved as shift
+WARNING: shift/reduce conflict for ID in state 125 resolved as shift
 WARNING: shift/reduce conflict for ID in state 136 resolved as shift
 WARNING: shift/reduce conflict for ID in state 142 resolved as shift
 WARNING: shift/reduce conflict for CORIZQ in state 143 resolved as shift
@@ -5515,27 +5542,27 @@ WARNING: shift/reduce conflict for CORIZQ in state 147 resolved as shift
 WARNING: shift/reduce conflict for CORIZQ in state 179 resolved as shift
 WARNING: shift/reduce conflict for ID in state 187 resolved as shift
 WARNING: shift/reduce conflict for CORIZQ in state 195 resolved as shift
-WARNING: shift/reduce conflict for ID in state 205 resolved as shift
 WARNING: shift/reduce conflict for ID in state 206 resolved as shift
 WARNING: shift/reduce conflict for ID in state 207 resolved as shift
 WARNING: shift/reduce conflict for ID in state 208 resolved as shift
-WARNING: shift/reduce conflict for ID in state 211 resolved as shift
+WARNING: shift/reduce conflict for ID in state 209 resolved as shift
 WARNING: shift/reduce conflict for ID in state 212 resolved as shift
 WARNING: shift/reduce conflict for ID in state 213 resolved as shift
 WARNING: shift/reduce conflict for ID in state 214 resolved as shift
-WARNING: shift/reduce conflict for ID in state 233 resolved as shift
-WARNING: shift/reduce conflict for ID in state 236 resolved as shift
-WARNING: shift/reduce conflict for ID in state 239 resolved as shift
-WARNING: shift/reduce conflict for ID in state 242 resolved as shift
-WARNING: shift/reduce conflict for ID in state 247 resolved as shift
-WARNING: shift/reduce conflict for ID in state 248 resolved as shift
-WARNING: shift/reduce conflict for ID in state 254 resolved as shift
-WARNING: shift/reduce conflict for ID in state 257 resolved as shift
-WARNING: shift/reduce conflict for INT in state 305 resolved as shift
-WARNING: shift/reduce conflict for FLT in state 305 resolved as shift
-WARNING: shift/reduce conflict for CHAR in state 305 resolved as shift
-WARNING: shift/reduce conflict for ID in state 316 resolved as shift
-WARNING: shift/reduce conflict for ID in state 317 resolved as shift
+WARNING: shift/reduce conflict for ID in state 215 resolved as shift
+WARNING: shift/reduce conflict for ID in state 234 resolved as shift
+WARNING: shift/reduce conflict for ID in state 237 resolved as shift
+WARNING: shift/reduce conflict for ID in state 241 resolved as shift
+WARNING: shift/reduce conflict for ID in state 244 resolved as shift
+WARNING: shift/reduce conflict for ID in state 249 resolved as shift
+WARNING: shift/reduce conflict for ID in state 250 resolved as shift
+WARNING: shift/reduce conflict for ID in state 256 resolved as shift
+WARNING: shift/reduce conflict for ID in state 259 resolved as shift
+WARNING: shift/reduce conflict for INT in state 307 resolved as shift
+WARNING: shift/reduce conflict for FLT in state 307 resolved as shift
+WARNING: shift/reduce conflict for CHAR in state 307 resolved as shift
 WARNING: shift/reduce conflict for ID in state 318 resolved as shift
-WARNING: shift/reduce conflict for ID in state 326 resolved as shift
-WARNING: shift/reduce conflict for ID in state 337 resolved as shift
+WARNING: shift/reduce conflict for ID in state 319 resolved as shift
+WARNING: shift/reduce conflict for ID in state 320 resolved as shift
+WARNING: shift/reduce conflict for ID in state 328 resolved as shift
+WARNING: shift/reduce conflict for ID in state 339 resolved as shift
