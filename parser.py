@@ -380,7 +380,7 @@ def p_r_era_funcion_void(p):
     if func:
         if func.type == "void":
             global apuntador_argumento
-            cuad = Quadruple('ERA',None,None,nombre_func)
+            cuad = Quadruple('era',None,None,nombre_func)
             cuadruplos.append(cuad)
             if apuntador_argumento > -1:
                 pila_apuntador_argumentos.append(apuntador_argumento)
@@ -402,7 +402,7 @@ def p_r_era_funcion_retorno(p):
     if func:
         if func.type != "void":
             global apuntador_argumento
-            cuad = Quadruple('ERA',None,None,nombre_func)
+            cuad = Quadruple('era',None,None,nombre_func)
             cuadruplos.append(cuad)
             if apuntador_argumento > -1:
                 pila_apuntador_argumentos.append(apuntador_argumento)
@@ -432,7 +432,7 @@ def p_r_terminar_parametro(p):
     global temporal_int
     nombrefunc = pila_nombre_func.pop()
     num_quad = fun_dict.search_quad(nombrefunc)
-    cuad = Quadruple('GOSUB',None,None,num_quad)
+    cuad = Quadruple('gosub',None,None,num_quad)
     cuadruplos.append(cuad)
     if apuntador_argumento != -1:
         if apuntador_argumento < len(tipos_argumentos):
@@ -455,7 +455,7 @@ def p_r_terminar_parametro_void(p):
 
     nombrefunc = pila_nombre_func.pop()
     num_quad = fun_dict.search_quad(nombrefunc)
-    cuad = Quadruple('GOSUB',None,None,num_quad)
+    cuad = Quadruple('gosub',None,None,num_quad)
     cuadruplos.append(cuad)
     if apuntador_argumento != -1:
         if apuntador_argumento < len(tipos_argumentos):
@@ -595,7 +595,7 @@ def p_r_return_func(p):
     result = pila_operandos.pop()
     tipo = pila_tipos.pop()
     if tipo == fun_dict.curr_function.type:
-        cuad = Quadruple('RETURN',None, None,result)
+        cuad = Quadruple('return',None, None,result)
         cuadruplos.append(cuad)
 
     else:

@@ -32,7 +32,7 @@ class Virtualmemory:
             'local':        [] 
         }
     #Methods
-    def check_address(self, vaddr, context):
+    def check_address(self, vaddr, context): 
         if vaddr in self.memory[context]:
             return self.memory[context][vaddr]
         else:
