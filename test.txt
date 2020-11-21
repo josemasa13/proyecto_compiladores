@@ -33,7 +33,7 @@ program Ejemplo;
 
 main(){
 
-
+  read(p);
   write("Hola a todos mis amigos");
 
 }

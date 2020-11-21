@@ -237,10 +237,10 @@ def p_otro(p):
     '''
 
 def p_lectura(p):
-    '''lectura : READ PARIZQ iddim ciclodim PARDER PTOCOM'''
+    '''lectura : READ PARIZQ iddim r_genera_lectura ciclodim PARDER PTOCOM'''
 
 def p_ciclodim(p):
-    '''ciclodim : COMA iddim ciclodim
+    '''ciclodim : COMA iddim r_genera_lectura ciclodim
     | empty
     '''
 
@@ -868,6 +868,13 @@ def p_r_genera_escribe(p):
     cuad = Quadruple("WRITE", None, None, pila_operandos.pop())
     pila_tipos.pop()
     cuadruplos.append(cuad)
+
+def p_r_genera_lectura(p):
+    'r_genera_lectura : '
+    cuad = Quadruple("READ", None, None, pila_operandos.pop())
+    pila_tipos.pop()
+    cuadruplos.append(cuad)
+
 
 def p_r_genera_escribe_string(p):
     'r_genera_escribe_string : '
