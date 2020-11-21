@@ -57,8 +57,8 @@ class FunctionsDirectory:
         self.directory[len(self.directory) - 1].name = name
         return e
 
-    def append_variable_to_curr_function(self, name, type, virtual_address):
-        self.curr_function.add_variable(name, type, virtual_address)
+    def append_variable_to_curr_function(self, name, type, virtual_address, dims=None):
+        self.curr_function.add_variable(name, type, virtual_address,dims)
 
 
     def print_var_tables(self):

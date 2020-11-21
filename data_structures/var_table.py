@@ -2,7 +2,7 @@ class VarTable:
     def __init__(self):
         self.table = []
 
-    def add(self, var_name, var_type, virtual_address):
+    def add(self, var_name, var_type, virtual_address,dims):
         e = None
         # Check if the variable is not in the table already
         for var in self.table:
@@ -13,7 +13,8 @@ class VarTable:
         self.table.append({
             'name': var_name,
             'type': var_type,
-            'virtual_address': virtual_address 
+            'virtual_address': virtual_address,
+            'dims': dims
         })
 
         return e

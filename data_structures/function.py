@@ -13,14 +13,14 @@ class Function:
         self.temporal_float_spaces = 0
         self.temporal_bool_spaces = 0
 
-    def add_variable(self, var_name, var_type, virtual_address):
+    def add_variable(self, var_name, var_type, virtual_address, dims):
         e = None
         # Check if the variable is not in the table already
         for var in self.vars.table:
             if var["name"] == var_name:
                 raise Exception("La variable " + var_name + " ya está declarada en la función")
                 
-        self.vars.add(var_name,var_type, virtual_address)
+        self.vars.add(var_name,var_type, virtual_address, dims)
 
     # todo - check error handling
 

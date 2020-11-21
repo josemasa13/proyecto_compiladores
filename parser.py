@@ -3,8 +3,10 @@ from scanner import tokens
 from data_structures.functions_directory import FunctionsDirectory
 from data_structures.quadruple import Quadruple
 from data_structures.semantic_cube import semantic_cube
+from data_structures.constant_table import Constanttable
 
 fun_dict = FunctionsDirectory()
+const_table = Constanttable()
 tabla_temporales = []
 pila_operandos = []
 pila_operadores = []
@@ -36,7 +38,7 @@ comp_set = {'>', '<', '==', '&', '|', '>=', '<=', '!='}
 
 # programa
 def p_program(p):
-    '''program : PRO ID r_register_global PTOCOM opvars opfunciones MAIN r_switch_to_global PARIZQ PARDER bloque'''
+    '''program : PRO r_register_gotomain ID r_register_global PTOCOM opvars opfunciones MAIN r_switch_to_global PARIZQ PARDER bloque'''
 
 def p_opvars(p):
     '''opvars : vars
@@ -54,7 +56,7 @@ def p_varciclo(p):
     | empty'''
 
 def p_arr(p):
-    '''arr : CORIZQ CTEI CORDER
+    '''arr : CORIZQ CTEI r_register_dim CORDER
     | empty'''
 
 def p_tipociclo(p):
@@ -225,8 +227,8 @@ def p_escritura(p):
     '''escritura : WRITE PARIZQ escrituraciclo otro PARDER PTOCOM'''
 
 def p_escrituraciclo(p):
-    '''escrituraciclo : CTE_STRING
-    | expresion'''
+    '''escrituraciclo : CTE_STRING r_genera_escribe
+    | expresion r_genera_escribe'''
 
 def p_otro(p):
     '''otro : COMA escrituraciclo otro
@@ -296,8 +298,7 @@ def reset_counters():
     global temporal_int
     global temporal_float
     global temporal_bool
-    global constant_int
-    global constant_float
+
 
     local_int = 8000
     local_float = 12000
@@ -308,6 +309,12 @@ def reset_counters():
     constant_float = 28000
 
 # * Puntos neurálgicos registro de funciones
+def p_r_register_gotomain(p):
+    'r_register_gotomain : '
+    cuad = Quadruple('goto',None,None,None)
+    cuadruplos.append(cuad)
+    pila_saltos.append(len(cuadruplos) - 1)
+
 def p_r_register_global(p):
     'r_register_global : '
     fun_dict.add_function("global")
@@ -323,6 +330,9 @@ def p_r_register_function(p):
 def p_r_switch_to_global(p):
     'r_switch_to_global : '
     fun_dict.curr_function = fun_dict.directory[0]
+    salto = pila_saltos.pop()
+    cuadruplos[salto].modificar_resultado(len(cuadruplos))
+
 
 def p_r_update_curr_function_name_especial(p):
     'r_update_curr_function_name_especial : '
@@ -428,7 +438,6 @@ def p_r_terminar_parametro(p):
                 tipos_argumentos = pila_tipos_argumentos.pop()
             else:
                 tipos_argumentos = []
-
 
 def p_r_terminar_parametro_void(p):
     'r_terminar_parametro_void : '
@@ -726,6 +735,7 @@ def p_r_pila_operandos_push_cte_int(p):
     # guardar la constant en la direccion de memoria - Tener en que direcion de memoria la gua
     global constant_int
     pila_operandos.append(constant_int)
+    const_table.insert_constant(p[-1], 'int', constant_int)
     pila_tipos.append('int')
     constant_int += 1
     tabla_temporales.append(('int', p[-1]))
@@ -734,6 +744,7 @@ def p_r_pila_operandos_push_cte_flt(p):
     'r_pila_operandos_push_cte_flt : '
     global constant_float
     pila_operandos.append(constant_float)
+    const_table.insert_constant(p[-1], 'float', constant_float)
     pila_tipos.append('float')
     constant_float += 1
     tabla_temporales.append(('float', p[-1]))
@@ -832,6 +843,12 @@ def get_type(tupla):
 
     else:
         return fun_dict.curr_function.vars[tupla[1]]
+
+def p_r_genera_escribe(p):
+    'r_genera_escribe : '
+
+    cuad = Quadruple("WRITE", None, None, pila_operandos.pop())
+    cuadruplos.append(cuad)
 
 def p_r_pop_comp(p):
     'r_pop_comp : '
@@ -974,6 +991,12 @@ def p_r_push_fondo_falso(p):
 def p_r_vaciar_fondo_falso(p):
     'r_vaciar_fondo_falso : '
     pass
+
+# Arreglos
+def p_r_register_dim(p):
+    'r_register_dim : '
+    pass
+
 
 
 def print_quads():
