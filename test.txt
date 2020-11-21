@@ -25,16 +25,19 @@ program Ejemplo;
       return(x);
     }
 
-  int module inicia(float a,int z)
+  int module inicia(int a,int z)
     var int x;
   {
-    return ( 1);
+    return ( 2 );
   }
-
+  void  module termina(int z)
+    var int x;
+  {
+    x = 3;
+  }
 main(){
 
-
-  i = 3+(inicia(3.4,5));
+  termina(fact(prueba(),1+test(3,inicia(1,3)),prueba() ));
 
 }
 

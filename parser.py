@@ -374,6 +374,7 @@ def p_r_era_funcion_void(p):
 def p_r_era_funcion_retorno(p):
     'r_era_funcion_retorno : '
     # guardar nombre de la función llamada
+    pila_operadores.append("FUNC")
     nombre_func = pila_guardar_variable[-1]
     pila_nombre_func.append(nombre_func)
     func = fun_dict.search_function(nombre_func)
@@ -408,6 +409,7 @@ def p_r_terminar_parametro(p):
     global apuntador_argumento
     global tipos_argumentos
     global temporal_int
+    pila_operadores.pop()
     nombrefunc = pila_nombre_func.pop()
     num_quad = fun_dict.search_quad(nombrefunc)
     cuad = Quadruple('GOSUB',None,None,num_quad)
