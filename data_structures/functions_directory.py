@@ -57,8 +57,8 @@ class FunctionsDirectory:
         self.directory[len(self.directory) - 1].name = name
         return e
 
-    def append_variable_to_curr_function(self, name, type, virtual_address):
-        self.curr_function.add_variable(name, type, virtual_address)
+    def append_variable_to_curr_function(self, name, type, virtual_address, dims=None):
+        self.curr_function.add_variable(name, type, virtual_address,dims)
 
 
     def print_var_tables(self):
@@ -66,6 +66,15 @@ class FunctionsDirectory:
             print(func.name)
             for item in func.vars.table:
                 print(item["name"], item["type"], item["virtual_address"])
+
+    def print_memory_spaces(self):
+        for func in self.directory:
+            print(func.name)
+            print("Enteros: " + str(func.int_spaces))
+            print("Flotantes: " + str(func.float_spaces))
+            print("Temporales Enteros: " + str(func.temporal_int_spaces))
+            print("Temporales Flotantes: " + str(func.temporal_float_spaces))
+            print("Temporales Booleanos: " + str(func.temporal_bool_spaces))
     
     def print_funcs_params(self):
         for func in self.directory:
