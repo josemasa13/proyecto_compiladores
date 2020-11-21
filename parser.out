@@ -15,7 +15,7 @@ Rule 5     opfunciones -> empty
 Rule 6     vars -> VARTOKEN tipo ID r_register_variable_name arr arr varciclo PTOCOM tipociclo
 Rule 7     varciclo -> COMA ID r_register_variable_name arr arr varciclo
 Rule 8     varciclo -> empty
-Rule 9     arr -> CORIZQ CTEI r_register_dim CORDER
+Rule 9     arr -> CORIZQ CTEI r_register_const CORDER
 Rule 10    arr -> empty
 Rule 11    tipociclo -> tipo opciontipo
 Rule 12    tipociclo -> empty
@@ -101,7 +101,7 @@ Rule 91    decision -> IF PARIZQ expresion PARDER r_if_paso_1 THEN bloque decisi
 Rule 92    decision_else -> ELSE r_if_paso_2 bloque
 Rule 93    decision_else -> empty
 Rule 94    escritura -> WRITE PARIZQ escrituraciclo otro PARDER PTOCOM
-Rule 95    escrituraciclo -> CTE_STRING r_genera_escribe
+Rule 95    escrituraciclo -> CTE_STRING r_genera_escribe_string
 Rule 96    escrituraciclo -> expresion r_genera_escribe
 Rule 97    otro -> COMA escrituraciclo otro
 Rule 98    otro -> empty
@@ -126,63 +126,65 @@ Rule 116   empty -> <empty>
 Rule 117   r_register_gotomain -> <empty>
 Rule 118   r_register_global -> <empty>
 Rule 119   r_register_function -> <empty>
-Rule 120   r_switch_to_global -> <empty>
-Rule 121   r_update_curr_function_name_especial -> <empty>
-Rule 122   r_update_curr_function_name -> <empty>
-Rule 123   r_register_param_types -> <empty>
-Rule 124   r_register_variable_type -> <empty>
-Rule 125   r_update_func_type -> <empty>
-Rule 126   r_register_quad -> <empty>
-Rule 127   r_era_funcion_void -> <empty>
-Rule 128   r_era_funcion_retorno -> <empty>
-Rule 129   r_asegurar_return -> <empty>
-Rule 130   r_terminar_parametro -> <empty>
-Rule 131   r_terminar_parametro_void -> <empty>
-Rule 132   r_extraer_parametro -> <empty>
-Rule 133   r_verifica_void -> <empty>
-Rule 134   r_marcar_funcion -> <empty>
-Rule 135   r_desmarcar_funcion -> <empty>
-Rule 136   r_endfunc -> <empty>
-Rule 137   r_if_paso_1 -> <empty>
-Rule 138   r_register_variable_name -> <empty>
-Rule 139   r_verifica_variable_existe -> <empty>
-Rule 140   r_return_func -> <empty>
-Rule 141   r_if_paso_2 -> <empty>
-Rule 142   r_if_paso_3 -> <empty>
-Rule 143   r_while_paso_1 -> <empty>
-Rule 144   r_while_paso_2 -> <empty>
-Rule 145   r_while_paso_3 -> <empty>
-Rule 146   r_pop_igu_for -> <empty>
-Rule 147   r_for_paso_1 -> <empty>
-Rule 148   r_for_paso_2 -> <empty>
-Rule 149   r_guardar_variable -> <empty>
-Rule 150   r_pila_operandos_push -> <empty>
-Rule 151   r_pila_operandos_push_id -> <empty>
-Rule 152   r_pila_operandos_push_cte_int -> <empty>
-Rule 153   r_pila_operandos_push_cte_flt -> <empty>
-Rule 154   r_pop_mult -> <empty>
-Rule 155   r_pop_mas -> <empty>
-Rule 156   r_genera_escribe -> <empty>
-Rule 157   r_pop_comp -> <empty>
-Rule 158   r_pop_igu -> <empty>
-Rule 159   r_marcar_fondo_de_pila -> <empty>
-Rule 160   r_desmarcar_fondo_de_pila -> <empty>
-Rule 161   r_pila_operadores_push_mult -> <empty>
-Rule 162   r_pila_operadores_push_div -> <empty>
-Rule 163   r_pila_operadores_push_mas -> <empty>
-Rule 164   r_pila_operadores_push_menos -> <empty>
-Rule 165   r_pila_operadores_push_may -> <empty>
-Rule 166   r_pila_operadores_push_men -> <empty>
-Rule 167   r_pila_operadores_push_dif -> <empty>
-Rule 168   r_pila_operadores_push_iguigu -> <empty>
-Rule 169   r_pila_operadores_push_and -> <empty>
-Rule 170   r_pila_operadores_push_or -> <empty>
-Rule 171   r_pila_operadores_push_igu -> <empty>
-Rule 172   r_pila_operadores_push_mayigu -> <empty>
-Rule 173   r_pila_operadores_push_menigu -> <empty>
-Rule 174   r_push_fondo_falso -> <empty>
-Rule 175   r_vaciar_fondo_falso -> <empty>
-Rule 176   r_register_dim -> <empty>
+Rule 120   r_register_const -> <empty>
+Rule 121   r_switch_to_global -> <empty>
+Rule 122   r_update_curr_function_name_especial -> <empty>
+Rule 123   r_update_curr_function_name -> <empty>
+Rule 124   r_register_param_types -> <empty>
+Rule 125   r_register_variable_type -> <empty>
+Rule 126   r_update_func_type -> <empty>
+Rule 127   r_register_quad -> <empty>
+Rule 128   r_era_funcion_void -> <empty>
+Rule 129   r_era_funcion_retorno -> <empty>
+Rule 130   r_asegurar_return -> <empty>
+Rule 131   r_terminar_parametro -> <empty>
+Rule 132   r_terminar_parametro_void -> <empty>
+Rule 133   r_extraer_parametro -> <empty>
+Rule 134   r_verifica_void -> <empty>
+Rule 135   r_marcar_funcion -> <empty>
+Rule 136   r_desmarcar_funcion -> <empty>
+Rule 137   r_endfunc -> <empty>
+Rule 138   r_if_paso_1 -> <empty>
+Rule 139   r_register_variable_name -> <empty>
+Rule 140   r_verifica_variable_existe -> <empty>
+Rule 141   r_return_func -> <empty>
+Rule 142   r_if_paso_2 -> <empty>
+Rule 143   r_if_paso_3 -> <empty>
+Rule 144   r_while_paso_1 -> <empty>
+Rule 145   r_while_paso_2 -> <empty>
+Rule 146   r_while_paso_3 -> <empty>
+Rule 147   r_pop_igu_for -> <empty>
+Rule 148   r_for_paso_1 -> <empty>
+Rule 149   r_for_paso_2 -> <empty>
+Rule 150   r_guardar_variable -> <empty>
+Rule 151   r_pila_operandos_push -> <empty>
+Rule 152   r_pila_operandos_push_id -> <empty>
+Rule 153   r_pila_operandos_push_cte_int -> <empty>
+Rule 154   r_pila_operandos_push_cte_flt -> <empty>
+Rule 155   r_pop_mult -> <empty>
+Rule 156   r_pop_mas -> <empty>
+Rule 157   r_genera_escribe -> <empty>
+Rule 158   r_genera_escribe_string -> <empty>
+Rule 159   r_pop_comp -> <empty>
+Rule 160   r_pop_igu -> <empty>
+Rule 161   r_marcar_fondo_de_pila -> <empty>
+Rule 162   r_desmarcar_fondo_de_pila -> <empty>
+Rule 163   r_pila_operadores_push_mult -> <empty>
+Rule 164   r_pila_operadores_push_div -> <empty>
+Rule 165   r_pila_operadores_push_mas -> <empty>
+Rule 166   r_pila_operadores_push_menos -> <empty>
+Rule 167   r_pila_operadores_push_may -> <empty>
+Rule 168   r_pila_operadores_push_men -> <empty>
+Rule 169   r_pila_operadores_push_dif -> <empty>
+Rule 170   r_pila_operadores_push_iguigu -> <empty>
+Rule 171   r_pila_operadores_push_and -> <empty>
+Rule 172   r_pila_operadores_push_or -> <empty>
+Rule 173   r_pila_operadores_push_igu -> <empty>
+Rule 174   r_pila_operadores_push_mayigu -> <empty>
+Rule 175   r_pila_operadores_push_menigu -> <empty>
+Rule 176   r_push_fondo_falso -> <empty>
+Rule 177   r_vaciar_fondo_falso -> <empty>
+Rule 178   r_register_dim -> <empty>
 
 Terminals, with rules where they appear
 
@@ -291,7 +293,8 @@ r_era_funcion_void   : 90
 r_extraer_parametro  : 86 88
 r_for_paso_1         : 108
 r_for_paso_2         : 108
-r_genera_escribe     : 95 96
+r_genera_escribe     : 96
+r_genera_escribe_string : 95
 r_guardar_variable   : 77
 r_if_paso_1          : 91 109
 r_if_paso_2          : 92 110
@@ -321,7 +324,8 @@ r_pop_igu_for        : 108
 r_pop_mas            : 67
 r_pop_mult           : 71
 r_push_fondo_falso   : 
-r_register_dim       : 9
+r_register_const     : 9
+r_register_dim       : 
 r_register_function  : 18 19 20 24
 r_register_global    : 1
 r_register_gotomain  : 1
@@ -601,39 +605,39 @@ state 21
 state 22
 
     (15) tipo -> INT . r_register_variable_type
-    (124) r_register_variable_type -> .
+    (125) r_register_variable_type -> .
 
-    ID              reduce using rule 124 (r_register_variable_type -> .)
-    MODULE          reduce using rule 124 (r_register_variable_type -> .)
+    ID              reduce using rule 125 (r_register_variable_type -> .)
+    MODULE          reduce using rule 125 (r_register_variable_type -> .)
 
     r_register_variable_type       shift and go to state 33
 
 state 23
 
     (16) tipo -> FLT . r_register_variable_type
-    (124) r_register_variable_type -> .
+    (125) r_register_variable_type -> .
 
-    ID              reduce using rule 124 (r_register_variable_type -> .)
-    MODULE          reduce using rule 124 (r_register_variable_type -> .)
+    ID              reduce using rule 125 (r_register_variable_type -> .)
+    MODULE          reduce using rule 125 (r_register_variable_type -> .)
 
     r_register_variable_type       shift and go to state 34
 
 state 24
 
     (17) tipo -> CHAR . r_register_variable_type
-    (124) r_register_variable_type -> .
+    (125) r_register_variable_type -> .
 
-    ID              reduce using rule 124 (r_register_variable_type -> .)
-    MODULE          reduce using rule 124 (r_register_variable_type -> .)
+    ID              reduce using rule 125 (r_register_variable_type -> .)
+    MODULE          reduce using rule 125 (r_register_variable_type -> .)
 
     r_register_variable_type       shift and go to state 35
 
 state 25
 
     (1) program -> PRO r_register_gotomain ID r_register_global PTOCOM opvars opfunciones MAIN . r_switch_to_global PARIZQ PARDER bloque
-    (120) r_switch_to_global -> .
+    (121) r_switch_to_global -> .
 
-    PARIZQ          reduce using rule 120 (r_switch_to_global -> .)
+    PARIZQ          reduce using rule 121 (r_switch_to_global -> .)
 
     r_switch_to_global             shift and go to state 36
 
@@ -682,11 +686,11 @@ state 31
 state 32
 
     (6) vars -> VARTOKEN tipo ID . r_register_variable_name arr arr varciclo PTOCOM tipociclo
-    (138) r_register_variable_name -> .
+    (139) r_register_variable_name -> .
 
-    CORIZQ          reduce using rule 138 (r_register_variable_name -> .)
-    COMA            reduce using rule 138 (r_register_variable_name -> .)
-    PTOCOM          reduce using rule 138 (r_register_variable_name -> .)
+    CORIZQ          reduce using rule 139 (r_register_variable_name -> .)
+    COMA            reduce using rule 139 (r_register_variable_name -> .)
+    PTOCOM          reduce using rule 139 (r_register_variable_name -> .)
 
     r_register_variable_name       shift and go to state 39
 
@@ -731,16 +735,16 @@ state 37
 state 38
 
     (29) funcion -> tipo_func MODULE ID . r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
-    (122) r_update_curr_function_name -> .
+    (123) r_update_curr_function_name -> .
 
-    PARIZQ          reduce using rule 122 (r_update_curr_function_name -> .)
+    PARIZQ          reduce using rule 123 (r_update_curr_function_name -> .)
 
     r_update_curr_function_name    shift and go to state 42
 
 state 39
 
     (6) vars -> VARTOKEN tipo ID r_register_variable_name . arr arr varciclo PTOCOM tipociclo
-    (9) arr -> . CORIZQ CTEI r_register_dim CORDER
+    (9) arr -> . CORIZQ CTEI r_register_const CORDER
     (10) arr -> . empty
     (116) empty -> .
 
@@ -764,9 +768,9 @@ state 40
 state 41
 
     (24) funcionvoid -> VOID r_register_function MODULE ID . r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloque r_endfunc
-    (122) r_update_curr_function_name -> .
+    (123) r_update_curr_function_name -> .
 
-    PARIZQ          reduce using rule 122 (r_update_curr_function_name -> .)
+    PARIZQ          reduce using rule 123 (r_update_curr_function_name -> .)
 
     r_update_curr_function_name    shift and go to state 47
 
@@ -780,7 +784,7 @@ state 42
 state 43
 
     (6) vars -> VARTOKEN tipo ID r_register_variable_name arr . arr varciclo PTOCOM tipociclo
-    (9) arr -> . CORIZQ CTEI r_register_dim CORDER
+    (9) arr -> . CORIZQ CTEI r_register_const CORDER
     (10) arr -> . empty
     (116) empty -> .
 
@@ -793,7 +797,7 @@ state 43
 
 state 44
 
-    (9) arr -> CORIZQ . CTEI r_register_dim CORDER
+    (9) arr -> CORIZQ . CTEI r_register_const CORDER
 
     CTEI            shift and go to state 50
 
@@ -826,12 +830,12 @@ state 47
 state 48
 
     (29) funcion -> tipo_func MODULE ID r_update_curr_function_name PARIZQ . r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
-    (134) r_marcar_funcion -> .
+    (135) r_marcar_funcion -> .
 
-    INT             reduce using rule 134 (r_marcar_funcion -> .)
-    FLT             reduce using rule 134 (r_marcar_funcion -> .)
-    CHAR            reduce using rule 134 (r_marcar_funcion -> .)
-    PARDER          reduce using rule 134 (r_marcar_funcion -> .)
+    INT             reduce using rule 135 (r_marcar_funcion -> .)
+    FLT             reduce using rule 135 (r_marcar_funcion -> .)
+    CHAR            reduce using rule 135 (r_marcar_funcion -> .)
+    PARDER          reduce using rule 135 (r_marcar_funcion -> .)
 
     r_marcar_funcion               shift and go to state 54
 
@@ -850,12 +854,12 @@ state 49
 
 state 50
 
-    (9) arr -> CORIZQ CTEI . r_register_dim CORDER
-    (176) r_register_dim -> .
+    (9) arr -> CORIZQ CTEI . r_register_const CORDER
+    (120) r_register_const -> .
 
-    CORDER          reduce using rule 176 (r_register_dim -> .)
+    CORDER          reduce using rule 120 (r_register_const -> .)
 
-    r_register_dim                 shift and go to state 58
+    r_register_const               shift and go to state 58
 
 state 51
 
@@ -909,12 +913,12 @@ state 52
 state 53
 
     (24) funcionvoid -> VOID r_register_function MODULE ID r_update_curr_function_name PARIZQ . r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloque r_endfunc
-    (134) r_marcar_funcion -> .
+    (135) r_marcar_funcion -> .
 
-    INT             reduce using rule 134 (r_marcar_funcion -> .)
-    FLT             reduce using rule 134 (r_marcar_funcion -> .)
-    CHAR            reduce using rule 134 (r_marcar_funcion -> .)
-    PARDER          reduce using rule 134 (r_marcar_funcion -> .)
+    INT             reduce using rule 135 (r_marcar_funcion -> .)
+    FLT             reduce using rule 135 (r_marcar_funcion -> .)
+    CHAR            reduce using rule 135 (r_marcar_funcion -> .)
+    PARDER          reduce using rule 135 (r_marcar_funcion -> .)
 
     r_marcar_funcion               shift and go to state 76
 
@@ -962,7 +966,7 @@ state 57
 
 state 58
 
-    (9) arr -> CORIZQ CTEI r_register_dim . CORDER
+    (9) arr -> CORIZQ CTEI r_register_const . CORDER
 
     CORDER          shift and go to state 83
 
@@ -1105,12 +1109,12 @@ state 68
 
     (52) asignacion -> ID . r_verifica_variable_existe r_pila_operandos_push_id asignacionarr asignacionarr IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
     (90) llamadafunc -> ID . r_verifica_void PARIZQ r_era_funcion_void parametros r_terminar_parametro_void PARDER PTOCOM
-    (139) r_verifica_variable_existe -> .
-    (133) r_verifica_void -> .
+    (140) r_verifica_variable_existe -> .
+    (134) r_verifica_void -> .
 
-    CORIZQ          reduce using rule 139 (r_verifica_variable_existe -> .)
-    IGU             reduce using rule 139 (r_verifica_variable_existe -> .)
-    PARIZQ          reduce using rule 133 (r_verifica_void -> .)
+    CORIZQ          reduce using rule 140 (r_verifica_variable_existe -> .)
+    IGU             reduce using rule 140 (r_verifica_variable_existe -> .)
+    PARIZQ          reduce using rule 134 (r_verifica_void -> .)
 
     r_verifica_variable_existe     shift and go to state 86
     r_verifica_void                shift and go to state 87
@@ -1165,9 +1169,9 @@ state 73
 state 74
 
     (107) condicional -> WHILE . r_while_paso_1 PARIZQ expresion PARDER r_while_paso_2 DO bloque r_while_paso_3
-    (143) r_while_paso_1 -> .
+    (144) r_while_paso_1 -> .
 
-    PARIZQ          reduce using rule 143 (r_while_paso_1 -> .)
+    PARIZQ          reduce using rule 144 (r_while_paso_1 -> .)
 
     r_while_paso_1                 shift and go to state 91
 
@@ -1204,9 +1208,9 @@ state 76
 state 77
 
     (29) funcion -> tipo_func MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple . r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
-    (135) r_desmarcar_funcion -> .
+    (136) r_desmarcar_funcion -> .
 
-    PARDER          reduce using rule 135 (r_desmarcar_funcion -> .)
+    PARDER          reduce using rule 136 (r_desmarcar_funcion -> .)
 
     r_desmarcar_funcion            shift and go to state 95
 
@@ -1270,21 +1274,21 @@ state 81
 state 82
 
     (7) varciclo -> COMA ID . r_register_variable_name arr arr varciclo
-    (138) r_register_variable_name -> .
+    (139) r_register_variable_name -> .
 
-    CORIZQ          reduce using rule 138 (r_register_variable_name -> .)
-    COMA            reduce using rule 138 (r_register_variable_name -> .)
-    PTOCOM          reduce using rule 138 (r_register_variable_name -> .)
+    CORIZQ          reduce using rule 139 (r_register_variable_name -> .)
+    COMA            reduce using rule 139 (r_register_variable_name -> .)
+    PTOCOM          reduce using rule 139 (r_register_variable_name -> .)
 
     r_register_variable_name       shift and go to state 104
 
 state 83
 
-    (9) arr -> CORIZQ CTEI r_register_dim CORDER .
+    (9) arr -> CORIZQ CTEI r_register_const CORDER .
 
-    CORIZQ          reduce using rule 9 (arr -> CORIZQ CTEI r_register_dim CORDER .)
-    COMA            reduce using rule 9 (arr -> CORIZQ CTEI r_register_dim CORDER .)
-    PTOCOM          reduce using rule 9 (arr -> CORIZQ CTEI r_register_dim CORDER .)
+    CORIZQ          reduce using rule 9 (arr -> CORIZQ CTEI r_register_const CORDER .)
+    COMA            reduce using rule 9 (arr -> CORIZQ CTEI r_register_const CORDER .)
+    PTOCOM          reduce using rule 9 (arr -> CORIZQ CTEI r_register_const CORDER .)
 
 
 state 84
@@ -1317,10 +1321,10 @@ state 85
 state 86
 
     (52) asignacion -> ID r_verifica_variable_existe . r_pila_operandos_push_id asignacionarr asignacionarr IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
-    (151) r_pila_operandos_push_id -> .
+    (152) r_pila_operandos_push_id -> .
 
-    CORIZQ          reduce using rule 151 (r_pila_operandos_push_id -> .)
-    IGU             reduce using rule 151 (r_pila_operandos_push_id -> .)
+    CORIZQ          reduce using rule 152 (r_pila_operandos_push_id -> .)
+    IGU             reduce using rule 152 (r_pila_operandos_push_id -> .)
 
     r_pila_operandos_push_id       shift and go to state 105
 
@@ -1365,7 +1369,7 @@ state 88
 state 89
 
     (94) escritura -> WRITE PARIZQ . escrituraciclo otro PARDER PTOCOM
-    (95) escrituraciclo -> . CTE_STRING r_genera_escribe
+    (95) escrituraciclo -> . CTE_STRING r_genera_escribe_string
     (96) escrituraciclo -> . expresion r_genera_escribe
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
@@ -1423,37 +1427,37 @@ state 92
 state 93
 
     (102) iddim -> ID . r_verifica_variable_existe r_pila_operandos_push_id arrexp arrexp
-    (139) r_verifica_variable_existe -> .
+    (140) r_verifica_variable_existe -> .
 
-    CORIZQ          reduce using rule 139 (r_verifica_variable_existe -> .)
-    IGU             reduce using rule 139 (r_verifica_variable_existe -> .)
-    COMA            reduce using rule 139 (r_verifica_variable_existe -> .)
-    PARDER          reduce using rule 139 (r_verifica_variable_existe -> .)
-    MULT            reduce using rule 139 (r_verifica_variable_existe -> .)
-    DIV             reduce using rule 139 (r_verifica_variable_existe -> .)
-    MAS             reduce using rule 139 (r_verifica_variable_existe -> .)
-    MENOS           reduce using rule 139 (r_verifica_variable_existe -> .)
-    MAY             reduce using rule 139 (r_verifica_variable_existe -> .)
-    MEN             reduce using rule 139 (r_verifica_variable_existe -> .)
-    DIF             reduce using rule 139 (r_verifica_variable_existe -> .)
-    IGUIGU          reduce using rule 139 (r_verifica_variable_existe -> .)
-    AND             reduce using rule 139 (r_verifica_variable_existe -> .)
-    OR              reduce using rule 139 (r_verifica_variable_existe -> .)
-    MAYIGU          reduce using rule 139 (r_verifica_variable_existe -> .)
-    MENIGU          reduce using rule 139 (r_verifica_variable_existe -> .)
-    CORDER          reduce using rule 139 (r_verifica_variable_existe -> .)
-    TO              reduce using rule 139 (r_verifica_variable_existe -> .)
-    PTOCOM          reduce using rule 139 (r_verifica_variable_existe -> .)
-    DO              reduce using rule 139 (r_verifica_variable_existe -> .)
+    CORIZQ          reduce using rule 140 (r_verifica_variable_existe -> .)
+    IGU             reduce using rule 140 (r_verifica_variable_existe -> .)
+    COMA            reduce using rule 140 (r_verifica_variable_existe -> .)
+    PARDER          reduce using rule 140 (r_verifica_variable_existe -> .)
+    MULT            reduce using rule 140 (r_verifica_variable_existe -> .)
+    DIV             reduce using rule 140 (r_verifica_variable_existe -> .)
+    MAS             reduce using rule 140 (r_verifica_variable_existe -> .)
+    MENOS           reduce using rule 140 (r_verifica_variable_existe -> .)
+    MAY             reduce using rule 140 (r_verifica_variable_existe -> .)
+    MEN             reduce using rule 140 (r_verifica_variable_existe -> .)
+    DIF             reduce using rule 140 (r_verifica_variable_existe -> .)
+    IGUIGU          reduce using rule 140 (r_verifica_variable_existe -> .)
+    AND             reduce using rule 140 (r_verifica_variable_existe -> .)
+    OR              reduce using rule 140 (r_verifica_variable_existe -> .)
+    MAYIGU          reduce using rule 140 (r_verifica_variable_existe -> .)
+    MENIGU          reduce using rule 140 (r_verifica_variable_existe -> .)
+    CORDER          reduce using rule 140 (r_verifica_variable_existe -> .)
+    TO              reduce using rule 140 (r_verifica_variable_existe -> .)
+    PTOCOM          reduce using rule 140 (r_verifica_variable_existe -> .)
+    DO              reduce using rule 140 (r_verifica_variable_existe -> .)
 
     r_verifica_variable_existe     shift and go to state 123
 
 state 94
 
     (24) funcionvoid -> VOID r_register_function MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple . r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloque r_endfunc
-    (135) r_desmarcar_funcion -> .
+    (136) r_desmarcar_funcion -> .
 
-    PARDER          reduce using rule 135 (r_desmarcar_funcion -> .)
+    PARDER          reduce using rule 136 (r_desmarcar_funcion -> .)
 
     r_desmarcar_funcion            shift and go to state 124
 
@@ -1504,11 +1508,11 @@ state 99
 state 100
 
     (30) ident -> ID . r_register_variable_name arrini arrini
-    (138) r_register_variable_name -> .
+    (139) r_register_variable_name -> .
 
-    CORIZQ          reduce using rule 138 (r_register_variable_name -> .)
-    COMA            reduce using rule 138 (r_register_variable_name -> .)
-    PARDER          reduce using rule 138 (r_register_variable_name -> .)
+    CORIZQ          reduce using rule 139 (r_register_variable_name -> .)
+    COMA            reduce using rule 139 (r_register_variable_name -> .)
+    PARDER          reduce using rule 139 (r_register_variable_name -> .)
 
     r_register_variable_name       shift and go to state 127
 
@@ -1550,7 +1554,7 @@ state 103
 state 104
 
     (7) varciclo -> COMA ID r_register_variable_name . arr arr varciclo
-    (9) arr -> . CORIZQ CTEI r_register_dim CORDER
+    (9) arr -> . CORIZQ CTEI r_register_const CORDER
     (10) arr -> . empty
     (116) empty -> .
 
@@ -1583,29 +1587,29 @@ state 105
 state 106
 
     (90) llamadafunc -> ID r_verifica_void PARIZQ . r_era_funcion_void parametros r_terminar_parametro_void PARDER PTOCOM
-    (127) r_era_funcion_void -> .
+    (128) r_era_funcion_void -> .
 
-    PARIZQ          reduce using rule 127 (r_era_funcion_void -> .)
-    ID              reduce using rule 127 (r_era_funcion_void -> .)
-    MAS             reduce using rule 127 (r_era_funcion_void -> .)
-    MENOS           reduce using rule 127 (r_era_funcion_void -> .)
-    PARDER          reduce using rule 127 (r_era_funcion_void -> .)
-    CTEI            reduce using rule 127 (r_era_funcion_void -> .)
-    CTEF            reduce using rule 127 (r_era_funcion_void -> .)
+    PARIZQ          reduce using rule 128 (r_era_funcion_void -> .)
+    ID              reduce using rule 128 (r_era_funcion_void -> .)
+    MAS             reduce using rule 128 (r_era_funcion_void -> .)
+    MENOS           reduce using rule 128 (r_era_funcion_void -> .)
+    PARDER          reduce using rule 128 (r_era_funcion_void -> .)
+    CTEI            reduce using rule 128 (r_era_funcion_void -> .)
+    CTEF            reduce using rule 128 (r_era_funcion_void -> .)
 
     r_era_funcion_void             shift and go to state 135
 
 state 107
 
     (75) factor -> PARIZQ . r_marcar_fondo_de_pila expresion r_desmarcar_fondo_de_pila PARDER
-    (159) r_marcar_fondo_de_pila -> .
+    (161) r_marcar_fondo_de_pila -> .
 
-    PARIZQ          reduce using rule 159 (r_marcar_fondo_de_pila -> .)
-    ID              reduce using rule 159 (r_marcar_fondo_de_pila -> .)
-    MAS             reduce using rule 159 (r_marcar_fondo_de_pila -> .)
-    MENOS           reduce using rule 159 (r_marcar_fondo_de_pila -> .)
-    CTEI            reduce using rule 159 (r_marcar_fondo_de_pila -> .)
-    CTEF            reduce using rule 159 (r_marcar_fondo_de_pila -> .)
+    PARIZQ          reduce using rule 161 (r_marcar_fondo_de_pila -> .)
+    ID              reduce using rule 161 (r_marcar_fondo_de_pila -> .)
+    MAS             reduce using rule 161 (r_marcar_fondo_de_pila -> .)
+    MENOS           reduce using rule 161 (r_marcar_fondo_de_pila -> .)
+    CTEI            reduce using rule 161 (r_marcar_fondo_de_pila -> .)
+    CTEF            reduce using rule 161 (r_marcar_fondo_de_pila -> .)
 
     r_marcar_fondo_de_pila         shift and go to state 136
 
@@ -1619,72 +1623,72 @@ state 108
 state 109
 
     (55) expresion -> exp . r_pop_comp expresionsig
-    (157) r_pop_comp -> .
+    (159) r_pop_comp -> .
 
-    MAY             reduce using rule 157 (r_pop_comp -> .)
-    MEN             reduce using rule 157 (r_pop_comp -> .)
-    DIF             reduce using rule 157 (r_pop_comp -> .)
-    IGUIGU          reduce using rule 157 (r_pop_comp -> .)
-    AND             reduce using rule 157 (r_pop_comp -> .)
-    OR              reduce using rule 157 (r_pop_comp -> .)
-    MAYIGU          reduce using rule 157 (r_pop_comp -> .)
-    MENIGU          reduce using rule 157 (r_pop_comp -> .)
-    PARDER          reduce using rule 157 (r_pop_comp -> .)
-    COMA            reduce using rule 157 (r_pop_comp -> .)
-    CORDER          reduce using rule 157 (r_pop_comp -> .)
-    TO              reduce using rule 157 (r_pop_comp -> .)
-    PTOCOM          reduce using rule 157 (r_pop_comp -> .)
-    DO              reduce using rule 157 (r_pop_comp -> .)
+    MAY             reduce using rule 159 (r_pop_comp -> .)
+    MEN             reduce using rule 159 (r_pop_comp -> .)
+    DIF             reduce using rule 159 (r_pop_comp -> .)
+    IGUIGU          reduce using rule 159 (r_pop_comp -> .)
+    AND             reduce using rule 159 (r_pop_comp -> .)
+    OR              reduce using rule 159 (r_pop_comp -> .)
+    MAYIGU          reduce using rule 159 (r_pop_comp -> .)
+    MENIGU          reduce using rule 159 (r_pop_comp -> .)
+    PARDER          reduce using rule 159 (r_pop_comp -> .)
+    COMA            reduce using rule 159 (r_pop_comp -> .)
+    CORDER          reduce using rule 159 (r_pop_comp -> .)
+    TO              reduce using rule 159 (r_pop_comp -> .)
+    PTOCOM          reduce using rule 159 (r_pop_comp -> .)
+    DO              reduce using rule 159 (r_pop_comp -> .)
 
     r_pop_comp                     shift and go to state 138
 
 state 110
 
     (67) exp -> termino . r_pop_mas expciclo
-    (155) r_pop_mas -> .
+    (156) r_pop_mas -> .
 
-    MAS             reduce using rule 155 (r_pop_mas -> .)
-    MENOS           reduce using rule 155 (r_pop_mas -> .)
-    MAY             reduce using rule 155 (r_pop_mas -> .)
-    MEN             reduce using rule 155 (r_pop_mas -> .)
-    DIF             reduce using rule 155 (r_pop_mas -> .)
-    IGUIGU          reduce using rule 155 (r_pop_mas -> .)
-    AND             reduce using rule 155 (r_pop_mas -> .)
-    OR              reduce using rule 155 (r_pop_mas -> .)
-    MAYIGU          reduce using rule 155 (r_pop_mas -> .)
-    MENIGU          reduce using rule 155 (r_pop_mas -> .)
-    PARDER          reduce using rule 155 (r_pop_mas -> .)
-    COMA            reduce using rule 155 (r_pop_mas -> .)
-    CORDER          reduce using rule 155 (r_pop_mas -> .)
-    TO              reduce using rule 155 (r_pop_mas -> .)
-    PTOCOM          reduce using rule 155 (r_pop_mas -> .)
-    DO              reduce using rule 155 (r_pop_mas -> .)
+    MAS             reduce using rule 156 (r_pop_mas -> .)
+    MENOS           reduce using rule 156 (r_pop_mas -> .)
+    MAY             reduce using rule 156 (r_pop_mas -> .)
+    MEN             reduce using rule 156 (r_pop_mas -> .)
+    DIF             reduce using rule 156 (r_pop_mas -> .)
+    IGUIGU          reduce using rule 156 (r_pop_mas -> .)
+    AND             reduce using rule 156 (r_pop_mas -> .)
+    OR              reduce using rule 156 (r_pop_mas -> .)
+    MAYIGU          reduce using rule 156 (r_pop_mas -> .)
+    MENIGU          reduce using rule 156 (r_pop_mas -> .)
+    PARDER          reduce using rule 156 (r_pop_mas -> .)
+    COMA            reduce using rule 156 (r_pop_mas -> .)
+    CORDER          reduce using rule 156 (r_pop_mas -> .)
+    TO              reduce using rule 156 (r_pop_mas -> .)
+    PTOCOM          reduce using rule 156 (r_pop_mas -> .)
+    DO              reduce using rule 156 (r_pop_mas -> .)
 
     r_pop_mas                      shift and go to state 139
 
 state 111
 
     (71) termino -> factor . r_pop_mult factorciclo
-    (154) r_pop_mult -> .
+    (155) r_pop_mult -> .
 
-    MULT            reduce using rule 154 (r_pop_mult -> .)
-    DIV             reduce using rule 154 (r_pop_mult -> .)
-    MAS             reduce using rule 154 (r_pop_mult -> .)
-    MENOS           reduce using rule 154 (r_pop_mult -> .)
-    MAY             reduce using rule 154 (r_pop_mult -> .)
-    MEN             reduce using rule 154 (r_pop_mult -> .)
-    DIF             reduce using rule 154 (r_pop_mult -> .)
-    IGUIGU          reduce using rule 154 (r_pop_mult -> .)
-    AND             reduce using rule 154 (r_pop_mult -> .)
-    OR              reduce using rule 154 (r_pop_mult -> .)
-    MAYIGU          reduce using rule 154 (r_pop_mult -> .)
-    MENIGU          reduce using rule 154 (r_pop_mult -> .)
-    PARDER          reduce using rule 154 (r_pop_mult -> .)
-    COMA            reduce using rule 154 (r_pop_mult -> .)
-    CORDER          reduce using rule 154 (r_pop_mult -> .)
-    TO              reduce using rule 154 (r_pop_mult -> .)
-    PTOCOM          reduce using rule 154 (r_pop_mult -> .)
-    DO              reduce using rule 154 (r_pop_mult -> .)
+    MULT            reduce using rule 155 (r_pop_mult -> .)
+    DIV             reduce using rule 155 (r_pop_mult -> .)
+    MAS             reduce using rule 155 (r_pop_mult -> .)
+    MENOS           reduce using rule 155 (r_pop_mult -> .)
+    MAY             reduce using rule 155 (r_pop_mult -> .)
+    MEN             reduce using rule 155 (r_pop_mult -> .)
+    DIF             reduce using rule 155 (r_pop_mult -> .)
+    IGUIGU          reduce using rule 155 (r_pop_mult -> .)
+    AND             reduce using rule 155 (r_pop_mult -> .)
+    OR              reduce using rule 155 (r_pop_mult -> .)
+    MAYIGU          reduce using rule 155 (r_pop_mult -> .)
+    MENIGU          reduce using rule 155 (r_pop_mult -> .)
+    PARDER          reduce using rule 155 (r_pop_mult -> .)
+    COMA            reduce using rule 155 (r_pop_mult -> .)
+    CORDER          reduce using rule 155 (r_pop_mult -> .)
+    TO              reduce using rule 155 (r_pop_mult -> .)
+    PTOCOM          reduce using rule 155 (r_pop_mult -> .)
+    DO              reduce using rule 155 (r_pop_mult -> .)
 
     r_pop_mult                     shift and go to state 140
 
@@ -1706,28 +1710,28 @@ state 112
 state 113
 
     (77) factor -> ID . r_verifica_variable_existe r_guardar_variable opcionid r_pila_operandos_push
-    (139) r_verifica_variable_existe -> .
+    (140) r_verifica_variable_existe -> .
 
-    PARIZQ          reduce using rule 139 (r_verifica_variable_existe -> .)
-    CORIZQ          reduce using rule 139 (r_verifica_variable_existe -> .)
-    MULT            reduce using rule 139 (r_verifica_variable_existe -> .)
-    DIV             reduce using rule 139 (r_verifica_variable_existe -> .)
-    MAS             reduce using rule 139 (r_verifica_variable_existe -> .)
-    MENOS           reduce using rule 139 (r_verifica_variable_existe -> .)
-    MAY             reduce using rule 139 (r_verifica_variable_existe -> .)
-    MEN             reduce using rule 139 (r_verifica_variable_existe -> .)
-    DIF             reduce using rule 139 (r_verifica_variable_existe -> .)
-    IGUIGU          reduce using rule 139 (r_verifica_variable_existe -> .)
-    AND             reduce using rule 139 (r_verifica_variable_existe -> .)
-    OR              reduce using rule 139 (r_verifica_variable_existe -> .)
-    MAYIGU          reduce using rule 139 (r_verifica_variable_existe -> .)
-    MENIGU          reduce using rule 139 (r_verifica_variable_existe -> .)
-    PARDER          reduce using rule 139 (r_verifica_variable_existe -> .)
-    COMA            reduce using rule 139 (r_verifica_variable_existe -> .)
-    CORDER          reduce using rule 139 (r_verifica_variable_existe -> .)
-    TO              reduce using rule 139 (r_verifica_variable_existe -> .)
-    PTOCOM          reduce using rule 139 (r_verifica_variable_existe -> .)
-    DO              reduce using rule 139 (r_verifica_variable_existe -> .)
+    PARIZQ          reduce using rule 140 (r_verifica_variable_existe -> .)
+    CORIZQ          reduce using rule 140 (r_verifica_variable_existe -> .)
+    MULT            reduce using rule 140 (r_verifica_variable_existe -> .)
+    DIV             reduce using rule 140 (r_verifica_variable_existe -> .)
+    MAS             reduce using rule 140 (r_verifica_variable_existe -> .)
+    MENOS           reduce using rule 140 (r_verifica_variable_existe -> .)
+    MAY             reduce using rule 140 (r_verifica_variable_existe -> .)
+    MEN             reduce using rule 140 (r_verifica_variable_existe -> .)
+    DIF             reduce using rule 140 (r_verifica_variable_existe -> .)
+    IGUIGU          reduce using rule 140 (r_verifica_variable_existe -> .)
+    AND             reduce using rule 140 (r_verifica_variable_existe -> .)
+    OR              reduce using rule 140 (r_verifica_variable_existe -> .)
+    MAYIGU          reduce using rule 140 (r_verifica_variable_existe -> .)
+    MENIGU          reduce using rule 140 (r_verifica_variable_existe -> .)
+    PARDER          reduce using rule 140 (r_verifica_variable_existe -> .)
+    COMA            reduce using rule 140 (r_verifica_variable_existe -> .)
+    CORDER          reduce using rule 140 (r_verifica_variable_existe -> .)
+    TO              reduce using rule 140 (r_verifica_variable_existe -> .)
+    PTOCOM          reduce using rule 140 (r_verifica_variable_existe -> .)
+    DO              reduce using rule 140 (r_verifica_variable_existe -> .)
 
     r_verifica_variable_existe     shift and go to state 145
 
@@ -1773,21 +1777,21 @@ state 117
 
 state 118
 
-    (95) escrituraciclo -> CTE_STRING . r_genera_escribe
-    (156) r_genera_escribe -> .
+    (95) escrituraciclo -> CTE_STRING . r_genera_escribe_string
+    (158) r_genera_escribe_string -> .
 
-    COMA            reduce using rule 156 (r_genera_escribe -> .)
-    PARDER          reduce using rule 156 (r_genera_escribe -> .)
+    COMA            reduce using rule 158 (r_genera_escribe_string -> .)
+    PARDER          reduce using rule 158 (r_genera_escribe_string -> .)
 
-    r_genera_escribe               shift and go to state 149
+    r_genera_escribe_string        shift and go to state 149
 
 state 119
 
     (96) escrituraciclo -> expresion . r_genera_escribe
-    (156) r_genera_escribe -> .
+    (157) r_genera_escribe -> .
 
-    COMA            reduce using rule 156 (r_genera_escribe -> .)
-    PARDER          reduce using rule 156 (r_genera_escribe -> .)
+    COMA            reduce using rule 157 (r_genera_escribe -> .)
+    PARDER          reduce using rule 157 (r_genera_escribe -> .)
 
     r_genera_escribe               shift and go to state 150
 
@@ -1838,42 +1842,42 @@ state 121
 state 122
 
     (108) nocondicional -> FOR iddim IGU . r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion r_for_paso_1 DO bloque r_for_paso_2
-    (171) r_pila_operadores_push_igu -> .
+    (173) r_pila_operadores_push_igu -> .
 
-    PARIZQ          reduce using rule 171 (r_pila_operadores_push_igu -> .)
-    ID              reduce using rule 171 (r_pila_operadores_push_igu -> .)
-    MAS             reduce using rule 171 (r_pila_operadores_push_igu -> .)
-    MENOS           reduce using rule 171 (r_pila_operadores_push_igu -> .)
-    CTEI            reduce using rule 171 (r_pila_operadores_push_igu -> .)
-    CTEF            reduce using rule 171 (r_pila_operadores_push_igu -> .)
+    PARIZQ          reduce using rule 173 (r_pila_operadores_push_igu -> .)
+    ID              reduce using rule 173 (r_pila_operadores_push_igu -> .)
+    MAS             reduce using rule 173 (r_pila_operadores_push_igu -> .)
+    MENOS           reduce using rule 173 (r_pila_operadores_push_igu -> .)
+    CTEI            reduce using rule 173 (r_pila_operadores_push_igu -> .)
+    CTEF            reduce using rule 173 (r_pila_operadores_push_igu -> .)
 
     r_pila_operadores_push_igu     shift and go to state 155
 
 state 123
 
     (102) iddim -> ID r_verifica_variable_existe . r_pila_operandos_push_id arrexp arrexp
-    (151) r_pila_operandos_push_id -> .
+    (152) r_pila_operandos_push_id -> .
 
-    CORIZQ          reduce using rule 151 (r_pila_operandos_push_id -> .)
-    IGU             reduce using rule 151 (r_pila_operandos_push_id -> .)
-    COMA            reduce using rule 151 (r_pila_operandos_push_id -> .)
-    PARDER          reduce using rule 151 (r_pila_operandos_push_id -> .)
-    MULT            reduce using rule 151 (r_pila_operandos_push_id -> .)
-    DIV             reduce using rule 151 (r_pila_operandos_push_id -> .)
-    MAS             reduce using rule 151 (r_pila_operandos_push_id -> .)
-    MENOS           reduce using rule 151 (r_pila_operandos_push_id -> .)
-    MAY             reduce using rule 151 (r_pila_operandos_push_id -> .)
-    MEN             reduce using rule 151 (r_pila_operandos_push_id -> .)
-    DIF             reduce using rule 151 (r_pila_operandos_push_id -> .)
-    IGUIGU          reduce using rule 151 (r_pila_operandos_push_id -> .)
-    AND             reduce using rule 151 (r_pila_operandos_push_id -> .)
-    OR              reduce using rule 151 (r_pila_operandos_push_id -> .)
-    MAYIGU          reduce using rule 151 (r_pila_operandos_push_id -> .)
-    MENIGU          reduce using rule 151 (r_pila_operandos_push_id -> .)
-    CORDER          reduce using rule 151 (r_pila_operandos_push_id -> .)
-    TO              reduce using rule 151 (r_pila_operandos_push_id -> .)
-    PTOCOM          reduce using rule 151 (r_pila_operandos_push_id -> .)
-    DO              reduce using rule 151 (r_pila_operandos_push_id -> .)
+    CORIZQ          reduce using rule 152 (r_pila_operandos_push_id -> .)
+    IGU             reduce using rule 152 (r_pila_operandos_push_id -> .)
+    COMA            reduce using rule 152 (r_pila_operandos_push_id -> .)
+    PARDER          reduce using rule 152 (r_pila_operandos_push_id -> .)
+    MULT            reduce using rule 152 (r_pila_operandos_push_id -> .)
+    DIV             reduce using rule 152 (r_pila_operandos_push_id -> .)
+    MAS             reduce using rule 152 (r_pila_operandos_push_id -> .)
+    MENOS           reduce using rule 152 (r_pila_operandos_push_id -> .)
+    MAY             reduce using rule 152 (r_pila_operandos_push_id -> .)
+    MEN             reduce using rule 152 (r_pila_operandos_push_id -> .)
+    DIF             reduce using rule 152 (r_pila_operandos_push_id -> .)
+    IGUIGU          reduce using rule 152 (r_pila_operandos_push_id -> .)
+    AND             reduce using rule 152 (r_pila_operandos_push_id -> .)
+    OR              reduce using rule 152 (r_pila_operandos_push_id -> .)
+    MAYIGU          reduce using rule 152 (r_pila_operandos_push_id -> .)
+    MENIGU          reduce using rule 152 (r_pila_operandos_push_id -> .)
+    CORDER          reduce using rule 152 (r_pila_operandos_push_id -> .)
+    TO              reduce using rule 152 (r_pila_operandos_push_id -> .)
+    PTOCOM          reduce using rule 152 (r_pila_operandos_push_id -> .)
+    DO              reduce using rule 152 (r_pila_operandos_push_id -> .)
 
     r_pila_operandos_push_id       shift and go to state 156
 
@@ -1887,10 +1891,10 @@ state 124
 state 125
 
     (29) funcion -> tipo_func MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER . r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
-    (123) r_register_param_types -> .
+    (124) r_register_param_types -> .
 
-    VARTOKEN        reduce using rule 123 (r_register_param_types -> .)
-    KEYIZQ          reduce using rule 123 (r_register_param_types -> .)
+    VARTOKEN        reduce using rule 124 (r_register_param_types -> .)
+    KEYIZQ          reduce using rule 124 (r_register_param_types -> .)
 
     r_register_param_types         shift and go to state 158
 
@@ -1939,11 +1943,11 @@ state 128
 state 129
 
     (13) opciontipo -> ID . r_register_variable_name arr arr varciclo PTOCOM tipociclo
-    (138) r_register_variable_name -> .
+    (139) r_register_variable_name -> .
 
-    CORIZQ          reduce using rule 138 (r_register_variable_name -> .)
-    COMA            reduce using rule 138 (r_register_variable_name -> .)
-    PTOCOM          reduce using rule 138 (r_register_variable_name -> .)
+    CORIZQ          reduce using rule 139 (r_register_variable_name -> .)
+    COMA            reduce using rule 139 (r_register_variable_name -> .)
+    PTOCOM          reduce using rule 139 (r_register_variable_name -> .)
 
     r_register_variable_name       shift and go to state 163
 
@@ -1957,7 +1961,7 @@ state 130
 state 131
 
     (7) varciclo -> COMA ID r_register_variable_name arr . arr varciclo
-    (9) arr -> . CORIZQ CTEI r_register_dim CORDER
+    (9) arr -> . CORIZQ CTEI r_register_const CORDER
     (10) arr -> . empty
     (116) empty -> .
 
@@ -2089,9 +2093,9 @@ state 136
 state 137
 
     (91) decision -> IF PARIZQ expresion PARDER . r_if_paso_1 THEN bloque decision_else r_if_paso_3
-    (137) r_if_paso_1 -> .
+    (138) r_if_paso_1 -> .
 
-    THEN            reduce using rule 137 (r_if_paso_1 -> .)
+    THEN            reduce using rule 138 (r_if_paso_1 -> .)
 
     r_if_paso_1                    shift and go to state 172
 
@@ -2236,80 +2240,80 @@ state 142
 state 143
 
     (84) varcte -> CTEI . r_pila_operandos_push_cte_int
-    (152) r_pila_operandos_push_cte_int -> .
+    (153) r_pila_operandos_push_cte_int -> .
 
-    MULT            reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    DIV             reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    MAS             reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    MENOS           reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    MAY             reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    MEN             reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    DIF             reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    IGUIGU          reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    AND             reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    OR              reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    MAYIGU          reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    MENIGU          reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    PARDER          reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    COMA            reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    CORDER          reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    TO              reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    PTOCOM          reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
-    DO              reduce using rule 152 (r_pila_operandos_push_cte_int -> .)
+    MULT            reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    DIV             reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    MAS             reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    MENOS           reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    MAY             reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    MEN             reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    DIF             reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    IGUIGU          reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    AND             reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    OR              reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    MAYIGU          reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    MENIGU          reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    PARDER          reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    COMA            reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    CORDER          reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    TO              reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    PTOCOM          reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
+    DO              reduce using rule 153 (r_pila_operandos_push_cte_int -> .)
 
     r_pila_operandos_push_cte_int  shift and go to state 191
 
 state 144
 
     (85) varcte -> CTEF . r_pila_operandos_push_cte_flt
-    (153) r_pila_operandos_push_cte_flt -> .
+    (154) r_pila_operandos_push_cte_flt -> .
 
-    MULT            reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    DIV             reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    MAS             reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    MENOS           reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    MAY             reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    MEN             reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    DIF             reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    IGUIGU          reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    AND             reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    OR              reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    MAYIGU          reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    MENIGU          reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    PARDER          reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    COMA            reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    CORDER          reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    TO              reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    PTOCOM          reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
-    DO              reduce using rule 153 (r_pila_operandos_push_cte_flt -> .)
+    MULT            reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    DIV             reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    MAS             reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    MENOS           reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    MAY             reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    MEN             reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    DIF             reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    IGUIGU          reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    AND             reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    OR              reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    MAYIGU          reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    MENIGU          reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    PARDER          reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    COMA            reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    CORDER          reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    TO              reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    PTOCOM          reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
+    DO              reduce using rule 154 (r_pila_operandos_push_cte_flt -> .)
 
     r_pila_operandos_push_cte_flt  shift and go to state 192
 
 state 145
 
     (77) factor -> ID r_verifica_variable_existe . r_guardar_variable opcionid r_pila_operandos_push
-    (149) r_guardar_variable -> .
+    (150) r_guardar_variable -> .
 
-    PARIZQ          reduce using rule 149 (r_guardar_variable -> .)
-    CORIZQ          reduce using rule 149 (r_guardar_variable -> .)
-    MULT            reduce using rule 149 (r_guardar_variable -> .)
-    DIV             reduce using rule 149 (r_guardar_variable -> .)
-    MAS             reduce using rule 149 (r_guardar_variable -> .)
-    MENOS           reduce using rule 149 (r_guardar_variable -> .)
-    MAY             reduce using rule 149 (r_guardar_variable -> .)
-    MEN             reduce using rule 149 (r_guardar_variable -> .)
-    DIF             reduce using rule 149 (r_guardar_variable -> .)
-    IGUIGU          reduce using rule 149 (r_guardar_variable -> .)
-    AND             reduce using rule 149 (r_guardar_variable -> .)
-    OR              reduce using rule 149 (r_guardar_variable -> .)
-    MAYIGU          reduce using rule 149 (r_guardar_variable -> .)
-    MENIGU          reduce using rule 149 (r_guardar_variable -> .)
-    PARDER          reduce using rule 149 (r_guardar_variable -> .)
-    COMA            reduce using rule 149 (r_guardar_variable -> .)
-    CORDER          reduce using rule 149 (r_guardar_variable -> .)
-    TO              reduce using rule 149 (r_guardar_variable -> .)
-    PTOCOM          reduce using rule 149 (r_guardar_variable -> .)
-    DO              reduce using rule 149 (r_guardar_variable -> .)
+    PARIZQ          reduce using rule 150 (r_guardar_variable -> .)
+    CORIZQ          reduce using rule 150 (r_guardar_variable -> .)
+    MULT            reduce using rule 150 (r_guardar_variable -> .)
+    DIV             reduce using rule 150 (r_guardar_variable -> .)
+    MAS             reduce using rule 150 (r_guardar_variable -> .)
+    MENOS           reduce using rule 150 (r_guardar_variable -> .)
+    MAY             reduce using rule 150 (r_guardar_variable -> .)
+    MEN             reduce using rule 150 (r_guardar_variable -> .)
+    DIF             reduce using rule 150 (r_guardar_variable -> .)
+    IGUIGU          reduce using rule 150 (r_guardar_variable -> .)
+    AND             reduce using rule 150 (r_guardar_variable -> .)
+    OR              reduce using rule 150 (r_guardar_variable -> .)
+    MAYIGU          reduce using rule 150 (r_guardar_variable -> .)
+    MENIGU          reduce using rule 150 (r_guardar_variable -> .)
+    PARDER          reduce using rule 150 (r_guardar_variable -> .)
+    COMA            reduce using rule 150 (r_guardar_variable -> .)
+    CORDER          reduce using rule 150 (r_guardar_variable -> .)
+    TO              reduce using rule 150 (r_guardar_variable -> .)
+    PTOCOM          reduce using rule 150 (r_guardar_variable -> .)
+    DO              reduce using rule 150 (r_guardar_variable -> .)
 
     r_guardar_variable             shift and go to state 193
 
@@ -2323,7 +2327,7 @@ state 146
 state 147
 
     (97) otro -> COMA . escrituraciclo otro
-    (95) escrituraciclo -> . CTE_STRING r_genera_escribe
+    (95) escrituraciclo -> . CTE_STRING r_genera_escribe_string
     (96) escrituraciclo -> . expresion r_genera_escribe
     (55) expresion -> . exp r_pop_comp expresionsig
     (67) exp -> . termino r_pop_mas expciclo
@@ -2364,10 +2368,10 @@ state 148
 
 state 149
 
-    (95) escrituraciclo -> CTE_STRING r_genera_escribe .
+    (95) escrituraciclo -> CTE_STRING r_genera_escribe_string .
 
-    COMA            reduce using rule 95 (escrituraciclo -> CTE_STRING r_genera_escribe .)
-    PARDER          reduce using rule 95 (escrituraciclo -> CTE_STRING r_genera_escribe .)
+    COMA            reduce using rule 95 (escrituraciclo -> CTE_STRING r_genera_escribe_string .)
+    PARDER          reduce using rule 95 (escrituraciclo -> CTE_STRING r_genera_escribe_string .)
 
 
 state 150
@@ -2476,10 +2480,10 @@ state 156
 state 157
 
     (24) funcionvoid -> VOID r_register_function MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER . r_register_param_types opvars r_register_quad bloque r_endfunc
-    (123) r_register_param_types -> .
+    (124) r_register_param_types -> .
 
-    VARTOKEN        reduce using rule 123 (r_register_param_types -> .)
-    KEYIZQ          reduce using rule 123 (r_register_param_types -> .)
+    VARTOKEN        reduce using rule 124 (r_register_param_types -> .)
+    KEYIZQ          reduce using rule 124 (r_register_param_types -> .)
 
     r_register_param_types         shift and go to state 203
 
@@ -2538,7 +2542,7 @@ state 162
 state 163
 
     (13) opciontipo -> ID r_register_variable_name . arr arr varciclo PTOCOM tipociclo
-    (9) arr -> . CORIZQ CTEI r_register_dim CORDER
+    (9) arr -> . CORIZQ CTEI r_register_const CORDER
     (10) arr -> . empty
     (116) empty -> .
 
@@ -2555,9 +2559,9 @@ state 163
 state 164
 
     (14) opciontipo -> MODULE ID . r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
-    (125) r_update_func_type -> .
+    (126) r_update_func_type -> .
 
-    PARIZQ          reduce using rule 125 (r_update_func_type -> .)
+    PARIZQ          reduce using rule 126 (r_update_func_type -> .)
 
     r_update_func_type             shift and go to state 208
 
@@ -2591,19 +2595,19 @@ state 167
 state 168
 
     (90) llamadafunc -> ID r_verifica_void PARIZQ r_era_funcion_void parametros . r_terminar_parametro_void PARDER PTOCOM
-    (131) r_terminar_parametro_void -> .
+    (132) r_terminar_parametro_void -> .
 
-    PARDER          reduce using rule 131 (r_terminar_parametro_void -> .)
+    PARDER          reduce using rule 132 (r_terminar_parametro_void -> .)
 
     r_terminar_parametro_void      shift and go to state 212
 
 state 169
 
     (86) parametros -> expresion . r_extraer_parametro cicloparametros
-    (132) r_extraer_parametro -> .
+    (133) r_extraer_parametro -> .
 
-    COMA            reduce using rule 132 (r_extraer_parametro -> .)
-    PARDER          reduce using rule 132 (r_extraer_parametro -> .)
+    COMA            reduce using rule 133 (r_extraer_parametro -> .)
+    PARDER          reduce using rule 133 (r_extraer_parametro -> .)
 
     r_extraer_parametro            shift and go to state 213
 
@@ -2621,9 +2625,9 @@ state 170
 state 171
 
     (75) factor -> PARIZQ r_marcar_fondo_de_pila expresion . r_desmarcar_fondo_de_pila PARDER
-    (160) r_desmarcar_fondo_de_pila -> .
+    (162) r_desmarcar_fondo_de_pila -> .
 
-    PARDER          reduce using rule 160 (r_desmarcar_fondo_de_pila -> .)
+    PARDER          reduce using rule 162 (r_desmarcar_fondo_de_pila -> .)
 
     r_desmarcar_fondo_de_pila      shift and go to state 214
 
@@ -2649,116 +2653,116 @@ state 173
 state 174
 
     (56) expresionsig -> MAY . r_pila_operadores_push_may expresionsigequal expresion
-    (165) r_pila_operadores_push_may -> .
+    (167) r_pila_operadores_push_may -> .
 
-    IGU             reduce using rule 165 (r_pila_operadores_push_may -> .)
-    PARIZQ          reduce using rule 165 (r_pila_operadores_push_may -> .)
-    ID              reduce using rule 165 (r_pila_operadores_push_may -> .)
-    MAS             reduce using rule 165 (r_pila_operadores_push_may -> .)
-    MENOS           reduce using rule 165 (r_pila_operadores_push_may -> .)
-    CTEI            reduce using rule 165 (r_pila_operadores_push_may -> .)
-    CTEF            reduce using rule 165 (r_pila_operadores_push_may -> .)
+    IGU             reduce using rule 167 (r_pila_operadores_push_may -> .)
+    PARIZQ          reduce using rule 167 (r_pila_operadores_push_may -> .)
+    ID              reduce using rule 167 (r_pila_operadores_push_may -> .)
+    MAS             reduce using rule 167 (r_pila_operadores_push_may -> .)
+    MENOS           reduce using rule 167 (r_pila_operadores_push_may -> .)
+    CTEI            reduce using rule 167 (r_pila_operadores_push_may -> .)
+    CTEF            reduce using rule 167 (r_pila_operadores_push_may -> .)
 
     r_pila_operadores_push_may     shift and go to state 216
 
 state 175
 
     (57) expresionsig -> MEN . r_pila_operadores_push_men expresionsigequal expresion
-    (166) r_pila_operadores_push_men -> .
+    (168) r_pila_operadores_push_men -> .
 
-    IGU             reduce using rule 166 (r_pila_operadores_push_men -> .)
-    PARIZQ          reduce using rule 166 (r_pila_operadores_push_men -> .)
-    ID              reduce using rule 166 (r_pila_operadores_push_men -> .)
-    MAS             reduce using rule 166 (r_pila_operadores_push_men -> .)
-    MENOS           reduce using rule 166 (r_pila_operadores_push_men -> .)
-    CTEI            reduce using rule 166 (r_pila_operadores_push_men -> .)
-    CTEF            reduce using rule 166 (r_pila_operadores_push_men -> .)
+    IGU             reduce using rule 168 (r_pila_operadores_push_men -> .)
+    PARIZQ          reduce using rule 168 (r_pila_operadores_push_men -> .)
+    ID              reduce using rule 168 (r_pila_operadores_push_men -> .)
+    MAS             reduce using rule 168 (r_pila_operadores_push_men -> .)
+    MENOS           reduce using rule 168 (r_pila_operadores_push_men -> .)
+    CTEI            reduce using rule 168 (r_pila_operadores_push_men -> .)
+    CTEF            reduce using rule 168 (r_pila_operadores_push_men -> .)
 
     r_pila_operadores_push_men     shift and go to state 217
 
 state 176
 
     (58) expresionsig -> DIF . r_pila_operadores_push_dif expresion
-    (167) r_pila_operadores_push_dif -> .
+    (169) r_pila_operadores_push_dif -> .
 
-    PARIZQ          reduce using rule 167 (r_pila_operadores_push_dif -> .)
-    ID              reduce using rule 167 (r_pila_operadores_push_dif -> .)
-    MAS             reduce using rule 167 (r_pila_operadores_push_dif -> .)
-    MENOS           reduce using rule 167 (r_pila_operadores_push_dif -> .)
-    CTEI            reduce using rule 167 (r_pila_operadores_push_dif -> .)
-    CTEF            reduce using rule 167 (r_pila_operadores_push_dif -> .)
+    PARIZQ          reduce using rule 169 (r_pila_operadores_push_dif -> .)
+    ID              reduce using rule 169 (r_pila_operadores_push_dif -> .)
+    MAS             reduce using rule 169 (r_pila_operadores_push_dif -> .)
+    MENOS           reduce using rule 169 (r_pila_operadores_push_dif -> .)
+    CTEI            reduce using rule 169 (r_pila_operadores_push_dif -> .)
+    CTEF            reduce using rule 169 (r_pila_operadores_push_dif -> .)
 
     r_pila_operadores_push_dif     shift and go to state 218
 
 state 177
 
     (59) expresionsig -> IGUIGU . r_pila_operadores_push_iguigu expresion
-    (168) r_pila_operadores_push_iguigu -> .
+    (170) r_pila_operadores_push_iguigu -> .
 
-    PARIZQ          reduce using rule 168 (r_pila_operadores_push_iguigu -> .)
-    ID              reduce using rule 168 (r_pila_operadores_push_iguigu -> .)
-    MAS             reduce using rule 168 (r_pila_operadores_push_iguigu -> .)
-    MENOS           reduce using rule 168 (r_pila_operadores_push_iguigu -> .)
-    CTEI            reduce using rule 168 (r_pila_operadores_push_iguigu -> .)
-    CTEF            reduce using rule 168 (r_pila_operadores_push_iguigu -> .)
+    PARIZQ          reduce using rule 170 (r_pila_operadores_push_iguigu -> .)
+    ID              reduce using rule 170 (r_pila_operadores_push_iguigu -> .)
+    MAS             reduce using rule 170 (r_pila_operadores_push_iguigu -> .)
+    MENOS           reduce using rule 170 (r_pila_operadores_push_iguigu -> .)
+    CTEI            reduce using rule 170 (r_pila_operadores_push_iguigu -> .)
+    CTEF            reduce using rule 170 (r_pila_operadores_push_iguigu -> .)
 
     r_pila_operadores_push_iguigu  shift and go to state 219
 
 state 178
 
     (60) expresionsig -> AND . r_pila_operadores_push_and expresion
-    (169) r_pila_operadores_push_and -> .
+    (171) r_pila_operadores_push_and -> .
 
-    PARIZQ          reduce using rule 169 (r_pila_operadores_push_and -> .)
-    ID              reduce using rule 169 (r_pila_operadores_push_and -> .)
-    MAS             reduce using rule 169 (r_pila_operadores_push_and -> .)
-    MENOS           reduce using rule 169 (r_pila_operadores_push_and -> .)
-    CTEI            reduce using rule 169 (r_pila_operadores_push_and -> .)
-    CTEF            reduce using rule 169 (r_pila_operadores_push_and -> .)
+    PARIZQ          reduce using rule 171 (r_pila_operadores_push_and -> .)
+    ID              reduce using rule 171 (r_pila_operadores_push_and -> .)
+    MAS             reduce using rule 171 (r_pila_operadores_push_and -> .)
+    MENOS           reduce using rule 171 (r_pila_operadores_push_and -> .)
+    CTEI            reduce using rule 171 (r_pila_operadores_push_and -> .)
+    CTEF            reduce using rule 171 (r_pila_operadores_push_and -> .)
 
     r_pila_operadores_push_and     shift and go to state 220
 
 state 179
 
     (61) expresionsig -> OR . r_pila_operadores_push_or expresion
-    (170) r_pila_operadores_push_or -> .
+    (172) r_pila_operadores_push_or -> .
 
-    PARIZQ          reduce using rule 170 (r_pila_operadores_push_or -> .)
-    ID              reduce using rule 170 (r_pila_operadores_push_or -> .)
-    MAS             reduce using rule 170 (r_pila_operadores_push_or -> .)
-    MENOS           reduce using rule 170 (r_pila_operadores_push_or -> .)
-    CTEI            reduce using rule 170 (r_pila_operadores_push_or -> .)
-    CTEF            reduce using rule 170 (r_pila_operadores_push_or -> .)
+    PARIZQ          reduce using rule 172 (r_pila_operadores_push_or -> .)
+    ID              reduce using rule 172 (r_pila_operadores_push_or -> .)
+    MAS             reduce using rule 172 (r_pila_operadores_push_or -> .)
+    MENOS           reduce using rule 172 (r_pila_operadores_push_or -> .)
+    CTEI            reduce using rule 172 (r_pila_operadores_push_or -> .)
+    CTEF            reduce using rule 172 (r_pila_operadores_push_or -> .)
 
     r_pila_operadores_push_or      shift and go to state 221
 
 state 180
 
     (62) expresionsig -> MAYIGU . r_pila_operadores_push_mayigu expresionsigequal expresion
-    (172) r_pila_operadores_push_mayigu -> .
+    (174) r_pila_operadores_push_mayigu -> .
 
-    IGU             reduce using rule 172 (r_pila_operadores_push_mayigu -> .)
-    PARIZQ          reduce using rule 172 (r_pila_operadores_push_mayigu -> .)
-    ID              reduce using rule 172 (r_pila_operadores_push_mayigu -> .)
-    MAS             reduce using rule 172 (r_pila_operadores_push_mayigu -> .)
-    MENOS           reduce using rule 172 (r_pila_operadores_push_mayigu -> .)
-    CTEI            reduce using rule 172 (r_pila_operadores_push_mayigu -> .)
-    CTEF            reduce using rule 172 (r_pila_operadores_push_mayigu -> .)
+    IGU             reduce using rule 174 (r_pila_operadores_push_mayigu -> .)
+    PARIZQ          reduce using rule 174 (r_pila_operadores_push_mayigu -> .)
+    ID              reduce using rule 174 (r_pila_operadores_push_mayigu -> .)
+    MAS             reduce using rule 174 (r_pila_operadores_push_mayigu -> .)
+    MENOS           reduce using rule 174 (r_pila_operadores_push_mayigu -> .)
+    CTEI            reduce using rule 174 (r_pila_operadores_push_mayigu -> .)
+    CTEF            reduce using rule 174 (r_pila_operadores_push_mayigu -> .)
 
     r_pila_operadores_push_mayigu  shift and go to state 222
 
 state 181
 
     (63) expresionsig -> MENIGU . r_pila_operadores_push_menigu expresionsigequal expresion
-    (173) r_pila_operadores_push_menigu -> .
+    (175) r_pila_operadores_push_menigu -> .
 
-    IGU             reduce using rule 173 (r_pila_operadores_push_menigu -> .)
-    PARIZQ          reduce using rule 173 (r_pila_operadores_push_menigu -> .)
-    ID              reduce using rule 173 (r_pila_operadores_push_menigu -> .)
-    MAS             reduce using rule 173 (r_pila_operadores_push_menigu -> .)
-    MENOS           reduce using rule 173 (r_pila_operadores_push_menigu -> .)
-    CTEI            reduce using rule 173 (r_pila_operadores_push_menigu -> .)
-    CTEF            reduce using rule 173 (r_pila_operadores_push_menigu -> .)
+    IGU             reduce using rule 175 (r_pila_operadores_push_menigu -> .)
+    PARIZQ          reduce using rule 175 (r_pila_operadores_push_menigu -> .)
+    ID              reduce using rule 175 (r_pila_operadores_push_menigu -> .)
+    MAS             reduce using rule 175 (r_pila_operadores_push_menigu -> .)
+    MENOS           reduce using rule 175 (r_pila_operadores_push_menigu -> .)
+    CTEI            reduce using rule 175 (r_pila_operadores_push_menigu -> .)
+    CTEF            reduce using rule 175 (r_pila_operadores_push_menigu -> .)
 
     r_pila_operadores_push_menigu  shift and go to state 223
 
@@ -2797,28 +2801,28 @@ state 183
 state 184
 
     (68) expciclo -> MAS . r_pila_operadores_push_mas exp
-    (163) r_pila_operadores_push_mas -> .
+    (165) r_pila_operadores_push_mas -> .
 
-    PARIZQ          reduce using rule 163 (r_pila_operadores_push_mas -> .)
-    ID              reduce using rule 163 (r_pila_operadores_push_mas -> .)
-    MAS             reduce using rule 163 (r_pila_operadores_push_mas -> .)
-    MENOS           reduce using rule 163 (r_pila_operadores_push_mas -> .)
-    CTEI            reduce using rule 163 (r_pila_operadores_push_mas -> .)
-    CTEF            reduce using rule 163 (r_pila_operadores_push_mas -> .)
+    PARIZQ          reduce using rule 165 (r_pila_operadores_push_mas -> .)
+    ID              reduce using rule 165 (r_pila_operadores_push_mas -> .)
+    MAS             reduce using rule 165 (r_pila_operadores_push_mas -> .)
+    MENOS           reduce using rule 165 (r_pila_operadores_push_mas -> .)
+    CTEI            reduce using rule 165 (r_pila_operadores_push_mas -> .)
+    CTEF            reduce using rule 165 (r_pila_operadores_push_mas -> .)
 
     r_pila_operadores_push_mas     shift and go to state 224
 
 state 185
 
     (69) expciclo -> MENOS . r_pila_operadores_push_menos exp
-    (164) r_pila_operadores_push_menos -> .
+    (166) r_pila_operadores_push_menos -> .
 
-    PARIZQ          reduce using rule 164 (r_pila_operadores_push_menos -> .)
-    ID              reduce using rule 164 (r_pila_operadores_push_menos -> .)
-    MAS             reduce using rule 164 (r_pila_operadores_push_menos -> .)
-    MENOS           reduce using rule 164 (r_pila_operadores_push_menos -> .)
-    CTEI            reduce using rule 164 (r_pila_operadores_push_menos -> .)
-    CTEF            reduce using rule 164 (r_pila_operadores_push_menos -> .)
+    PARIZQ          reduce using rule 166 (r_pila_operadores_push_menos -> .)
+    ID              reduce using rule 166 (r_pila_operadores_push_menos -> .)
+    MAS             reduce using rule 166 (r_pila_operadores_push_menos -> .)
+    MENOS           reduce using rule 166 (r_pila_operadores_push_menos -> .)
+    CTEI            reduce using rule 166 (r_pila_operadores_push_menos -> .)
+    CTEF            reduce using rule 166 (r_pila_operadores_push_menos -> .)
 
     r_pila_operadores_push_menos   shift and go to state 225
 
@@ -2867,28 +2871,28 @@ state 187
 state 188
 
     (72) factorciclo -> MULT . r_pila_operadores_push_mult termino
-    (161) r_pila_operadores_push_mult -> .
+    (163) r_pila_operadores_push_mult -> .
 
-    PARIZQ          reduce using rule 161 (r_pila_operadores_push_mult -> .)
-    ID              reduce using rule 161 (r_pila_operadores_push_mult -> .)
-    MAS             reduce using rule 161 (r_pila_operadores_push_mult -> .)
-    MENOS           reduce using rule 161 (r_pila_operadores_push_mult -> .)
-    CTEI            reduce using rule 161 (r_pila_operadores_push_mult -> .)
-    CTEF            reduce using rule 161 (r_pila_operadores_push_mult -> .)
+    PARIZQ          reduce using rule 163 (r_pila_operadores_push_mult -> .)
+    ID              reduce using rule 163 (r_pila_operadores_push_mult -> .)
+    MAS             reduce using rule 163 (r_pila_operadores_push_mult -> .)
+    MENOS           reduce using rule 163 (r_pila_operadores_push_mult -> .)
+    CTEI            reduce using rule 163 (r_pila_operadores_push_mult -> .)
+    CTEF            reduce using rule 163 (r_pila_operadores_push_mult -> .)
 
     r_pila_operadores_push_mult    shift and go to state 226
 
 state 189
 
     (73) factorciclo -> DIV . r_pila_operadores_push_div termino
-    (162) r_pila_operadores_push_div -> .
+    (164) r_pila_operadores_push_div -> .
 
-    PARIZQ          reduce using rule 162 (r_pila_operadores_push_div -> .)
-    ID              reduce using rule 162 (r_pila_operadores_push_div -> .)
-    MAS             reduce using rule 162 (r_pila_operadores_push_div -> .)
-    MENOS           reduce using rule 162 (r_pila_operadores_push_div -> .)
-    CTEI            reduce using rule 162 (r_pila_operadores_push_div -> .)
-    CTEF            reduce using rule 162 (r_pila_operadores_push_div -> .)
+    PARIZQ          reduce using rule 164 (r_pila_operadores_push_div -> .)
+    ID              reduce using rule 164 (r_pila_operadores_push_div -> .)
+    MAS             reduce using rule 164 (r_pila_operadores_push_div -> .)
+    MENOS           reduce using rule 164 (r_pila_operadores_push_div -> .)
+    CTEI            reduce using rule 164 (r_pila_operadores_push_div -> .)
+    CTEF            reduce using rule 164 (r_pila_operadores_push_div -> .)
 
     r_pila_operadores_push_div     shift and go to state 227
 
@@ -3042,9 +3046,9 @@ state 197
 state 198
 
     (107) condicional -> WHILE r_while_paso_1 PARIZQ expresion PARDER . r_while_paso_2 DO bloque r_while_paso_3
-    (144) r_while_paso_2 -> .
+    (145) r_while_paso_2 -> .
 
-    DO              reduce using rule 144 (r_while_paso_2 -> .)
+    DO              reduce using rule 145 (r_while_paso_2 -> .)
 
     r_while_paso_2                 shift and go to state 235
 
@@ -3161,9 +3165,9 @@ state 203
 state 204
 
     (29) funcion -> tipo_func MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars . r_register_quad bloquefunc r_endfunc r_asegurar_return
-    (126) r_register_quad -> .
+    (127) r_register_quad -> .
 
-    KEYIZQ          reduce using rule 126 (r_register_quad -> .)
+    KEYIZQ          reduce using rule 127 (r_register_quad -> .)
 
     r_register_quad                shift and go to state 240
 
@@ -3187,7 +3191,7 @@ state 206
 state 207
 
     (13) opciontipo -> ID r_register_variable_name arr . arr varciclo PTOCOM tipociclo
-    (9) arr -> . CORIZQ CTEI r_register_dim CORDER
+    (9) arr -> . CORIZQ CTEI r_register_const CORDER
     (10) arr -> . empty
     (116) empty -> .
 
@@ -3201,9 +3205,9 @@ state 207
 state 208
 
     (14) opciontipo -> MODULE ID r_update_func_type . r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
-    (121) r_update_curr_function_name_especial -> .
+    (122) r_update_curr_function_name_especial -> .
 
-    PARIZQ          reduce using rule 121 (r_update_curr_function_name_especial -> .)
+    PARIZQ          reduce using rule 122 (r_update_curr_function_name_especial -> .)
 
     r_update_curr_function_name_especial shift and go to state 242
 
@@ -3217,14 +3221,14 @@ state 209
 state 210
 
     (52) asignacion -> ID r_verifica_variable_existe r_pila_operandos_push_id asignacionarr asignacionarr IGU . r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
-    (171) r_pila_operadores_push_igu -> .
+    (173) r_pila_operadores_push_igu -> .
 
-    PARIZQ          reduce using rule 171 (r_pila_operadores_push_igu -> .)
-    ID              reduce using rule 171 (r_pila_operadores_push_igu -> .)
-    MAS             reduce using rule 171 (r_pila_operadores_push_igu -> .)
-    MENOS           reduce using rule 171 (r_pila_operadores_push_igu -> .)
-    CTEI            reduce using rule 171 (r_pila_operadores_push_igu -> .)
-    CTEF            reduce using rule 171 (r_pila_operadores_push_igu -> .)
+    PARIZQ          reduce using rule 173 (r_pila_operadores_push_igu -> .)
+    ID              reduce using rule 173 (r_pila_operadores_push_igu -> .)
+    MAS             reduce using rule 173 (r_pila_operadores_push_igu -> .)
+    MENOS           reduce using rule 173 (r_pila_operadores_push_igu -> .)
+    CTEI            reduce using rule 173 (r_pila_operadores_push_igu -> .)
+    CTEF            reduce using rule 173 (r_pila_operadores_push_igu -> .)
 
     r_pila_operadores_push_igu     shift and go to state 243
 
@@ -3583,41 +3587,41 @@ state 227
 state 228
 
     (77) factor -> ID r_verifica_variable_existe r_guardar_variable opcionid . r_pila_operandos_push
-    (150) r_pila_operandos_push -> .
+    (151) r_pila_operandos_push -> .
 
-    MULT            reduce using rule 150 (r_pila_operandos_push -> .)
-    DIV             reduce using rule 150 (r_pila_operandos_push -> .)
-    MAS             reduce using rule 150 (r_pila_operandos_push -> .)
-    MENOS           reduce using rule 150 (r_pila_operandos_push -> .)
-    MAY             reduce using rule 150 (r_pila_operandos_push -> .)
-    MEN             reduce using rule 150 (r_pila_operandos_push -> .)
-    DIF             reduce using rule 150 (r_pila_operandos_push -> .)
-    IGUIGU          reduce using rule 150 (r_pila_operandos_push -> .)
-    AND             reduce using rule 150 (r_pila_operandos_push -> .)
-    OR              reduce using rule 150 (r_pila_operandos_push -> .)
-    MAYIGU          reduce using rule 150 (r_pila_operandos_push -> .)
-    MENIGU          reduce using rule 150 (r_pila_operandos_push -> .)
-    PARDER          reduce using rule 150 (r_pila_operandos_push -> .)
-    COMA            reduce using rule 150 (r_pila_operandos_push -> .)
-    CORDER          reduce using rule 150 (r_pila_operandos_push -> .)
-    TO              reduce using rule 150 (r_pila_operandos_push -> .)
-    PTOCOM          reduce using rule 150 (r_pila_operandos_push -> .)
-    DO              reduce using rule 150 (r_pila_operandos_push -> .)
+    MULT            reduce using rule 151 (r_pila_operandos_push -> .)
+    DIV             reduce using rule 151 (r_pila_operandos_push -> .)
+    MAS             reduce using rule 151 (r_pila_operandos_push -> .)
+    MENOS           reduce using rule 151 (r_pila_operandos_push -> .)
+    MAY             reduce using rule 151 (r_pila_operandos_push -> .)
+    MEN             reduce using rule 151 (r_pila_operandos_push -> .)
+    DIF             reduce using rule 151 (r_pila_operandos_push -> .)
+    IGUIGU          reduce using rule 151 (r_pila_operandos_push -> .)
+    AND             reduce using rule 151 (r_pila_operandos_push -> .)
+    OR              reduce using rule 151 (r_pila_operandos_push -> .)
+    MAYIGU          reduce using rule 151 (r_pila_operandos_push -> .)
+    MENIGU          reduce using rule 151 (r_pila_operandos_push -> .)
+    PARDER          reduce using rule 151 (r_pila_operandos_push -> .)
+    COMA            reduce using rule 151 (r_pila_operandos_push -> .)
+    CORDER          reduce using rule 151 (r_pila_operandos_push -> .)
+    TO              reduce using rule 151 (r_pila_operandos_push -> .)
+    PTOCOM          reduce using rule 151 (r_pila_operandos_push -> .)
+    DO              reduce using rule 151 (r_pila_operandos_push -> .)
 
     r_pila_operandos_push          shift and go to state 264
 
 state 229
 
     (81) opcionid -> PARIZQ . r_era_funcion_retorno parametros r_terminar_parametro PARDER
-    (128) r_era_funcion_retorno -> .
+    (129) r_era_funcion_retorno -> .
 
-    PARIZQ          reduce using rule 128 (r_era_funcion_retorno -> .)
-    ID              reduce using rule 128 (r_era_funcion_retorno -> .)
-    MAS             reduce using rule 128 (r_era_funcion_retorno -> .)
-    MENOS           reduce using rule 128 (r_era_funcion_retorno -> .)
-    PARDER          reduce using rule 128 (r_era_funcion_retorno -> .)
-    CTEI            reduce using rule 128 (r_era_funcion_retorno -> .)
-    CTEF            reduce using rule 128 (r_era_funcion_retorno -> .)
+    PARIZQ          reduce using rule 129 (r_era_funcion_retorno -> .)
+    ID              reduce using rule 129 (r_era_funcion_retorno -> .)
+    MAS             reduce using rule 129 (r_era_funcion_retorno -> .)
+    MENOS           reduce using rule 129 (r_era_funcion_retorno -> .)
+    PARDER          reduce using rule 129 (r_era_funcion_retorno -> .)
+    CTEI            reduce using rule 129 (r_era_funcion_retorno -> .)
+    CTEF            reduce using rule 129 (r_era_funcion_retorno -> .)
 
     r_era_funcion_retorno          shift and go to state 265
 
@@ -3703,14 +3707,14 @@ state 235
 state 236
 
     (108) nocondicional -> FOR iddim IGU r_pila_operadores_push_igu expresion TO . r_pop_igu_for expresion r_for_paso_1 DO bloque r_for_paso_2
-    (146) r_pop_igu_for -> .
+    (147) r_pop_igu_for -> .
 
-    PARIZQ          reduce using rule 146 (r_pop_igu_for -> .)
-    ID              reduce using rule 146 (r_pop_igu_for -> .)
-    MAS             reduce using rule 146 (r_pop_igu_for -> .)
-    MENOS           reduce using rule 146 (r_pop_igu_for -> .)
-    CTEI            reduce using rule 146 (r_pop_igu_for -> .)
-    CTEF            reduce using rule 146 (r_pop_igu_for -> .)
+    PARIZQ          reduce using rule 147 (r_pop_igu_for -> .)
+    ID              reduce using rule 147 (r_pop_igu_for -> .)
+    MAS             reduce using rule 147 (r_pop_igu_for -> .)
+    MENOS           reduce using rule 147 (r_pop_igu_for -> .)
+    CTEI            reduce using rule 147 (r_pop_igu_for -> .)
+    CTEF            reduce using rule 147 (r_pop_igu_for -> .)
 
     r_pop_igu_for                  shift and go to state 268
 
@@ -3749,9 +3753,9 @@ state 238
 state 239
 
     (24) funcionvoid -> VOID r_register_function MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars . r_register_quad bloque r_endfunc
-    (126) r_register_quad -> .
+    (127) r_register_quad -> .
 
-    KEYIZQ          reduce using rule 126 (r_register_quad -> .)
+    KEYIZQ          reduce using rule 127 (r_register_quad -> .)
 
     r_register_quad                shift and go to state 270
 
@@ -4351,13 +4355,13 @@ state 270
 state 271
 
     (29) funcion -> tipo_func MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc . r_endfunc r_asegurar_return
-    (136) r_endfunc -> .
+    (137) r_endfunc -> .
 
-    VOID            reduce using rule 136 (r_endfunc -> .)
-    INT             reduce using rule 136 (r_endfunc -> .)
-    FLT             reduce using rule 136 (r_endfunc -> .)
-    CHAR            reduce using rule 136 (r_endfunc -> .)
-    MAIN            reduce using rule 136 (r_endfunc -> .)
+    VOID            reduce using rule 137 (r_endfunc -> .)
+    INT             reduce using rule 137 (r_endfunc -> .)
+    FLT             reduce using rule 137 (r_endfunc -> .)
+    CHAR            reduce using rule 137 (r_endfunc -> .)
+    MAIN            reduce using rule 137 (r_endfunc -> .)
 
     r_endfunc                      shift and go to state 289
 
@@ -4415,21 +4419,21 @@ state 273
 state 274
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ . r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
-    (134) r_marcar_funcion -> .
+    (135) r_marcar_funcion -> .
 
-    INT             reduce using rule 134 (r_marcar_funcion -> .)
-    FLT             reduce using rule 134 (r_marcar_funcion -> .)
-    CHAR            reduce using rule 134 (r_marcar_funcion -> .)
-    PARDER          reduce using rule 134 (r_marcar_funcion -> .)
+    INT             reduce using rule 135 (r_marcar_funcion -> .)
+    FLT             reduce using rule 135 (r_marcar_funcion -> .)
+    CHAR            reduce using rule 135 (r_marcar_funcion -> .)
+    PARDER          reduce using rule 135 (r_marcar_funcion -> .)
 
     r_marcar_funcion               shift and go to state 306
 
 state 275
 
     (52) asignacion -> ID r_verifica_variable_existe r_pila_operandos_push_id asignacionarr asignacionarr IGU r_pila_operadores_push_igu expresion . r_pop_igu PTOCOM
-    (158) r_pop_igu -> .
+    (160) r_pop_igu -> .
 
-    PTOCOM          reduce using rule 158 (r_pop_igu -> .)
+    PTOCOM          reduce using rule 160 (r_pop_igu -> .)
 
     r_pop_igu                      shift and go to state 307
 
@@ -4450,34 +4454,34 @@ state 276
 state 277
 
     (88) cicloparametros -> COMA expresion . r_extraer_parametro cicloparametros
-    (132) r_extraer_parametro -> .
+    (133) r_extraer_parametro -> .
 
-    COMA            reduce using rule 132 (r_extraer_parametro -> .)
-    PARDER          reduce using rule 132 (r_extraer_parametro -> .)
+    COMA            reduce using rule 133 (r_extraer_parametro -> .)
+    PARDER          reduce using rule 133 (r_extraer_parametro -> .)
 
     r_extraer_parametro            shift and go to state 308
 
 state 278
 
     (91) decision -> IF PARIZQ expresion PARDER r_if_paso_1 THEN bloque decision_else . r_if_paso_3
-    (142) r_if_paso_3 -> .
+    (143) r_if_paso_3 -> .
 
-    ID              reduce using rule 142 (r_if_paso_3 -> .)
-    IF              reduce using rule 142 (r_if_paso_3 -> .)
-    WRITE           reduce using rule 142 (r_if_paso_3 -> .)
-    READ            reduce using rule 142 (r_if_paso_3 -> .)
-    WHILE           reduce using rule 142 (r_if_paso_3 -> .)
-    FOR             reduce using rule 142 (r_if_paso_3 -> .)
-    KEYDER          reduce using rule 142 (r_if_paso_3 -> .)
+    ID              reduce using rule 143 (r_if_paso_3 -> .)
+    IF              reduce using rule 143 (r_if_paso_3 -> .)
+    WRITE           reduce using rule 143 (r_if_paso_3 -> .)
+    READ            reduce using rule 143 (r_if_paso_3 -> .)
+    WHILE           reduce using rule 143 (r_if_paso_3 -> .)
+    FOR             reduce using rule 143 (r_if_paso_3 -> .)
+    KEYDER          reduce using rule 143 (r_if_paso_3 -> .)
 
     r_if_paso_3                    shift and go to state 309
 
 state 279
 
     (92) decision_else -> ELSE . r_if_paso_2 bloque
-    (141) r_if_paso_2 -> .
+    (142) r_if_paso_2 -> .
 
-    KEYIZQ          reduce using rule 141 (r_if_paso_2 -> .)
+    KEYIZQ          reduce using rule 142 (r_if_paso_2 -> .)
 
     r_if_paso_2                    shift and go to state 310
 
@@ -4545,59 +4549,59 @@ state 284
 state 285
 
     (81) opcionid -> PARIZQ r_era_funcion_retorno parametros . r_terminar_parametro PARDER
-    (130) r_terminar_parametro -> .
+    (131) r_terminar_parametro -> .
 
-    PARDER          reduce using rule 130 (r_terminar_parametro -> .)
+    PARDER          reduce using rule 131 (r_terminar_parametro -> .)
 
     r_terminar_parametro           shift and go to state 311
 
 state 286
 
     (107) condicional -> WHILE r_while_paso_1 PARIZQ expresion PARDER r_while_paso_2 DO bloque . r_while_paso_3
-    (145) r_while_paso_3 -> .
+    (146) r_while_paso_3 -> .
 
-    ID              reduce using rule 145 (r_while_paso_3 -> .)
-    IF              reduce using rule 145 (r_while_paso_3 -> .)
-    WRITE           reduce using rule 145 (r_while_paso_3 -> .)
-    READ            reduce using rule 145 (r_while_paso_3 -> .)
-    WHILE           reduce using rule 145 (r_while_paso_3 -> .)
-    FOR             reduce using rule 145 (r_while_paso_3 -> .)
-    KEYDER          reduce using rule 145 (r_while_paso_3 -> .)
+    ID              reduce using rule 146 (r_while_paso_3 -> .)
+    IF              reduce using rule 146 (r_while_paso_3 -> .)
+    WRITE           reduce using rule 146 (r_while_paso_3 -> .)
+    READ            reduce using rule 146 (r_while_paso_3 -> .)
+    WHILE           reduce using rule 146 (r_while_paso_3 -> .)
+    FOR             reduce using rule 146 (r_while_paso_3 -> .)
+    KEYDER          reduce using rule 146 (r_while_paso_3 -> .)
 
     r_while_paso_3                 shift and go to state 312
 
 state 287
 
     (108) nocondicional -> FOR iddim IGU r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion . r_for_paso_1 DO bloque r_for_paso_2
-    (147) r_for_paso_1 -> .
+    (148) r_for_paso_1 -> .
 
-    DO              reduce using rule 147 (r_for_paso_1 -> .)
+    DO              reduce using rule 148 (r_for_paso_1 -> .)
 
     r_for_paso_1                   shift and go to state 313
 
 state 288
 
     (24) funcionvoid -> VOID r_register_function MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloque . r_endfunc
-    (136) r_endfunc -> .
+    (137) r_endfunc -> .
 
-    VOID            reduce using rule 136 (r_endfunc -> .)
-    INT             reduce using rule 136 (r_endfunc -> .)
-    FLT             reduce using rule 136 (r_endfunc -> .)
-    CHAR            reduce using rule 136 (r_endfunc -> .)
-    MAIN            reduce using rule 136 (r_endfunc -> .)
+    VOID            reduce using rule 137 (r_endfunc -> .)
+    INT             reduce using rule 137 (r_endfunc -> .)
+    FLT             reduce using rule 137 (r_endfunc -> .)
+    CHAR            reduce using rule 137 (r_endfunc -> .)
+    MAIN            reduce using rule 137 (r_endfunc -> .)
 
     r_endfunc                      shift and go to state 314
 
 state 289
 
     (29) funcion -> tipo_func MODULE ID r_update_curr_function_name PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc . r_asegurar_return
-    (129) r_asegurar_return -> .
+    (130) r_asegurar_return -> .
 
-    VOID            reduce using rule 129 (r_asegurar_return -> .)
-    INT             reduce using rule 129 (r_asegurar_return -> .)
-    FLT             reduce using rule 129 (r_asegurar_return -> .)
-    CHAR            reduce using rule 129 (r_asegurar_return -> .)
-    MAIN            reduce using rule 129 (r_asegurar_return -> .)
+    VOID            reduce using rule 130 (r_asegurar_return -> .)
+    INT             reduce using rule 130 (r_asegurar_return -> .)
+    FLT             reduce using rule 130 (r_asegurar_return -> .)
+    CHAR            reduce using rule 130 (r_asegurar_return -> .)
+    MAIN            reduce using rule 130 (r_asegurar_return -> .)
 
     r_asegurar_return              shift and go to state 315
 
@@ -5084,9 +5088,9 @@ state 322
 state 323
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple . r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
-    (135) r_desmarcar_funcion -> .
+    (136) r_desmarcar_funcion -> .
 
-    PARDER          reduce using rule 135 (r_desmarcar_funcion -> .)
+    PARDER          reduce using rule 136 (r_desmarcar_funcion -> .)
 
     r_desmarcar_funcion            shift and go to state 333
 
@@ -5160,9 +5164,9 @@ state 328
 state 329
 
     (51) estatutofunc -> RETURN PARIZQ expresion . r_return_func PARDER PTOCOM
-    (140) r_return_func -> .
+    (141) r_return_func -> .
 
-    PARDER          reduce using rule 140 (r_return_func -> .)
+    PARDER          reduce using rule 141 (r_return_func -> .)
 
     r_return_func                  shift and go to state 335
 
@@ -5221,15 +5225,15 @@ state 333
 state 334
 
     (108) nocondicional -> FOR iddim IGU r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion r_for_paso_1 DO bloque . r_for_paso_2
-    (148) r_for_paso_2 -> .
+    (149) r_for_paso_2 -> .
 
-    ID              reduce using rule 148 (r_for_paso_2 -> .)
-    IF              reduce using rule 148 (r_for_paso_2 -> .)
-    WRITE           reduce using rule 148 (r_for_paso_2 -> .)
-    READ            reduce using rule 148 (r_for_paso_2 -> .)
-    WHILE           reduce using rule 148 (r_for_paso_2 -> .)
-    FOR             reduce using rule 148 (r_for_paso_2 -> .)
-    KEYDER          reduce using rule 148 (r_for_paso_2 -> .)
+    ID              reduce using rule 149 (r_for_paso_2 -> .)
+    IF              reduce using rule 149 (r_for_paso_2 -> .)
+    WRITE           reduce using rule 149 (r_for_paso_2 -> .)
+    READ            reduce using rule 149 (r_for_paso_2 -> .)
+    WHILE           reduce using rule 149 (r_for_paso_2 -> .)
+    FOR             reduce using rule 149 (r_for_paso_2 -> .)
+    KEYDER          reduce using rule 149 (r_for_paso_2 -> .)
 
     r_for_paso_2                   shift and go to state 340
 
@@ -5243,9 +5247,9 @@ state 335
 state 336
 
     (109) decisionfunc -> IF PARIZQ expresion PARDER . r_if_paso_1 THEN bloquefunc decisionfunc_else r_if_paso_3
-    (137) r_if_paso_1 -> .
+    (138) r_if_paso_1 -> .
 
-    THEN            reduce using rule 137 (r_if_paso_1 -> .)
+    THEN            reduce using rule 138 (r_if_paso_1 -> .)
 
     r_if_paso_1                    shift and go to state 342
 
@@ -5266,10 +5270,10 @@ state 338
 state 339
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER . r_register_param_types opvars r_register_quad bloquefunc r_endfunc r_asegurar_return
-    (123) r_register_param_types -> .
+    (124) r_register_param_types -> .
 
-    VARTOKEN        reduce using rule 123 (r_register_param_types -> .)
-    KEYIZQ          reduce using rule 123 (r_register_param_types -> .)
+    VARTOKEN        reduce using rule 124 (r_register_param_types -> .)
+    KEYIZQ          reduce using rule 124 (r_register_param_types -> .)
 
     r_register_param_types         shift and go to state 345
 
@@ -5402,9 +5406,9 @@ state 349
 state 350
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars . r_register_quad bloquefunc r_endfunc r_asegurar_return
-    (126) r_register_quad -> .
+    (127) r_register_quad -> .
 
-    KEYIZQ          reduce using rule 126 (r_register_quad -> .)
+    KEYIZQ          reduce using rule 127 (r_register_quad -> .)
 
     r_register_quad                shift and go to state 353
 
@@ -5449,25 +5453,25 @@ state 353
 state 354
 
     (109) decisionfunc -> IF PARIZQ expresion PARDER r_if_paso_1 THEN bloquefunc decisionfunc_else . r_if_paso_3
-    (142) r_if_paso_3 -> .
+    (143) r_if_paso_3 -> .
 
-    RETURN          reduce using rule 142 (r_if_paso_3 -> .)
-    ID              reduce using rule 142 (r_if_paso_3 -> .)
-    IF              reduce using rule 142 (r_if_paso_3 -> .)
-    WRITE           reduce using rule 142 (r_if_paso_3 -> .)
-    READ            reduce using rule 142 (r_if_paso_3 -> .)
-    WHILE           reduce using rule 142 (r_if_paso_3 -> .)
-    FOR             reduce using rule 142 (r_if_paso_3 -> .)
-    KEYDER          reduce using rule 142 (r_if_paso_3 -> .)
+    RETURN          reduce using rule 143 (r_if_paso_3 -> .)
+    ID              reduce using rule 143 (r_if_paso_3 -> .)
+    IF              reduce using rule 143 (r_if_paso_3 -> .)
+    WRITE           reduce using rule 143 (r_if_paso_3 -> .)
+    READ            reduce using rule 143 (r_if_paso_3 -> .)
+    WHILE           reduce using rule 143 (r_if_paso_3 -> .)
+    FOR             reduce using rule 143 (r_if_paso_3 -> .)
+    KEYDER          reduce using rule 143 (r_if_paso_3 -> .)
 
     r_if_paso_3                    shift and go to state 359
 
 state 355
 
     (110) decisionfunc_else -> ELSE . r_if_paso_2 bloquefunc
-    (141) r_if_paso_2 -> .
+    (142) r_if_paso_2 -> .
 
-    KEYIZQ          reduce using rule 141 (r_if_paso_2 -> .)
+    KEYIZQ          reduce using rule 142 (r_if_paso_2 -> .)
 
     r_if_paso_2                    shift and go to state 360
 
@@ -5502,14 +5506,14 @@ state 357
 state 358
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc . r_endfunc r_asegurar_return
-    (136) r_endfunc -> .
+    (137) r_endfunc -> .
 
-    VOID            reduce using rule 136 (r_endfunc -> .)
-    INT             reduce using rule 136 (r_endfunc -> .)
-    FLT             reduce using rule 136 (r_endfunc -> .)
-    CHAR            reduce using rule 136 (r_endfunc -> .)
-    MAIN            reduce using rule 136 (r_endfunc -> .)
-    KEYIZQ          reduce using rule 136 (r_endfunc -> .)
+    VOID            reduce using rule 137 (r_endfunc -> .)
+    INT             reduce using rule 137 (r_endfunc -> .)
+    FLT             reduce using rule 137 (r_endfunc -> .)
+    CHAR            reduce using rule 137 (r_endfunc -> .)
+    MAIN            reduce using rule 137 (r_endfunc -> .)
+    KEYIZQ          reduce using rule 137 (r_endfunc -> .)
 
     r_endfunc                      shift and go to state 361
 
@@ -5539,14 +5543,14 @@ state 360
 state 361
 
     (14) opciontipo -> MODULE ID r_update_func_type r_update_curr_function_name_especial PARIZQ r_marcar_funcion opcionvarsimple r_desmarcar_funcion PARDER r_register_param_types opvars r_register_quad bloquefunc r_endfunc . r_asegurar_return
-    (129) r_asegurar_return -> .
+    (130) r_asegurar_return -> .
 
-    VOID            reduce using rule 129 (r_asegurar_return -> .)
-    INT             reduce using rule 129 (r_asegurar_return -> .)
-    FLT             reduce using rule 129 (r_asegurar_return -> .)
-    CHAR            reduce using rule 129 (r_asegurar_return -> .)
-    MAIN            reduce using rule 129 (r_asegurar_return -> .)
-    KEYIZQ          reduce using rule 129 (r_asegurar_return -> .)
+    VOID            reduce using rule 130 (r_asegurar_return -> .)
+    INT             reduce using rule 130 (r_asegurar_return -> .)
+    FLT             reduce using rule 130 (r_asegurar_return -> .)
+    CHAR            reduce using rule 130 (r_asegurar_return -> .)
+    MAIN            reduce using rule 130 (r_asegurar_return -> .)
+    KEYIZQ          reduce using rule 130 (r_asegurar_return -> .)
 
     r_asegurar_return              shift and go to state 363
 

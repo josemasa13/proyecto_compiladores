@@ -34,7 +34,7 @@ program Ejemplo;
 main(){
 
 
-  write(1+1,2+2);
+  write("Hola a todos mis amigos");
 
 }
 

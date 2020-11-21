@@ -12,16 +12,15 @@ class Constanttable:
         new_constant = {
             'constant' :    constant,
             'type' :        const_type,
-            'v_address' :   self.start_address
+            'v_address' :   vAddress
         }
-        self.start_address += 1
-        if(self.start_address < 20000):
-            self.table.append(new_constant)
-            return new_constant['v_address']
-        else:
-            print("Memory overflow")
 
+        self.table.append(new_constant)
+        return vAddress
+
+        
     def display_table(self):
+
         print("Displaying constant table")
         print("Cons \t Type \t Address")
         for i in self.table:

@@ -33,6 +33,7 @@ temporal_float = 19000
 temporal_bool = 22000
 constant_int = 24000
 constant_float = 28000
+constant_string = 32000
 
 comp_set = {'>', '<', '==', '&', '|', '>=', '<=', '!='}
 
@@ -56,7 +57,7 @@ def p_varciclo(p):
     | empty'''
 
 def p_arr(p):
-    '''arr : CORIZQ CTEI r_register_dim CORDER
+    '''arr : CORIZQ CTEI r_register_const CORDER
     | empty'''
 
 def p_tipociclo(p):
@@ -227,7 +228,7 @@ def p_escritura(p):
     '''escritura : WRITE PARIZQ escrituraciclo otro PARDER PTOCOM'''
 
 def p_escrituraciclo(p):
-    '''escrituraciclo : CTE_STRING r_genera_escribe
+    '''escrituraciclo : CTE_STRING r_genera_escribe_string
     | expresion r_genera_escribe'''
 
 def p_otro(p):
@@ -305,8 +306,6 @@ def reset_counters():
     temporal_int = 16000
     temporal_float = 19000
     temporal_bool = 22000
-    constant_int = 24000
-    constant_float = 28000
 
 # * Puntos neurálgicos registro de funciones
 def p_r_register_gotomain(p):
@@ -326,6 +325,15 @@ def p_r_register_function(p):
     if exists:
         raise Exception("La función que intentas declarar ya existe " + p[-1])
     fun_dict.add_function(p[-1])
+
+def p_r_register_const(p):
+    'r_register_const : '
+    global constant_int
+    insertion = const_table.insert_constant(p[-1], 'int', constant_int)
+    if insertion == constant_int:
+        constant_int += 1
+
+
 
 def p_r_switch_to_global(p):
     'r_switch_to_global : '
@@ -734,19 +742,30 @@ def p_r_pila_operandos_push_cte_int(p):
     'r_pila_operandos_push_cte_int : '
     # guardar la constant en la direccion de memoria - Tener en que direcion de memoria la gua
     global constant_int
-    pila_operandos.append(constant_int)
-    const_table.insert_constant(p[-1], 'int', constant_int)
+    insertion = const_table.insert_constant(p[-1], 'int', constant_int)
+    if insertion != constant_int:
+        pila_operandos.append(insertion)
+
+    else:
+        pila_operandos.append(constant_int)
+        constant_int += 1
+
     pila_tipos.append('int')
-    constant_int += 1
     tabla_temporales.append(('int', p[-1]))
 
 def p_r_pila_operandos_push_cte_flt(p):
     'r_pila_operandos_push_cte_flt : '
     global constant_float
     pila_operandos.append(constant_float)
-    const_table.insert_constant(p[-1], 'float', constant_float)
+    insertion = const_table.insert_constant(p[-1], 'float', constant_float)
+    if insertion != constant_float:
+        pila_operandos.append(insertion)
+
+    else:
+        pila_operandos.append(constant_float)
+        constant_float += 1
+
     pila_tipos.append('float')
-    constant_float += 1
     tabla_temporales.append(('float', p[-1]))
 
 def p_r_pop_mult(p):
@@ -846,8 +865,23 @@ def get_type(tupla):
 
 def p_r_genera_escribe(p):
     'r_genera_escribe : '
-
     cuad = Quadruple("WRITE", None, None, pila_operandos.pop())
+    pila_tipos.pop()
+    cuadruplos.append(cuad)
+
+def p_r_genera_escribe_string(p):
+    'r_genera_escribe_string : '
+    global constant_string
+
+    insertion = const_table.insert_constant(p[-1], 'string',constant_string)
+    
+    if insertion != constant_string:
+        cuad = Quadruple("WRITE", None, None, insertion)
+
+    else:
+        cuad = Quadruple("WRITE", None, None, constant_string)
+        constant_string += 1
+
     cuadruplos.append(cuad)
 
 def p_r_pop_comp(p):
@@ -1013,6 +1047,7 @@ with open("test.txt") as f:
 
 parser.parse(data)
 fun_dict.print_var_tables()
-fun_dict.print_memory_spaces()
-fun_dict.print_funcs_params()
+#fun_dict.print_memory_spaces()
+const_table.display_table()
+#fun_dict.print_funcs_params()
 print_quads()
