@@ -1,5 +1,5 @@
 #Patito Virtual Machine
-from handlers import Operations
+from operaciones import Operations
 import json
 import sys
 
@@ -8,8 +8,8 @@ quadruples = []
 quad_counter = 0
 
 op_list = {
-    "GOTO" :            operations.goto,
-    "GOTOF" :           operations.goto_false,
+    "goto" :            operations.goto,
+    "gotof" :           operations.goto_false,
     "+" :               operations.plus_op,
     "-" :               operations.minus_op,
     "*" :               operations.mult_op,
@@ -23,14 +23,14 @@ op_list = {
     ">" :               operations.greater_op,
     "<" :               operations.less_op,
     "=" :               operations.asignation,
-    'WRITE':            operations.write,
+    'write':            operations.write,
     'VER':              operations.ver,
     'EBDOROC':          operations.ebdoroc,
-    'EKA':              operations.eka,
-    'PARAM':            operations.param,
-    'GOSUB':            operations.gosub,
-    'RETURN':           operations.return_val,
-    'READ' :            operations.lee,
+    'era':              operations.eka,
+    'parameter':        operations.param,
+    'gosub':            operations.gosub,
+    'return':           operations.return_val,
+    'read' :            operations.lee,
     'CREATE_MATRIX':    operations.create_matrix,
     'DETERMINANT':      operations.determinant,
     'INVERSE':          operations.inverse,

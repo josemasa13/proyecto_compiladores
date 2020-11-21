@@ -237,10 +237,10 @@ def p_otro(p):
     '''
 
 def p_lectura(p):
-    '''lectura : READ PARIZQ iddim ciclodim PARDER PTOCOM'''
+    '''lectura : READ PARIZQ iddim r_genera_lectura ciclodim PARDER PTOCOM'''
 
 def p_ciclodim(p):
-    '''ciclodim : COMA iddim ciclodim
+    '''ciclodim : COMA iddim r_genera_lectura ciclodim
     | empty
     '''
 
@@ -380,7 +380,7 @@ def p_r_era_funcion_void(p):
     if func:
         if func.type == "void":
             global apuntador_argumento
-            cuad = Quadruple('ERA',None,None,nombre_func)
+            cuad = Quadruple('era',None,None,nombre_func)
             cuadruplos.append(cuad)
             if apuntador_argumento > -1:
                 pila_apuntador_argumentos.append(apuntador_argumento)
@@ -402,7 +402,7 @@ def p_r_era_funcion_retorno(p):
     if func:
         if func.type != "void":
             global apuntador_argumento
-            cuad = Quadruple('ERA',None,None,nombre_func)
+            cuad = Quadruple('era',None,None,nombre_func)
             cuadruplos.append(cuad)
             if apuntador_argumento > -1:
                 pila_apuntador_argumentos.append(apuntador_argumento)
@@ -432,7 +432,7 @@ def p_r_terminar_parametro(p):
     global temporal_int
     nombrefunc = pila_nombre_func.pop()
     num_quad = fun_dict.search_quad(nombrefunc)
-    cuad = Quadruple('GOSUB',None,None,num_quad)
+    cuad = Quadruple('gosub',None,None,num_quad)
     cuadruplos.append(cuad)
     if apuntador_argumento != -1:
         if apuntador_argumento < len(tipos_argumentos):
@@ -455,7 +455,7 @@ def p_r_terminar_parametro_void(p):
 
     nombrefunc = pila_nombre_func.pop()
     num_quad = fun_dict.search_quad(nombrefunc)
-    cuad = Quadruple('GOSUB',None,None,num_quad)
+    cuad = Quadruple('gosub',None,None,num_quad)
     cuadruplos.append(cuad)
     if apuntador_argumento != -1:
         if apuntador_argumento < len(tipos_argumentos):
@@ -595,7 +595,7 @@ def p_r_return_func(p):
     result = pila_operandos.pop()
     tipo = pila_tipos.pop()
     if tipo == fun_dict.curr_function.type:
-        cuad = Quadruple('RETURN',None, None,result)
+        cuad = Quadruple('return',None, None,result)
         cuadruplos.append(cuad)
 
     else:
@@ -868,6 +868,13 @@ def p_r_genera_escribe(p):
     cuad = Quadruple("WRITE", None, None, pila_operandos.pop())
     pila_tipos.pop()
     cuadruplos.append(cuad)
+
+def p_r_genera_lectura(p):
+    'r_genera_lectura : '
+    cuad = Quadruple("READ", None, None, pila_operandos.pop())
+    pila_tipos.pop()
+    cuadruplos.append(cuad)
+
 
 def p_r_genera_escribe_string(p):
     'r_genera_escribe_string : '
