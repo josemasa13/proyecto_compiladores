@@ -36,7 +36,7 @@ comp_set = {'>', '<', '==', '&', '|', '>=', '<=', '!='}
 
 # programa
 def p_program(p):
-    '''program : PRO ID r_register_global PTOCOM opvars opfunciones MAIN PARIZQ PARDER bloque'''
+    '''program : PRO ID r_register_global PTOCOM opvars opfunciones MAIN r_switch_to_global PARIZQ PARDER bloque'''
 
 def p_opvars(p):
     '''opvars : vars
@@ -320,6 +320,10 @@ def p_r_register_function(p):
         raise Exception("La función que intentas declarar ya existe " + p[-1])
     fun_dict.add_function(p[-1])
 
+def p_r_switch_to_global(p):
+    'r_switch_to_global : '
+    fun_dict.curr_function = fun_dict.directory[0]
+
 def p_r_update_curr_function_name_especial(p):
     'r_update_curr_function_name_especial : '
     fun_dict.update_curr_function_name(p[-2])
@@ -529,6 +533,9 @@ def p_r_register_variable_name(p):
             fun_dict.append_variable_to_curr_function(temporal_var[1], temporal_var[0], local_int)
             local_int += 1
 
+        fun_dict.curr_function.int_spaces += 1
+
+
     elif temporal_var[0] == "float":
         if fun_dict.curr_function.name == "global":
             fun_dict.append_variable_to_curr_function(temporal_var[1], temporal_var[0], global_float)
@@ -537,6 +544,9 @@ def p_r_register_variable_name(p):
         else:
             fun_dict.append_variable_to_curr_function(temporal_var[1], temporal_var[0], local_float)
             local_float += 1
+
+        fun_dict.curr_function.float_spaces += 1
+
 
     else:
         raise Exception("El tipo de dato especificado, no existe " + temporal_var[0])
@@ -750,16 +760,19 @@ def p_r_pop_mult(p):
                     cuad = Quadruple(operator, operando_izq, operando_der,temporal_float)
                     pila_operandos.append(temporal_float)
                     temporal_float += 1
+                    fun_dict.curr_function.temporal_float_spaces += 1
 
                 elif res_type == 'int':
                     cuad = Quadruple(operator, operando_izq, operando_der,temporal_int)
                     pila_operandos.append(temporal_int)
                     temporal_int += 1
+                    fun_dict.curr_function.temporal_int_spaces += 1
 
                 elif res_type == 'bool':
                     cuad = Quadruple(operator, operando_izq, operando_der,temporal_bool)
                     pila_operandos.append(temporal_bool)
                     temporal_bool += 1
+                    fun_dict.curr_function.temporal_bool_spaces += 1
 
 
                 pila_tipos.append(res_type)
@@ -790,16 +803,20 @@ def p_r_pop_mas(p):
                     cuad = Quadruple(operator, operando_izq, operando_der,temporal_float)
                     pila_operandos.append(temporal_float)
                     temporal_float += 1
+                    fun_dict.curr_function.temporal_float_spaces += 1
+
 
                 elif res_type == 'int':
                     cuad = Quadruple(operator, operando_izq, operando_der,temporal_int)
                     pila_operandos.append(temporal_int)
                     temporal_int += 1
+                    fun_dict.curr_function.temporal_int_spaces += 1
 
                 elif res_type == 'bool':
                     cuad = Quadruple(operator, operando_izq, operando_der,temporal_bool)
                     pila_operandos.append(temporal_bool)
                     temporal_bool += 1
+                    fun_dict.curr_function.temporal_bool_spaces += 1
 
 
                 pila_tipos.append(res_type)
@@ -841,16 +858,19 @@ def p_r_pop_comp(p):
                     cuad = Quadruple(operator, operando_izq, operando_der,temporal_float)
                     pila_operandos.append(temporal_float)
                     temporal_float += 1
+                    fun_dict.curr_function.temporal_float_spaces += 1
 
                 elif res_type == 'int':
                     cuad = Quadruple(operator, operando_izq, operando_der,temporal_int)
                     pila_operandos.append(temporal_int)
                     temporal_int += 1
+                    fun_dict.curr_function.temporal_int_spaces += 1
 
                 elif res_type == 'bool':
                     cuad = Quadruple(operator, operando_izq, operando_der,temporal_bool)
                     pila_operandos.append(temporal_bool)
                     temporal_bool += 1
+                    fun_dict.curr_function.temporal_bool_spaces += 1
 
 
                 pila_tipos.append(res_type)
@@ -959,8 +979,9 @@ def p_r_vaciar_fondo_falso(p):
 def print_quads():
     for i,cuad in enumerate(cuadruplos):
         print(i, cuad.operador, cuad.operando_izq, cuad.operando_der, cuad.resultado)
-    
-    # Build the parser
+
+ 
+# Build the parser
 parser = yacc.yacc()
 
 with open("test.txt") as f:
@@ -969,5 +990,6 @@ with open("test.txt") as f:
 
 parser.parse(data)
 fun_dict.print_var_tables()
+fun_dict.print_memory_spaces()
 fun_dict.print_funcs_params()
 print_quads()

@@ -66,6 +66,15 @@ class FunctionsDirectory:
             print(func.name)
             for item in func.vars.table:
                 print(item["name"], item["type"], item["virtual_address"])
+
+    def print_memory_spaces(self):
+        for func in self.directory:
+            print(func.name)
+            print("Enteros: " + str(func.int_spaces))
+            print("Flotantes: " + str(func.float_spaces))
+            print("Temporales Enteros: " + str(func.temporal_int_spaces))
+            print("Temporales Flotantes: " + str(func.temporal_float_spaces))
+            print("Temporales Booleanos: " + str(func.temporal_bool_spaces))
     
     def print_funcs_params(self):
         for func in self.directory:

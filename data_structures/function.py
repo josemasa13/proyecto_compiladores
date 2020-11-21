@@ -7,6 +7,11 @@ class Function:
         self.vars = VarTable()
         self.parameters = [] 
         self.quadruple = -1
+        self.int_spaces = 0
+        self.float_spaces = 0
+        self.temporal_int_spaces = 0
+        self.temporal_float_spaces = 0
+        self.temporal_bool_spaces = 0
 
     def add_variable(self, var_name, var_type, virtual_address):
         e = None
