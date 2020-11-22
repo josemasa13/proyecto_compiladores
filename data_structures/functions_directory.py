@@ -57,9 +57,14 @@ class FunctionsDirectory:
         self.directory[len(self.directory) - 1].name = name
         return e
 
-    def append_variable_to_curr_function(self, name, type, virtual_address, dims=None):
-        self.curr_function.add_variable(name, type, virtual_address,dims)
+    def append_variable_to_curr_function(self, name, type, virtual_address):
+        self.curr_function.add_variable(name, type, virtual_address)
 
+    def add_dim_one(self,name,dim_one):
+        self.curr_function.add_one_dim(name,dim_one)
+
+    def add_dim_two(self,name,dim_one,dim_two):
+        self.curr_function.add_two_dim(name,dim_one,dim_two)
 
     def print_var_tables(self):
         for func in self.directory:
@@ -93,6 +98,3 @@ class FunctionsDirectory:
             var = global_func.get_variable(var_name)
 
         return var
-
-
-            
