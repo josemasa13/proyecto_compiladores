@@ -5,10 +5,11 @@ program Ejemplo;
   int i,j,k,p;
   float valor;
   int Matriz[3][8];
-  int l;
+
 
 main(){
-  i = 3;
+
+main(){
   Matriz[Matriz[3+4][Arreglo[4]]][0] =  Matriz[Matriz[3+4][0]][0];
 }
 

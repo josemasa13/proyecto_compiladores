@@ -44,3 +44,14 @@ main(){
     }
 }
 
+    ''''VER':              operations.ver,
+    'EBDOROC':          operations.ebdoroc,
+    
+    'CREATE_MATRIX':    operations.create_matrix,
+    'DETERMINANT':      operations.determinant,
+    'INVERSE':          operations.inverse,
+    'TRANSPOSE':        operations.transpose,
+    "+_arr" :           operations.plus_op_arr,
+    "-_arr" :           operations.minus_op_arr,
+    "*_arr" :           operations.mult_op_arr,
+    "WRITE_MAT":        operations.write_mat'''
