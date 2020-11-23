@@ -13,6 +13,8 @@ class FunctionsDirectory:
         self.number_quadruple.append(index)
         return None
 
+    def add_function_to_global(self, name, type, vaddr):
+        self.directory[0].add_variable(name, type, vaddr)
 
     def search_function(self, name):
         for function in self.directory:

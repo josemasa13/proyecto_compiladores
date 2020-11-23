@@ -373,7 +373,17 @@ def p_r_update_curr_function_name(p):
 
 def p_r_register_param_types(p):
     'r_register_param_types : '
-    fun_dict.curr_function.register_parameters()
+    curr_func = fun_dict.curr_function
+    if curr_func.type == "float":
+        fun_dict.add_function_to_global(curr_func.name, curr_func.type, global_float)
+        global_float += 1
+
+    elif curr_func.type == "int":
+        fun_dict.add_function_to_global(curr_func.name, curr_func.type, global_int)
+        global_int += 1
+
+    curr_func.register_parameters()
+        
 
 def p_r_register_variable_type(p):
     'r_register_variable_type : '
@@ -1232,7 +1242,8 @@ def compile():
 
     parser = yacc.yacc()
     parser.parse(file.read())
-    '''fun_dict.print_var_tables()
+    fun_dict.print_var_tables()
+    '''
     fun_dict.print_memory_spaces()
     fun_dict.print_funcs_params()
     print_quads()'''
