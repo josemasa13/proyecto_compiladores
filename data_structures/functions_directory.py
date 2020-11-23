@@ -13,6 +13,7 @@ class FunctionsDirectory:
         self.number_quadruple.append(index)
         return None
 
+
     def search_function(self, name):
         for function in self.directory:
             if function.name == name:

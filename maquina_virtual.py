@@ -5,7 +5,7 @@ import sys
 
 operations = Operations()
 quadruples = []
-quad_counter = 0
+instruction_pointer = 0
 
 op_list = {
     "goto" :            operations.goto,
@@ -24,13 +24,16 @@ op_list = {
     "<" :               operations.less_op,
     "=" :               operations.asignation,
     'write':            operations.write,
-    'VER':              operations.ver,
-    'EBDOROC':          operations.ebdoroc,
-    'era':              operations.eka,
+    'era':              operations.era,
     'parameter':        operations.param,
     'gosub':            operations.gosub,
     'return':           operations.return_val,
-    'read' :            operations.lee,
+    'read' :            operations.read,
+
+
+    ''''VER':              operations.ver,
+    'EBDOROC':          operations.ebdoroc,
+    
     'CREATE_MATRIX':    operations.create_matrix,
     'DETERMINANT':      operations.determinant,
     'INVERSE':          operations.inverse,
@@ -38,11 +41,11 @@ op_list = {
     "+_arr" :           operations.plus_op_arr,
     "-_arr" :           operations.minus_op_arr,
     "*_arr" :           operations.mult_op_arr,
-    "WRITE_MAT":        operations.write_mat
+    "WRITE_MAT":        operations.write_mat'''
 }
 
 def main():
-    global quad_counter
+    global instruction_pointer
     #Check if we have parameters
     if(len(sys.argv) == 2):
         try:
@@ -68,11 +71,11 @@ def main():
     #Dump constants in memory
     operations.load_constants(constant_lines)
 
-    while quad_counter < len(quadruples):
+    while instruction_pointer < len(quadruples):
         #get the current operation
-        new_quad_number = op_list[quadruples[quad_counter]['operator']](quadruples[quad_counter])
+        new_quad_number = op_list[quadruples[instruction_pointer]['operator']](quadruples[instruction_pointer])
         if new_quad_number:
-            quad_counter = new_quad_number
+            instruction_pointer = new_quad_number
         else:
-            quad_counter += 1
+            instruction_pointer += 1
 main()

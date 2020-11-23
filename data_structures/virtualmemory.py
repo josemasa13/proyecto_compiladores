@@ -16,13 +16,13 @@ class Virtualmemory:
             'GLOBAL_LLIMIT' :    1000,
             'GLOBAL_ULIMIT' :    7999,
             'LOCAL_LLIMIT' :     8000,
-            'LOCAL_ULIMIT' :     14999,
-            'TEMPORAL_LLIMIT' :  20000,
-            'TEMPORAL_ULIMIT' :  29000,
-            'CONSTANT_LLIMIT' :  15000,
-            'CONSTANT_ULIMIT' :  19999,
-            'POINTERS_LLIMIT' :  30000,
-            'POINTERS_ULIMIT' :  40000  
+            'LOCAL_ULIMIT' :     15999,
+            'TEMPORAL_LLIMIT' :  16000,
+            'TEMPORAL_ULIMIT' :  23999,
+            'CONSTANT_LLIMIT' :  24000,
+            'CONSTANT_ULIMIT' :  35999,
+            'POINTERS_LLIMIT' :  36000,
+            'POINTERS_ULIMIT' :  39999  
         }
 
         self.new_local_memory_cache = {}

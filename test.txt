@@ -28,11 +28,10 @@ program Ejemplo;
   int module inicia(float a,int z)
     var int x;
   {
-    return ( 1);
+    return (1);
   }
 
 main(){
-  read(p,j);
-  write("Hola a todos mis amigos");
+  write(inicia(2.2,3));
 }
 

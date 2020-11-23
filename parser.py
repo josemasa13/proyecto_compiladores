@@ -4,6 +4,7 @@ from data_structures.functions_directory import FunctionsDirectory
 from data_structures.quadruple import Quadruple
 from data_structures.semantic_cube import semantic_cube
 from data_structures.constant_table import Constanttable
+import sys
 
 fun_dict = FunctionsDirectory()
 const_table = Constanttable()
@@ -34,6 +35,7 @@ temporal_bool = 22000
 constant_int = 24000
 constant_float = 28000
 constant_string = 32000
+
 
 comp_set = {'>', '<', '==', '&', '|', '>=', '<=', '!='}
 
@@ -608,12 +610,12 @@ def p_r_if_paso_2(p):
     cuadruplos.append(cuad)
     salto = pila_saltos.pop()
     pila_saltos.append(len(cuadruplos)-1)
-    cuadruplos[salto].modificar_resultado((-1,len(cuadruplos)))
+    cuadruplos[salto].modificar_resultado(len(cuadruplos))
 
 def p_r_if_paso_3(p):
     'r_if_paso_3 : '
     salto = pila_saltos.pop()
-    cuadruplos[salto].modificar_resultado((-1,len(cuadruplos)))
+    cuadruplos[salto].modificar_resultado(len(cuadruplos))
 
 def p_r_while_paso_1(p):
     'r_while_paso_1 : '
@@ -681,11 +683,17 @@ def p_r_for_paso_2(p):
     #guardar constante 1
     global constant_int
     global temporal_int
-    cuad = Quadruple('+',constant_int,resultado,temporal_int)
+    insertion = const_table.insert_constant(1, 'int', constant_int)
+    if insertion != constant_int:
+        cuad = Quadruple('+',insertion,resultado,temporal_int)
+
+    else:
+        cuad = Quadruple('+',constant_int,resultado,temporal_int)
+        constant_int += 1
+
     cuadruplos.append(cuad)
     cuadasignacion = Quadruple('=',temporal_int,None,resultado)
     temporal_int += 1
-    constant_int += 1
     cuadruplos.append(cuadasignacion)
     gotof = pila_saltos.pop()
     retorno = pila_saltos.pop()
@@ -865,13 +873,13 @@ def get_type(tupla):
 
 def p_r_genera_escribe(p):
     'r_genera_escribe : '
-    cuad = Quadruple("WRITE", None, None, pila_operandos.pop())
+    cuad = Quadruple("write", None, None, pila_operandos.pop())
     pila_tipos.pop()
     cuadruplos.append(cuad)
 
 def p_r_genera_lectura(p):
     'r_genera_lectura : '
-    cuad = Quadruple("READ", None, None, pila_operandos.pop())
+    cuad = Quadruple("read", None, None, pila_operandos.pop())
     pila_tipos.pop()
     cuadruplos.append(cuad)
 
@@ -883,10 +891,10 @@ def p_r_genera_escribe_string(p):
     insertion = const_table.insert_constant(p[-1], 'string',constant_string)
     
     if insertion != constant_string:
-        cuad = Quadruple("WRITE", None, None, insertion)
+        cuad = Quadruple("write", None, None, insertion)
 
     else:
-        cuad = Quadruple("WRITE", None, None, constant_string)
+        cuad = Quadruple("write", None, None, constant_string)
         constant_string += 1
 
     cuadruplos.append(cuad)
@@ -1046,15 +1054,83 @@ def print_quads():
 
  
 # Build the parser
-parser = yacc.yacc()
-
-with open("test.txt") as f:
-    data = f.read()
 
 
-parser.parse(data)
-fun_dict.print_var_tables()
-#fun_dict.print_memory_spaces()
-const_table.display_table()
-#fun_dict.print_funcs_params()
-print_quads()
+def compile():
+    try:
+        file = open(sys.argv[1], "r")
+    except:
+        print('File ' + str(sys.argv[1]) + ' not found')
+        sys.exit()
+
+    parser = yacc.yacc()
+    parser.parse(file.read())
+    '''fun_dict.print_var_tables()
+    fun_dict.print_memory_spaces()
+    fun_dict.print_funcs_params()
+    print_quads()'''
+    const_table.display_table()
+    return cuadruplos, const_table
+
+
+from operaciones import Operations
+
+operations = Operations()
+
+op_list = {
+    "goto" :            operations.goto,
+    "gotof" :           operations.goto_false,
+    "+" :               operations.plus_op,
+    "-" :               operations.minus_op,
+    "*" :               operations.mult_op,
+    "/" :               operations.div_op,
+    "==" :              operations.eq_op,
+    "&" :              operations.and_op,
+    "|" :              operations.or_op,
+    "!=" :              operations.not_eq_op,
+    ">=" :              operations.greater_eq_op,
+    "<=" :              operations.less_qp_op,
+    ">" :               operations.greater_op,
+    "<" :               operations.less_op,
+    "=" :               operations.asignation,
+    'write':            operations.write,
+    'era':              operations.era,
+    'parameter':        operations.param,
+    'gosub':            operations.gosub,
+    'return':           operations.return_val,
+    'read' :            operations.read
+}
+
+quadruples = []
+instruction_pointer = 0
+
+def execute(quads, const_table):
+    global instruction_pointer
+    operations.load_constants(const_table)
+
+    while instruction_pointer < len(quads):
+        if quads[instruction_pointer].operador == "gosub":
+            new_quad_number = op_list[quads[instruction_pointer].operador](quads[instruction_pointer], instruction_pointer)
+        else:
+            new_quad_number = op_list[quads[instruction_pointer].operador](quads[instruction_pointer])
+            
+        if new_quad_number:
+            instruction_pointer = new_quad_number
+        else:
+            instruction_pointer += 1
+
+
+def main():
+    quads, const_table = compile()
+    for i,cuad in enumerate(quads):
+        print(i, cuad.operador, cuad.operando_izq, cuad.operando_der, cuad.resultado)
+
+    execute(quads, const_table.table)
+
+    
+
+    
+
+main()
+    
+
