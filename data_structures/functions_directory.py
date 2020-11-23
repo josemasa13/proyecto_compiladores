@@ -16,6 +16,13 @@ class FunctionsDirectory:
     def add_function_to_global(self, name, type, vaddr):
         self.directory[0].add_variable(name, type, vaddr)
 
+    def search_global(self, var_name):
+        global_func = self.directory[0]
+        return global_func.get_variable(var_name)
+
+
+
+
     def search_function(self, name):
         for function in self.directory:
             if function.name == name:

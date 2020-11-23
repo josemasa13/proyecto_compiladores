@@ -16,7 +16,7 @@ class Operations:
                 constant['v_address'],
                 constant['constant']
             )
-
+            
     def asignation(self,quadruple):
         l_operand = quadruple.operando_izq
         resultado = quadruple.resultado
@@ -179,7 +179,7 @@ class Operations:
             print("Runtime Error: Array out of bounds")
             sys.exit()
 
-    def ebdoroc(self, quadruple):
+    def endfunc(self, quadruple):
         #Return tu previos state
         previos_state = self.jump_stack.pop() + 1
         #restore local memory

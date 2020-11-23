@@ -1,15 +1,25 @@
 program Ejemplo;
 
   var
-  int Arreglo[10];
   int i,j,k,p;
+  int Arreglo[10];
   float valor;
   int Matriz[3][8];
 
+  int module fibo(int x){
+    if(x<=1) then{
+        return(x);
+    }
+    else{
+      return(fibo(x-1) + fibo(x-2));
+    }
+    
+  }
+
+  int module fibo1(int x){
+    return(1);
+  }
 
 main(){
-
-main(){
-  Matriz[Matriz[3+4][Arreglo[4]]][0] =  Matriz[Matriz[3+4][0]][0];
+  write((1*2) + fibo1(1+2));
 }
-

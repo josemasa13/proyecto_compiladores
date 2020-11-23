@@ -4,7 +4,7 @@ Global -> 1000 - 7999
 
 Local -> 8000 - 15999
     local_int -> 8000 - 11999
-    local_float -> 12000 - 15999
+    local -> 12000 - 15999
 
 Temporal -> 16000 - 23999
     temporal_int -> 16000-18999
