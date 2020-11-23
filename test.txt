@@ -1,37 +1,15 @@
 program Ejemplo;
 
   var
-  int i,j,k,p;
   int Arreglo[10];
+  int i,j,k,p;
   float valor;
   int Matriz[3][8];
 
-  int module test(int a,int b)
-    var int j;
-    {
-      return (j);
-    }
-
-  int module prueba()
-    var int j;
-    {
-      return (j);
-    }
-
-  int module fact(int a,int b,int c)
-    var int x;
-    {
-      x = 1;
-      return(x);
-    }
-
-  int module inicia(float a,int z)
-    var int x;
-  {
-    return (1);
-  }
 
 main(){
-  write(inicia(2.2,3));
+
+main(){
+  Matriz[Matriz[3+4][Arreglo[4]]][0] =  Matriz[Matriz[3+4][0]][0];
 }
 
