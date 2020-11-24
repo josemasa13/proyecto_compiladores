@@ -36,6 +36,7 @@ class Virtualmemory:
         if vaddr in self.memory[context]:
             return self.memory[context][vaddr]
         else:
+            raise Exception("Estás tratando de acceder a una variable sin valor")
             return None
             
     def is_pointer(self,vaddr):

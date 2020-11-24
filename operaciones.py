@@ -184,9 +184,9 @@ class Operations:
         array_ulimit = self.virtual_memory.get_value(quadruple.resultado)
 
 
-        if not array_index:
+        '''if not array_index:
             print("Error de ejecución: la posición no existe en el arreglo")
-            sys.exit()
+            sys.exit()'''
 
         #Check the limits
         if(array_index < array_llimit or array_index >= array_ulimit):
