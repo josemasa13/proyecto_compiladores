@@ -19,8 +19,12 @@ int module fibo(int n){
   }
 }
 
+int module genera(int n){
+  return(n+56);
+  
+}
+
 main(){
-  write("Escribe el numero de fibonacci que quieres");
-  read(i);
-  write(fibo(i));
+  i =  genera(1);
+  write(i);
 }

@@ -1,6 +1,4 @@
 from data_structures.virtualmemory import Virtualmemory
-import numpy as np
-from pandas import DataFrame
 import json
 import sys
 
