@@ -156,7 +156,7 @@ def p_estatutofunc(p):
     '''
 
 def p_asignacion(p):
-    '''asignacion : ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu  expresion r_pop_igu PTOCOM'''
+    '''asignacion : ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu  expresion r_pop_igu PTOCOM'''
 
 def p_expresion(p):
     '''expresion : exp r_pop_comp expresionsig'''
@@ -690,6 +690,7 @@ def p_r_verifica_arrexp_uno(p):
     if var["dim_uno"] == None:
         raise Exception("La variable " + name_var + " no es un arreglo")
     elif ("dim_uno" in var and var["dim_uno"] != None) and ("dim_dos" in var and var["dim_dos"] == None):
+        print("Entra")
         index = pila_operandos.pop()
         tipo_var = pila_tipos.pop()
         if tipo_var != "int":
@@ -731,7 +732,9 @@ def p_r_verifica_arrexp_uno(p):
 
         quad =  Quadruple('ver',index,l_limit,u_limit)
         cuadruplos.append(quad)
-        quad =  Quadruple('*',index,u_limit,temporal_int)
+        print("La dimension dos es:")
+        print(var["dim_dos"])
+        quad =  Quadruple('*_',index,var["dim_dos"],temporal_int)
         cuadruplos.append(quad)
         pila_tipos.append("int")
         pila_operandos.append(temporal_int)
@@ -744,10 +747,10 @@ def p_r_verifica_arrexp_dos(p):
     global constant_int
     pila_operadores.pop()
     verifica = pila_guardar_variable.pop()
-    name_var = pila_guardar_variable.pop()
-    var = fun_dict.get_variable(name_var)
     if (verifica == "tipo arreglo"):
         raise Exception("La variable  no es una matriz")
+    name_var = pila_guardar_variable.pop()
+    var = fun_dict.get_variable(name_var)
     if ("dim_uno" in var and var["dim_uno"] != None) and ("dim_dos" in var and var["dim_dos"] != None):
         pila_guardar_variable.append("tipo arreglo")
         index = pila_operandos.pop()
@@ -774,7 +777,6 @@ def p_r_verifica_arrexp_dos(p):
         temporal_int+=1
         pila_tipos.append(var["type"])
         pila_operandos.append(pointers)
-        print(pointers)
         pointers+=1
 
 
@@ -783,7 +785,6 @@ def p_r_return_func(p):
     global flag_return
     flag_return = True
     result = pila_operandos.pop()
-    print("res",result)
     tipo = pila_tipos.pop()
     if tipo == fun_dict.curr_function.type:
         space = fun_dict.search_global(fun_dict.curr_function.name + '_func')["virtual_address"]
@@ -901,34 +902,40 @@ def p_r_pila_operandos_push(p):
     global temporal_int
 
     oper = pila_guardar_variable.pop()
-
+    print("AQUI")
+    print(oper)
     if oper != "tipo matriz":
         if oper != "tipo arreglo":
             var = fun_dict.get_variable(oper)
-            if var:
-                pila_operandos.append(var['virtual_address'])
-                pila_tipos.append(var["type"])
-            else:
-                funcion = fun_dict.search_function(oper)
-                if not funcion:
-                    raise Exception("El identificador " + oper + " no existe")
-
+            print("AQUI")
+            print(var)
+            if ("dim_uno" in var and var["dim_uno"] == None) and ("dim_dos" in var and var["dim_dos"] == None):
+                if var:
+                    pila_operandos.append(var['virtual_address'])
+                    pila_tipos.append(var["type"])
                 else:
-                    return_type = funcion.type
-                    if return_type == "float":
-                        new_quad = Quadruple('=', oper, None, temporal_float)
-                        pila_operandos.append(temporal_float)
-                        pila_tipos.append("float")
-                        temporal_float += 1
+                    funcion = fun_dict.search_function(oper)
+                    if not funcion:
+                        raise Exception("El identificador " + oper + " no existe")
 
                     else:
-                        func = fun_dict.search_global(oper + "_func")
-                        new_quad = Quadruple('=', func["virtual_address"], None, temporal_int)
-                        pila_operandos.append(temporal_int)
-                        pila_tipos.append("int")
-                        temporal_int += 1
+                        return_type = funcion.type
+                        if return_type == "float":
+                            new_quad = Quadruple('=', oper, None, temporal_float)
+                            pila_operandos.append(temporal_float)
+                            pila_tipos.append("float")
+                            temporal_float += 1
 
-                    cuadruplos.append(new_quad)
+                        else:
+                            func = fun_dict.search_global(oper + "_func")
+                            new_quad = Quadruple('=', func["virtual_address"], None, temporal_int)
+                            pila_operandos.append(temporal_int)
+                            pila_tipos.append("int")
+                            temporal_int += 1
+
+                        cuadruplos.append(new_quad)
+            else:
+                raise Exception("La variable tiene dimensiones")
     else:
         raise Exception("La variable debe ser matriz")
             

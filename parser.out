@@ -62,7 +62,7 @@ Rule 52    estatutofunc -> llamadafunc
 Rule 53    estatutofunc -> repeticionfunc
 Rule 54    estatutofunc -> lectura
 Rule 55    estatutofunc -> RETURN PARIZQ expresion r_return_func PARDER PTOCOM
-Rule 56    asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
+Rule 56    asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
 Rule 57    expresion -> exp r_pop_comp expresionsig
 Rule 58    expresionsig -> MAY r_pila_operadores_push_may expresionsigequal expresion
 Rule 59    expresionsig -> MEN r_pila_operadores_push_men expresionsigequal expresion
@@ -333,10 +333,10 @@ r_pila_operadores_push_menigu : 65
 r_pila_operadores_push_menos : 71
 r_pila_operadores_push_mult : 74
 r_pila_operadores_push_or : 63
-r_pila_operandos_push : 79 105 106 108
+r_pila_operandos_push : 56 79 105 106 108
 r_pila_operandos_push_cte_flt : 91
 r_pila_operandos_push_cte_int : 90
-r_pila_operandos_push_id : 56 120
+r_pila_operandos_push_id : 120
 r_pop_comp           : 57
 r_pop_igu            : 56
 r_pop_igu_for        : 105 106
@@ -915,7 +915,7 @@ state 54
     (47) estatuto -> . repeticion
     (48) estatuto -> . lectura
     (117) empty -> .
-    (56) asignacion -> . ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
+    (56) asignacion -> . ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
     (97) decision -> . IF PARIZQ expresion PARDER r_if_paso_1 THEN bloque decision_else r_if_paso_3
     (107) escritura -> . WRITE PARIZQ escrituraciclo otro PARDER PTOCOM
     (96) llamadafunc -> . ID r_verifica_void PARIZQ r_era_funcion_void parametros r_terminar_parametro_void PARDER PTOCOM
@@ -1028,7 +1028,7 @@ state 61
     (47) estatuto -> . repeticion
     (48) estatuto -> . lectura
     (117) empty -> .
-    (56) asignacion -> . ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
+    (56) asignacion -> . ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
     (97) decision -> . IF PARIZQ expresion PARDER r_if_paso_1 THEN bloque decision_else r_if_paso_3
     (107) escritura -> . WRITE PARIZQ escrituraciclo otro PARDER PTOCOM
     (96) llamadafunc -> . ID r_verifica_void PARIZQ r_era_funcion_void parametros r_terminar_parametro_void PARDER PTOCOM
@@ -1145,7 +1145,7 @@ state 68
 
 state 69
 
-    (56) asignacion -> ID . r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
+    (56) asignacion -> ID . r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
     (96) llamadafunc -> ID . r_verifica_void PARIZQ r_era_funcion_void parametros r_terminar_parametro_void PARDER PTOCOM
     (149) r_verifica_variable_existe -> .
     (140) r_verifica_void -> .
@@ -1345,7 +1345,7 @@ state 88
 
 state 89
 
-    (56) asignacion -> ID r_verifica_variable_existe . r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
+    (56) asignacion -> ID r_verifica_variable_existe . r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
     (161) r_guardar_variable -> .
 
     CORIZQ          reduce using rule 161 (r_guardar_variable -> .)
@@ -1571,7 +1571,7 @@ state 106
 
 state 107
 
-    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable . arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
+    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable . arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
     (85) arrexp_uno -> . CORIZQ r_push_arr expresion r_verifica_arrexp_uno CORDER
     (86) arrexp_uno -> . empty
     (117) empty -> .
@@ -1957,7 +1957,7 @@ state 133
 
 state 134
 
-    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno . arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
+    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno . arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
     (87) arrexp_dos -> . CORIZQ r_push_arr expresion r_verifica_arrexp_dos CORDER
     (88) arrexp_dos -> . empty
     (117) empty -> .
@@ -2535,12 +2535,12 @@ state 166
 
 state 167
 
-    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos . r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
-    (163) r_pila_operandos_push_id -> .
+    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos . r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
+    (162) r_pila_operandos_push -> .
 
-    IGU             reduce using rule 163 (r_pila_operandos_push_id -> .)
+    IGU             reduce using rule 162 (r_pila_operandos_push -> .)
 
-    r_pila_operandos_push_id       shift and go to state 210
+    r_pila_operandos_push          shift and go to state 210
 
 state 168
 
@@ -3188,7 +3188,7 @@ state 209
 
 state 210
 
-    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id . IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
+    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push . IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
 
     IGU             shift and go to state 243
 
@@ -3788,7 +3788,7 @@ state 242
 
 state 243
 
-    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU . r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
+    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU . r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
     (186) r_pila_operadores_push_igu -> .
 
     PARIZQ          reduce using rule 186 (r_pila_operadores_push_igu -> .)
@@ -4421,7 +4421,7 @@ state 277
     (54) estatutofunc -> . lectura
     (55) estatutofunc -> . RETURN PARIZQ expresion r_return_func PARDER PTOCOM
     (117) empty -> .
-    (56) asignacion -> . ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
+    (56) asignacion -> . ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
     (100) decisionfunc -> . IF PARIZQ expresion PARDER r_if_paso_1 THEN bloquefunc decisionfunc_else r_if_paso_3
     (107) escritura -> . WRITE PARIZQ escrituraciclo otro PARDER PTOCOM
     (96) llamadafunc -> . ID r_verifica_void PARIZQ r_era_funcion_void parametros r_terminar_parametro_void PARDER PTOCOM
@@ -4478,7 +4478,7 @@ state 280
 
 state 281
 
-    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu . expresion r_pop_igu PTOCOM
+    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu . expresion r_pop_igu PTOCOM
     (57) expresion -> . exp r_pop_comp expresionsig
     (69) exp -> . termino r_pop_mas expciclo
     (73) termino -> . factor r_pop_mult factorciclo
@@ -4774,7 +4774,7 @@ state 302
     (54) estatutofunc -> . lectura
     (55) estatutofunc -> . RETURN PARIZQ expresion r_return_func PARDER PTOCOM
     (117) empty -> .
-    (56) asignacion -> . ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
+    (56) asignacion -> . ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM
     (100) decisionfunc -> . IF PARIZQ expresion PARDER r_if_paso_1 THEN bloquefunc decisionfunc_else r_if_paso_3
     (107) escritura -> . WRITE PARIZQ escrituraciclo otro PARDER PTOCOM
     (96) llamadafunc -> . ID r_verifica_void PARIZQ r_era_funcion_void parametros r_terminar_parametro_void PARDER PTOCOM
@@ -4981,7 +4981,7 @@ state 317
 
 state 318
 
-    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion . r_pop_igu PTOCOM
+    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion . r_pop_igu PTOCOM
     (173) r_pop_igu -> .
 
     PTOCOM          reduce using rule 173 (r_pop_igu -> .)
@@ -5296,7 +5296,7 @@ state 337
 
 state 338
 
-    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu . PTOCOM
+    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu . PTOCOM
 
     PTOCOM          shift and go to state 352
 
@@ -5454,16 +5454,16 @@ state 351
 
 state 352
 
-    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .
+    (56) asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .
 
-    ID              reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
-    IF              reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
-    WRITE           reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
-    READ            reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
-    WHILE           reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
-    FOR             reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
-    KEYDER          reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
-    RETURN          reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push_id IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
+    ID              reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
+    IF              reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
+    WRITE           reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
+    READ            reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
+    WHILE           reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
+    FOR             reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
+    KEYDER          reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
+    RETURN          reduce using rule 56 (asignacion -> ID r_verifica_variable_existe r_guardar_variable arrexp_uno arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion r_pop_igu PTOCOM .)
 
 
 state 353
