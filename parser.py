@@ -1310,11 +1310,10 @@ op_list = {
     'ver':              operations.ver
 }
 
-quadruples = []
-instruction_pointer = 0
 
 def execute(quads, const_table):
-    global instruction_pointer
+    instruction_pointer = 0
+    quadruples = []
     operations.load_constants(const_table)
 
     while instruction_pointer < len(quads):
