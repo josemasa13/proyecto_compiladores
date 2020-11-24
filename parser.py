@@ -243,8 +243,32 @@ def p_decision_else(p):
     '''decision_else : ELSE r_if_paso_2 bloque
     | empty'''
 
+def p_decisionfunc(p):
+    '''decisionfunc : IF PARIZQ expresion PARDER r_if_paso_1 THEN bloquefunc decisionfunc_else r_if_paso_3
+    '''
+
+def p_decisionfunc_else(p):
+    '''decisionfunc_else : ELSE r_if_paso_2 bloquefunc
+    | empty'''
+
+def p_condicional(p):
+    '''condicional : WHILE r_while_paso_1 PARIZQ expresion PARDER r_while_paso_2 DO bloque r_while_paso_3'''
+
+def p_condicionalfunc(p):
+    '''condicionalfunc : WHILE r_while_paso_1 PARIZQ r_while_paso_2 expresion PARDER DO bloquefunc'''
+
+def p_nocondicional(p):
+    '''nocondicional : FOR ID r_verifica_variable_existe r_guardar_variable arrexp_uno  arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion r_for_paso_1 DO bloque r_for_paso_2
+    '''
+
+def p_nocondicionalfunc(p):
+    '''nocondicionalfunc : FOR ID r_verifica_variable_existe r_guardar_variable arrexp_uno  arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion r_for_paso_1 DO bloquefunc r_for_paso_2'''
+
 def p_escritura(p):
     '''escritura : WRITE PARIZQ escrituraciclo otro PARDER PTOCOM'''
+
+def p_lectura(p):
+    '''lectura : READ PARIZQ ID r_verifica_variable_existe r_guardar_variable arrexp_uno  arrexp_dos r_pila_operandos_push  r_genera_lectura ciclodim PARDER PTOCOM'''
 
 def p_escrituraciclo(p):
     '''escrituraciclo : CTE_STRING r_genera_escribe_string
@@ -255,8 +279,19 @@ def p_otro(p):
     | empty
     '''
 
-def p_lectura(p):
-    '''lectura : READ PARIZQ ID r_verifica_variable_existe r_guardar_variable arrexp_uno  arrexp_dos r_pila_operandos_push  r_genera_lectura ciclodim PARDER PTOCOM'''
+def p_repeticion(p):
+    '''repeticion : condicional 
+    | nocondicional
+    '''
+
+def p_repeticionfunc(p):
+    '''repeticionfunc : condicionalfunc
+    | nocondicionalfunc
+    '''
+
+def p_empty(p):
+    'empty :'
+    pass
 
 def p_ciclodim(p):
     '''ciclodim : COMA iddim r_genera_lectura ciclodim
@@ -269,43 +304,6 @@ def p_iddim(p):
 def p_arrexp(p):
     '''arrexp : CORIZQ expresion CORDER
     | empty'''
-
-
-
-def p_repeticion(p):
-    '''repeticion : condicional 
-    | nocondicional
-    '''
-
-def p_condicional(p):
-    '''condicional : WHILE r_while_paso_1 PARIZQ expresion PARDER r_while_paso_2 DO bloque r_while_paso_3'''
-
-def p_nocondicional(p):
-    '''nocondicional : FOR ID r_verifica_variable_existe r_guardar_variable arrexp_uno  arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion r_for_paso_1 DO bloque r_for_paso_2
-    '''
-
-def p_decisionfunc(p):
-    '''decisionfunc : IF PARIZQ expresion PARDER r_if_paso_1 THEN bloquefunc decisionfunc_else r_if_paso_3
-    '''
-
-def p_decisionfunc_else(p):
-    '''decisionfunc_else : ELSE r_if_paso_2 bloquefunc
-    | empty'''
-
-def p_repeticionfunc(p):
-    '''repeticionfunc : condicionalfunc
-    | nocondicionalfunc
-    '''
-
-def p_condicionalfunc(p):
-    '''condicionalfunc : WHILE PARIZQ expresion PARDER DO bloquefunc'''
-
-def p_nocondicionalfunc(p):
-    '''nocondicionalfunc : FOR iddim IGU expresion TO expresion DO bloquefunc'''
-
-def p_empty(p):
-    'empty :'
-    pass
 
 def p_error(p):
     if p:
@@ -404,7 +402,7 @@ def p_r_register_quad(p):
 def p_r_era_funcion_void(p):
     'r_era_funcion_void : '
     # guardar nombre de la función llamada
-    pila_operandos.append("FUNC")
+    pila_operadores.append("FUNC")
     nombre_func = p[-3]
     pila_nombre_func.append(nombre_func)
     func = fun_dict.search_function(nombre_func)
