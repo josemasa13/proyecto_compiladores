@@ -4,6 +4,7 @@ from pandas import DataFrame
 import json
 import sys
 
+# regresar error en todas las operaciones si alguno de los operadores es none
 class Operations:
     def __init__(self):
         self.virtual_memory = Virtualmemory()
@@ -63,6 +64,15 @@ class Operations:
     def plus_op(self, quadruple):
         l_operand = self.virtual_memory.get_value(quadruple.operando_izq)
         r_operand = self.virtual_memory.get_value(quadruple.operando_der)
+        self.virtual_memory.update_memory(
+            quadruple.resultado,
+            l_operand + r_operand
+        )
+        return None
+
+    def plus_op_esp(self, quadruple):
+        l_operand = self.virtual_memory.get_value(quadruple.operando_izq)
+        r_operand = quadruple.operando_der
         self.virtual_memory.update_memory(
             quadruple.resultado,
             l_operand + r_operand
@@ -174,6 +184,12 @@ class Operations:
         array_index = self.virtual_memory.get_value(quadruple.operando_izq)
         array_llimit = self.virtual_memory.get_value(quadruple.operando_der)
         array_ulimit = self.virtual_memory.get_value(quadruple.resultado)
+
+
+        if not array_index:
+            print("Error de ejecución: la posición no existe en el arreglo")
+            sys.exit()
+
         #Check the limits
         if(array_index < array_llimit or array_index >= array_ulimit):
             print("Runtime Error: Array out of bounds")

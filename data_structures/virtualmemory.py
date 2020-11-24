@@ -46,7 +46,7 @@ class Virtualmemory:
 
     def update_address(self, vaddr, context, value):
         self.memory[context][vaddr] = value
-        print("value: " + str(value) + " address: " + str(vaddr) + " context: " + context)
+        #print("value: " + str(value) + " address: " + str(vaddr) + " context: " + context)
 
     def new_local_memory(self):
         self.new_local_memory_cache = {}

@@ -6,20 +6,21 @@ program Ejemplo;
   float valor;
   int Matriz[3][8];
 
-  int module fibo(int x){
-    if(x<=1) then{
-        return(x);
-    }
-    else{
-      return(fibo(x-1) + fibo(x-2));
-    }
-    
-  }
+int module test(int x){
+  return(1 + x);
+}
 
-  int module fibo1(int x){
-    return(1);
+int module fibo(int n){
+  if(n <= 1)then{
+    return(n);
   }
+  else{
+    return(fibo(n - 1) + fibo(n - 2));
+  }
+}
 
 main(){
-  write((1*2) + fibo1(1+2));
+  write("Escribe el numero de fibonacci que quieres");
+  read(i);
+  write(fibo(i));
 }

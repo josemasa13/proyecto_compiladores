@@ -256,7 +256,7 @@ def p_otro(p):
     '''
 
 def p_lectura(p):
-    '''lectura : READ PARIZQ iddim r_genera_lectura ciclodim PARDER PTOCOM'''
+    '''lectura : READ PARIZQ ID r_verifica_variable_existe r_guardar_variable arrexp_uno  arrexp_dos r_pila_operandos_push  r_genera_lectura ciclodim PARDER PTOCOM'''
 
 def p_ciclodim(p):
     '''ciclodim : COMA iddim r_genera_lectura ciclodim
@@ -281,7 +281,7 @@ def p_condicional(p):
     '''condicional : WHILE r_while_paso_1 PARIZQ expresion PARDER r_while_paso_2 DO bloque r_while_paso_3'''
 
 def p_nocondicional(p):
-    '''nocondicional : FOR iddim IGU r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion r_for_paso_1 DO bloque r_for_paso_2
+    '''nocondicional : FOR ID r_verifica_variable_existe r_guardar_variable arrexp_uno  arrexp_dos r_pila_operandos_push IGU r_pila_operadores_push_igu expresion TO r_pop_igu_for expresion r_for_paso_1 DO bloque r_for_paso_2
     '''
 
 def p_decisionfunc(p):
@@ -404,6 +404,7 @@ def p_r_register_quad(p):
 def p_r_era_funcion_void(p):
     'r_era_funcion_void : '
     # guardar nombre de la función llamada
+    pila_operandos.append("FUNC")
     nombre_func = p[-3]
     pila_nombre_func.append(nombre_func)
     func = fun_dict.search_function(nombre_func)
@@ -427,6 +428,7 @@ def p_r_era_funcion_void(p):
 def p_r_era_funcion_retorno(p):
     'r_era_funcion_retorno : '
     # guardar nombre de la función llamada
+    pila_operadores.append("FUNC")
     nombre_func = pila_guardar_variable[-1]
     pila_nombre_func.append(nombre_func)
     func = fun_dict.search_function(nombre_func)
@@ -461,6 +463,7 @@ def p_r_terminar_parametro(p):
     global apuntador_argumento
     global tipos_argumentos
     global temporal_int
+    pila_operadores.pop()
     nombrefunc = pila_nombre_func.pop()
     num_quad = fun_dict.search_quad(nombrefunc)
     cuad = Quadruple('gosub',None,None,num_quad)
@@ -483,7 +486,7 @@ def p_r_terminar_parametro_void(p):
     global apuntador_argumento
     global tipos_argumentos
     global temporal_int
-
+    pila_operadores.pop()
     nombrefunc = pila_nombre_func.pop()
     num_quad = fun_dict.search_quad(nombrefunc)
     cuad = Quadruple('gosub',None,None,num_quad)
@@ -705,7 +708,7 @@ def p_r_verifica_arrexp_uno(p):
         quad =  Quadruple('ver',index,l_limit,u_limit)
 
         cuadruplos.append(quad)
-        quad =  Quadruple('+',index,var["virtual_address"],pointers)
+        quad =  Quadruple('+_',index,var["virtual_address"],pointers)
         cuadruplos.append(quad)
         pila_tipos.append(var["type"])
         pila_operandos.append(pointers)
@@ -730,7 +733,7 @@ def p_r_verifica_arrexp_uno(p):
 
         quad =  Quadruple('ver',index,l_limit,u_limit)
         cuadruplos.append(quad)
-        quad =  Quadruple('*',index,var["dim_uno"],temporal_int)
+        quad =  Quadruple('*',index,u_limit,temporal_int)
         cuadruplos.append(quad)
         pila_tipos.append("int")
         pila_operandos.append(temporal_int)
@@ -768,7 +771,7 @@ def p_r_verifica_arrexp_dos(p):
         pila_tipos.pop()
         quad =  Quadruple('+',temporal_index,index,temporal_int)
         cuadruplos.append(quad)
-        quad =  Quadruple('+',temporal_int,var["virtual_address"],pointers)
+        quad =  Quadruple('+_',temporal_int,var["virtual_address"],pointers)
         cuadruplos.append(quad)
         temporal_int+=1
         pila_tipos.append(var["type"])
@@ -1284,6 +1287,7 @@ op_list = {
     "goto" :            operations.goto,
     "gotof" :           operations.goto_false,
     "+" :               operations.plus_op,
+    "+_" :              operations.plus_op_esp,
     "-" :               operations.minus_op,
     "*" :               operations.mult_op,
     "/" :               operations.div_op,
@@ -1314,6 +1318,9 @@ def execute(quads, const_table):
     operations.load_constants(const_table)
 
     while instruction_pointer < len(quads):
+        '''if quads[instruction_pointer].operador == "ver":
+            print(quads[instruction_pointer].operando_izq, quads[instruction_pointer].operando_der, quads[instruction_pointer].resultado)'''
+
         if quads[instruction_pointer].operador == "gosub":
             new_quad_number = op_list[quads[instruction_pointer].operador](quads[instruction_pointer], instruction_pointer)
         else:
