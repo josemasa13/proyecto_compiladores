@@ -95,6 +95,15 @@ class Operations:
         )
         return None
 
+    def mult_op_esp(self, quadruple):
+        l_operand = self.virtual_memory.get_value(quadruple.operando_izq)
+        r_operand = quadruple.operando_der
+        self.virtual_memory.update_memory(
+            quadruple.resultado,
+            l_operand * r_operand
+        )
+        return None
+
     def div_op(self, quadruple):
         l_operand = self.virtual_memory.get_value(quadruple.operando_izq)
         r_operand = self.virtual_memory.get_value(quadruple.operando_der)

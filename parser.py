@@ -1293,6 +1293,7 @@ op_list = {
     "gotof" :           operations.goto_false,
     "+" :               operations.plus_op,
     "+_" :              operations.plus_op_esp,
+    "*_":               operations.mult_op_esp,
     "-" :               operations.minus_op,
     "*" :               operations.mult_op,
     "/" :               operations.div_op,
